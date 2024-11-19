@@ -1,6 +1,23 @@
 import Link from "next/link";
+import { useState } from "react";
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 export default function LogIn() {
+    const [email, setEmail] = useState<string>();
+    const [pass, setPass] = useState<string>();
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+        e.preventDefault()
+        axios.post('http://localhost:3000/IniciarSesion', { email, pass })
+            .then(result => {
+                console.log(result)
+                if (result.data === "Sesion Iniciada")
+                    useRouter().push('/Registrarse');
+            })
+
+            .catch(err => console.log(err))
+    }
     return (
         <>
             <div id="login">
@@ -9,7 +26,7 @@ export default function LogIn() {
                     <span className="navbar-brand mb-0 ms-2">$YUPI</span>
                 </div>
                 <p className="LG_SUtitle">Iniciar Sesión</p>
-                <form className="center">
+                <form onSubmit={handleSubmit} className="center">
                     <div className="row mb-3">
                         <label htmlFor="inputEmail3" className="col-sm-3 col-form-label">
                             Correo Electrónico
@@ -19,6 +36,7 @@ export default function LogIn() {
                                 type="email"
                                 className="form-control"
                                 id="inputEmail3"
+                                onChange={(input) => setEmail(input.target.value)}
                                 required
                             />
                         </div>
@@ -32,6 +50,7 @@ export default function LogIn() {
                                 type="password"
                                 className="form-control"
                                 id="inputPassword3"
+                                onChange={(input) => setPass(input.target.value)}
                                 required
                             />
                         </div>
