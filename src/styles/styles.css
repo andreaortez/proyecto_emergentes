@@ -1,6 +1,7 @@
 .UserButton {
     background-color: #06b09a !important;
     color: white !important;
+    border: none !important;
 }
 
 .UserButton:hover {
