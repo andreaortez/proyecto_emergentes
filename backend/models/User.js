@@ -1,4 +1,4 @@
-const mongoose =  require('mongoose');
+const mongoose = require('mongoose');
 
 
 //User Schema
@@ -13,5 +13,6 @@ const UserSchema = new mongoose.Schema({
 });
 
 // Create the model with the `IUser` interface
-const UserModel = mongoose.model("users",UserSchema)
+const UserModel = mongoose.model("User", UserSchema)
+console.log(UserModel)
 module.exports = UserModel
