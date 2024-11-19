@@ -6,18 +6,34 @@ import { useRouter } from 'next/router';
 export default function LogIn() {
     const [email, setEmail] = useState<string>();
     const [pass, setPass] = useState<string>();
+    const [modalMessage, setModalMessage] = useState<string>('');
+    const [modalTitle, setModalTitle] = useState<string>('');
+    const [showModal, setShowModal] = useState<boolean>(false);
+
+    const router = useRouter();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault()
+        e.preventDefault();
         axios.post('http://localhost:3000/IniciarSesion', { email, pass })
             .then(result => {
-                console.log(result)
-                if (result.data === "Sesion Iniciada")
-                    useRouter().push('/Registrarse');
+                if (result.data === "Sesion Iniciada") {
+                    setModalTitle("¡Éxito!");
+                    setModalMessage("Inicio de sesión exitoso.");
+                    setShowModal(true);
+                } else {
+                    setModalTitle("¡Error!");
+                    setModalMessage("Correo electrónico o contraseña incorrecta.");
+                    setShowModal(true);
+                }
             })
+            .catch(() => {
+                setModalTitle("¡Error!");
+                setModalMessage("No se pudo conectar con el servidor. Intenta nuevamente más tarde.");
+                setShowModal(true);
+            });
+    };
 
-            .catch(err => console.log(err))
-    }
+
     return (
         <>
             <div id="login">
@@ -77,6 +93,37 @@ export default function LogIn() {
                     <img src="imagenes/atras.png" alt="Regresar" width="25" height="25" className="d-inline-block align-text-top" />
                 </Link>
             </div>
+
+            {/* Modal */}
+            {showModal && (
+                <div className="modal fade show d-block" tabIndex={-1} style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">{modalTitle}</h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    aria-label="Close"
+                                    onClick={() => setShowModal(false)}
+                                ></button>
+                            </div>
+                            <div className="modal-body">
+                                <p>{modalMessage}</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary UserButton"
+                                    onClick={() => setShowModal(false)}
+                                >
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
