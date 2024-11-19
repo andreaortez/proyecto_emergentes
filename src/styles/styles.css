@@ -65,37 +65,59 @@
 
 #login {
     left: 0;
+    top: 0;
+    position: fixed;
     background-color: white;
     width: 50%;
-    padding: 5%;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#login h2 {
-    margin-bottom: 20px;
-}
-
-
-#login form {
-    width: 100%;
-}
-
-#login .row {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-#login .btn {
-    margin-top: 20px;
-    align-self: center;
+    padding: 7%;
+    text-align: center;
 }
 
 #ovl2 {
     background: rgba(0, 0, 0, 0.1);
+}
+
+.alternativa {
+    font-size: 12px;
+    display: flex;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.textColor {
+    color: #06b09a;
+}
+
+.LG_SUtitle {
+    color: #06b09a;
+    font-size: 40px;
+    font-weight: bold;
+    padding-bottom: 2%;
+    padding-top: 13%;
+}
+
+#logo {
+    left: 0;
+    top: 0;
+    position: fixed;
+    padding-top: 1%;
+    padding-left: 1%;
+    align-items: center;
+    display: flex;
+}
+
+#logo span {
+    font-size: 25px;
+    font-weight: 400;
+}
+
+.back {
+    right: 0;
+    top: 0;
+    position: fixed;
+    padding-top: 1%;
+    padding-right: 1%;
+    align-items: center;
+    display: flex;
+    width: 53%;
 }
