@@ -9,7 +9,7 @@ export default function LogIn() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault()
-        axios.post('http://localhost:3000/IniciarSesion', { email, pass })
+        axios.post('http://localhost:3001/IniciarSesion', { email, pass })
             .then(result => {
                 console.log(result)
                 if (result.data === "Sesion Iniciada")
