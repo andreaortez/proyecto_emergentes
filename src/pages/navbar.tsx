@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Navbar() {
   return (
     <>
@@ -14,9 +16,12 @@ export default function Navbar() {
             <div className="navbar-nav ms-auto">
               <a className="nav-link" href="#">Sobre Nosotros</a>
               <a className="nav-link" href="#">Cómo Funciona</a>
-              <a className="nav-link" href="#">Iniciar Sesión</a>
+              <a className="nav-link" href="#">Contáctanos</a>
+              <Link href="/IniciarSesion" className="nav-link">Iniciar Sesión</Link>
             </div>
-            <button className="btn btn-outline-success" type="submit">Registrarse</button>
+            <button className="btn UserButton" type="button">
+              <Link href="/Registrarse" className="nav-link">Registrarse</Link>
+            </button>
           </div>
         </div>
       </nav >
