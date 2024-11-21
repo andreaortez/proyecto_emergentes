@@ -46,7 +46,7 @@ export default function LogIn() {
                 </div>
                 {/* Logo */}
                 <div id="logo" className="position-absolute top-0 start-0 d-flex align-items-center p-2">
-                    <img src="./imagenes/logo.png" alt="Logo" width="40" height="40" className="d-inline-block align-text-top" />
+                    <img src="./imagenes/logo.png" alt="Logo" width="40" height="40" />
                     <span className="navbar-brand mb-0 ms-2">$YUPI</span>
                 </div>
 
@@ -100,7 +100,7 @@ export default function LogIn() {
                     <p className="title">$YUPI</p>
                     <p className="text">Inicia Sesión para acceder a tu cuenta.</p>
                 </div>
-                <img src="imagenes/FondoLI.png" alt="Iniciar Sesión" width="100%" height="630px" className="d-inline-block align-text-top" />
+                <img src="imagenes/FondoLI.png" alt="Iniciar Sesión" width="100%" height="630px" />
             </div >
 
 
