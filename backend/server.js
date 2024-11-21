@@ -22,10 +22,11 @@ mongoose.connect("mongodb+srv://tzgarcia16:1234emergentes@cluster0.kpj6q.mongodb
 
 
 app.post("/IniciarSesion", (req, res) => {
-    const { email, password } = req.body;
-    UserModel.findOne({ email: email }).then(user => {
-        if (user) {
-            if (user.contraseña === password) {
+    const { email, pass } = req.body;
+    UserModel.findOne({ correo: email }).then(User => {
+        console.log(User)
+        if (User) {
+            if (User.contraseña === pass) {
                 res.json("Sesion Iniciada")
             } else {
                 res.json("contraseña incorrecta")
@@ -49,3 +50,19 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 
+// console.log(email + "-" + pass)
+    // const nuevoUsuario = new UserModel({
+    //     nombre: "Carlos López",
+    //     correo: "carlos.garcia@example.com",
+    //     contraseña: "miSuperContraseña",
+    //   });
+      
+    //   nuevoUsuario.save()
+    //     .then(() => {
+    //       console.log("Usuario insertado exitosamente");
+    //       mongoose.connection.close(); // Cerrar conexión después de insertar
+    //     })
+    //     .catch(err => {
+    //       console.error("Error al insertar usuario:", err);
+    //     });
+    // res.json("so")
