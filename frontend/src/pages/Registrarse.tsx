@@ -32,27 +32,27 @@ export default function SignUp() {
                     <div className="row">
                         <div className="col-6 mb-3">
                             <label htmlFor="formGroupExampleInput" className="form-label">Nombre</label>
-                            <input type="text" className="form-control" placeholder="Nombre" aria-label="First name" />
+                            <input type="text" className="form-control" aria-label="Nombre" />
                         </div>
                         <div className="col-6 mb-3">
                             <label htmlFor="Apellido" className="form-label">Apellido</label>
-                            <input type="text" className="form-control" placeholder="Apellido" aria-label="Last name" />
+                            <input type="text" className="form-control" aria-label="Apellido" />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-6 mb-3">
                             <label htmlFor="inputEmail4" className="form-label">Correo electrónico</label>
-                            <input type="email" className="form-control" placeholder="Correo electrónico" aria-label="First name" />
+                            <input type="email" className="form-control" aria-label="Correo" />
                         </div>
                         <div className="col-6 mb-3">
                             <label htmlFor="nombre" className="form-label">Número de teléfono</label>
-                            <input type="text" className="form-control" placeholder="Número de teléfono" aria-label="Last name" />
+                            <input type="text" className="form-control" aria-label="Numero" />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-6 mb-3">
                             <label htmlFor="inputPassword4" className="form-label">Contraseña</label>
-                            <input type="password" className="form-control" placeholder="Contraseña" aria-label="First name" />
+                            <input type="password" className="form-control" aria-label="Contraseña" />
                         </div>
                         <div className="col-6 mb-3">
                             <label htmlFor="inputState" className="form-label">Tipo de cuenta</label>
