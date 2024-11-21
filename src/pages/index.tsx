@@ -2,6 +2,8 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import NavBar from "./components/navbar";
 import Curtain from "./components/cortina";
+import Body from "./components/informacion"
+import Contactanos from "./components/contactanos";
 
 export default function Home() {
   return (
@@ -12,10 +14,11 @@ export default function Home() {
       </Head>
       <NavBar />
       <Curtain />
-      <footer className={styles.footer}>
-
+      <Body />
+      <Contactanos />
+      <footer className="footerText">
+        <p>© 2024 $YUPI</p>
       </footer>
-
     </>
   );
 }
