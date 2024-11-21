@@ -15,10 +15,13 @@ export default function contactanos() {
                     <div className="mb-4">
                         <textarea className="form-control" id="exampleFormControlTextarea1" rows={3} placeholder="Mensaje"></textarea>
                     </div>
-                    <button className="btn" id="contactButton" type="submit">
-                        <div>Enviar</div>
-                        <img src="imagenes/enviar-mensaje.png" alt="Contactanos" width="20" height="20" />
-                    </button>
+                    <div className="d-flex justify-content-end">
+                        <button className="btn" id="contactButton" type="submit">
+                            <div>Enviar</div>
+                            <img src="imagenes/enviar-mensaje.png" alt="Contactanos" width="20" height="20" />
+                        </button>
+                    </div>
+
                 </form>
             </div>
             <div>
