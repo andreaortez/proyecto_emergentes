@@ -46,7 +46,7 @@ app.post('/Registrarse', async (req, res) => {
             if (empresa) {
                 const newUser = await UserModel.create({ correo, contraseña, nombre, apellido, telefono })
                 const pyme = await PymeModel.create({ empresa, userId: newUser._id});
-                return res.json({ user: newUser, pyme });
+                return res.json("Pyme");
             }
             else {
                 res.status(400).send("Complete todos los campos requeridos.");
@@ -54,7 +54,7 @@ app.post('/Registrarse', async (req, res) => {
         } else {
             const newUser = await UserModel.create({ correo, contraseña, nombre, apellido, telefono })
             const inversionista = await InversionistaModel.create({ userId: newUser._id});
-            return res.json({ user: newUser, inversionista });
+            return res.json("Inversionista");
         }
     } 
 })
