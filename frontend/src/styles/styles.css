@@ -1,10 +1,10 @@
-.UserButton {
+.pageButton {
     background-color: #06b09a !important;
     color: white !important;
     border: none !important;
 }
 
-.UserButton:hover {
+.pageButton:hover {
     background-color: transparent !important;
     color: #06b09a !important;
     outline: 1px solid #06b09a !important;
@@ -17,6 +17,10 @@
     background-position: center;
     height: 565px;
     width: 100%;
+}
+
+.paddingTop {
+    padding-top: 66px;
 }
 
 .overlay {

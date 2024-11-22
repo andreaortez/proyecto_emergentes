@@ -10,15 +10,15 @@ self.__BUILD_MANIFEST = {
   "rootMainFiles": [],
   "rootMainFilesTree": {},
   "pages": {
-    "/IniciarSesion": [
+    "/": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/IniciarSesion.js"
+      "static/chunks/pages/index.js"
     ],
-    "/Registrarse": [
+    "/Dashboard-pyme": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/Registrarse.js"
+      "static/chunks/pages/Dashboard-pyme.js"
     ],
     "/_app": [
       "static/chunks/webpack.js",

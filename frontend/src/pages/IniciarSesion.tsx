@@ -33,11 +33,15 @@ export default function LogIn() {
             });
     };
 
+    const handleNavigation = () => {
+        router.push('/Dashboard-pyme');
+    };
+
 
     return (
         <>
             {/* Form */}
-            <div className="LG_SU-background float-start" style={{ paddingTop: '35px' }}>
+            <div className="LG_SU-background float-start" style={{ paddingTop: '90px' }}>
                 {/* Flecha */}
                 <div className="back position-absolute top-0 end-0">
                     <Link href="/">
@@ -49,7 +53,6 @@ export default function LogIn() {
                     <img src="./imagenes/logo.png" alt="Logo" width="40" height="40" />
                     <span className="navbar-brand mb-0 ms-2">$YUPI</span>
                 </div>
-
 
                 <p className="LG_SUtitle text-center" >Iniciar Sesión</p>
                 <form onSubmit={handleSubmit}>
@@ -82,7 +85,7 @@ export default function LogIn() {
                         </div>
                     </div>
                     <div className="text-center">
-                        <button className="UserButton btn" type="submit">
+                        <button className="pageButton btn" type="submit">
                             Iniciar Sesión
                         </button>
                     </div>
@@ -125,15 +128,18 @@ export default function LogIn() {
                                 <div className="modal-footer">
                                     <button
                                         type="button"
-                                        className="btn btn-secondary UserButton"
-                                        onClick={() => setShowModal(false)}
+                                        className="btn btn-secondary pageButton"
+                                        onClick={() => {
+                                            setShowModal(false);
+                                            handleNavigation();
+                                        }}
                                     >
                                         Cerrar
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div >
                 )
             }
         </>
