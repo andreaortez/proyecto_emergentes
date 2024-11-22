@@ -1,7 +1,36 @@
 import Link from "next/link";
 import React from 'react';
+import { useState } from "react";
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 export default function SignUp() {
+    const router = useRouter();
+    const tipo = 0; //Pyme 1, Inversionista 0
+    //User Data
+    const [correo, setCorreo] = useState<string>();
+    const [contraseña, setContraseña] = useState<string>();
+    const [nombre, setNombre] = useState<string>();
+    const [apellido, setApellido] = useState<string>();
+    const [telefono, setTelefono] = useState<string>();
+    //Pyme Data
+    const [empresa, setEmpresa] = useState<string>();
+
+    const [modalMessage, setModalMessage] = useState<string>('');
+    const [modalTitle, setModalTitle] = useState<string>('');
+    const [showModal, setShowModal] = useState<boolean>(false);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+        e.preventDefault();
+        axios.post('http://localhost:3000/Registrarse', { correo, contraseña, nombre, apellido, telefono, empresa, tipo })
+            .then(result => {
+                console.log(result)
+                router.push('/IniciarSesion');
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+    };
     return (
         <>
             {/* Imagen */}
@@ -28,31 +57,41 @@ export default function SignUp() {
                 </div>
 
                 <p className="LG_SUtitle text-center">Crear Cuenta</p>
-                <form className="center">
+                <form onSubmit={handleSubmit} className="center">
                     <div className="row">
                         <div className="col-6 mb-3">
                             <label htmlFor="formGroupExampleInput" className="form-label">Nombre</label>
-                            <input type="text" className="form-control" aria-label="Nombre" />
+                            <input
+                                onChange={(input) => setNombre(input.target.value)}
+                                type="text" className="form-control" aria-label="Nombre" />
                         </div>
                         <div className="col-6 mb-3">
                             <label htmlFor="Apellido" className="form-label">Apellido</label>
-                            <input type="text" className="form-control" aria-label="Apellido" />
+                            <input
+                                onChange={(input) => setApellido(input.target.value)}
+                                type="text" className="form-control" aria-label="Apellido" />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-6 mb-3">
                             <label htmlFor="inputEmail4" className="form-label">Correo electrónico</label>
-                            <input type="email" className="form-control" aria-label="Correo" />
+                            <input
+                                onChange={(input) => setCorreo(input.target.value)}
+                                type="email" className="form-control" aria-label="Correo" />
                         </div>
                         <div className="col-6 mb-3">
                             <label htmlFor="nombre" className="form-label">Número de teléfono</label>
-                            <input type="text" className="form-control" aria-label="Numero" />
+                            <input
+                                onChange={(input) => setTelefono(input.target.value)}
+                                type="text" className="form-control" aria-label="Numero" />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-6 mb-3">
                             <label htmlFor="inputPassword4" className="form-label">Contraseña</label>
-                            <input type="password" className="form-control" aria-label="Contraseña" />
+                            <input
+                                onChange={(input) => setContraseña(input.target.value)}
+                                type="password" className="form-control" aria-label="Contraseña" />
                         </div>
                         <div className="col-6 mb-3">
                             <label htmlFor="inputState" className="form-label">Tipo de cuenta</label>
