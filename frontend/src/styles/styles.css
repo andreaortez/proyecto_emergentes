@@ -139,6 +139,12 @@
 .footerText {
     text-align: center;
     justify-content: space-evenly;
+    background-color: white;
+    padding: 1%;
+}
+
+.footerText p {
+    margin: 0;
 }
 
 .seccion {
@@ -231,8 +237,58 @@
     margin-right: 15px;
 }
 
-.user-name p {
+.user-name {
     font-size: 20px;
     font-weight: 400;
     margin: 0;
+    padding: 0;
+    align-content: flex-start;
+    justify-content: center;
+    display: flex;
+}
+
+
+.nav-elements {
+    transition: color 0.3s ease-in-out;
+    color: black !important;
+    gap: 10px;
+}
+
+.nav-elements:hover {
+    background-color: #06b09a;
+    color: white !important;
+    border: none;
+}
+
+.gap {
+    margin-right: 10px;
+}
+
+.grafica {
+    position: absolute;
+    top: 330px;
+    left: 270px;
+    border-radius: 5px;
+}
+
+.estadisticas {
+    position: absolute;
+    top: 330px;
+    left: 900px;
+}
+
+.estadisticas img {
+    margin-right: 20px;
+    margin-bottom: 30px;
+}
+
+.estadisticas2 {
+    position: absolute;
+    top: 430px;
+    left: 900px;
+}
+
+.estadisticas2 img {
+    margin-right: 20px;
+    /* Espacio de 20px entre las imágenes */
 }

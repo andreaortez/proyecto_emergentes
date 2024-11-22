@@ -47,14 +47,3 @@ a {
   display: flex;
   align-items: center;
 }
-
-.nav-elements {
-  transition: color 0.3s ease-in-out;
-  color: black !important;
-}
-
-.nav-elements:hover {
-  background-color: #06b09a;
-  color: white !important;
-  border: none;
-}

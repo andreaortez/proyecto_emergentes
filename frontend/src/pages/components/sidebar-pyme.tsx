@@ -15,21 +15,49 @@ export default function Sidebar() {
                     <ul className="nav flex-column">
                         <li className="nav-item ">
                             <Link className="nav-link nav-elements" href="/Dashboard-pyme">
+                                <img
+                                    src="/imagenes/monitor.png"
+                                    alt="Dashboard Icon"
+                                    className="nav-icon gap"
+                                    width="20"
+                                    height="20"
+                                />
                                 Dashboard
                             </Link>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link nav-elements" href="#">
+                                <img
+                                    src="/imagenes/usuarios-alt.png"
+                                    alt="Dashboard Icon"
+                                    className="nav-icon gap"
+                                    width="20"
+                                    height="20"
+                                />
                                 Chat Inversores
                             </a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link nav-elements" href="#">
+                                <img
+                                    src="/imagenes/usuario.png"
+                                    alt="Dashboard Icon"
+                                    className="nav-icon gap"
+                                    width="20"
+                                    height="20"
+                                />
                                 Mi Perfil
                             </a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link nav-elements" href="#" data-bs-toggle="collapse" data-bs-target="#submenu">
+                                <img
+                                    src="/imagenes/usuarios-alt.png"
+                                    alt="Dashboard Icon"
+                                    className="nav-icon gap"
+                                    width="20"
+                                    height="20"
+                                />
                                 Mis Proyectos
                             </a>
                             <div id="submenu" className="collapse">
