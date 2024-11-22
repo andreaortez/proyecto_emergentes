@@ -43,7 +43,7 @@ export default function SignUp() {
             </div>
 
             {/* Form */}
-            <div className="LG_SU-background float-end" style={{ paddingTop: '0px' }}>
+            <div className="LG_SU-background float-end" style={{ paddingTop: '50px' }}>
                 {/* Flecha */}
                 <div className="back position-absolute top-0 start-50 p-2">
                     <Link href="/">
@@ -102,7 +102,7 @@ export default function SignUp() {
                         </div>
                     </div>
                     <div className="text-center">
-                        <button className="UserButton btn" type="submit">
+                        <button className="pageButton btn" type="submit">
                             Registrarse
                         </button>
                     </div>

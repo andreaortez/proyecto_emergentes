@@ -19,7 +19,7 @@ export default function Navbar() {
               <a className="nav-link" href="#contactanos">Contáctanos</a>
               <Link href="/IniciarSesion" className="nav-link">Iniciar Sesión</Link>
             </div>
-            <button className="btn UserButton" type="button">
+            <button className="btn pageButton" type="button">
               <Link href="/Registrarse" className="nav-link">Registrarse</Link>
             </button>
           </div>

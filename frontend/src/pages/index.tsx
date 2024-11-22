@@ -13,9 +13,11 @@ export default function Home() {
         <link rel="icon" href="/imagenes/logo.png" />
       </Head>
       <NavBar />
-      <Curtain />
-      <Body />
-      <Contactanos />
+      <div className="paddingTop">
+        <Curtain />
+        <Body />
+        <Contactanos />
+      </div>
       <footer className="footerText">
         <p>© 2024 $YUPI</p>
       </footer>
