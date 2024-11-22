@@ -10,8 +10,6 @@ export default function LogIn() {
     const [modalTitle, setModalTitle] = useState<string>('');
     const [showModal, setShowModal] = useState<boolean>(false);
 
-    const router = useRouter();
-
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         axios.post('http://localhost:3000/IniciarSesion', { email, pass })
@@ -21,9 +19,16 @@ export default function LogIn() {
                     setModalMessage("Inicio de sesión exitoso.");
                     setShowModal(true);
                 } else {
-                    setModalTitle("¡Error!");
-                    setModalMessage("Correo electrónico o contraseña incorrecta.");
-                    setShowModal(true);
+                    if (result.data === "contraseña incorrecta") {
+                        setModalTitle("¡Error!");
+                        setModalMessage("Contraseña incorrecta.");
+                        setShowModal(true);
+                    } else {
+                        setModalTitle("¡Error!");
+                        setModalMessage("El usuario no existe");
+                        setShowModal(true);
+                    }
+                    
                 }
             })
             .catch(() => {
