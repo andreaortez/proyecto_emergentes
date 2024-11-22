@@ -1,8 +1,0 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/IniciarSesion": "pages/IniciarSesion.js",
-  "/Dashboard-pyme": "pages/Dashboard-pyme.js",
-  "/": "pages/index.js"
-}
