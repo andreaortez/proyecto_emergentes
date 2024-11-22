@@ -18,7 +18,7 @@ body {
 
 body {
   color: var(--foreground);
-  background-image: url(../../public/imagenes/17397.jpg);
+  background-image: url(../../public/imagenes/fondoDashboard.jpg);
   background-size: cover;
   background-position: center;
   font-family: Arial, Helvetica, sans-serif;

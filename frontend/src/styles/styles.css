@@ -183,3 +183,56 @@
 #contactButton:hover {
     background-color: rgb(240, 240, 240);
 }
+
+.portadaUsuario {
+    position: relative;
+    background-image: url(../../public/imagenes/portada.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 150px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: white;
+}
+
+.title3 {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.overlay3 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-content: center;
+    align-self: center;
+    color: white;
+    padding: 2%;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.usuario-card {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: white;
+    height: 100px;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 200px;
+    left: 270px;
+    width: 77%;
+}
+
+.avatar-container {
+    margin-right: 15px;
+}
+
+.user-name p {
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0;
+}
