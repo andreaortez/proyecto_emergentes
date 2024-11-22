@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export default function SignUp() {
     const router = useRouter();
-    const tipo = 0; //Pyme 1, Inversionista 0
+    const tipo = 1; //Pyme 1, Inversionista 0
     //User Data
     const [correo, setCorreo] = useState<string>();
     const [contraseña, setContraseña] = useState<string>();
@@ -14,7 +14,7 @@ export default function SignUp() {
     const [apellido, setApellido] = useState<string>();
     const [telefono, setTelefono] = useState<string>();
     //Pyme Data
-    const [empresa, setEmpresa] = useState<string>();
+    const [empresa, setEmpresa] = useState<string>("Escala");
 
     const [modalMessage, setModalMessage] = useState<string>('');
     const [modalTitle, setModalTitle] = useState<string>('');
@@ -24,8 +24,12 @@ export default function SignUp() {
         e.preventDefault();
         axios.post('http://localhost:3000/Registrarse', { correo, contraseña, nombre, apellido, telefono, empresa, tipo })
             .then(result => {
-                console.log(result)
-                router.push('/IniciarSesion');
+                if (result.data === "Pyme") {
+                    console.log(result)
+                    router.push('/Dashboard-pyme');
+                } else {
+                    router.push('/IniciarSesion');
+                }
             })
             .catch((err) => {
                 console.log(err)

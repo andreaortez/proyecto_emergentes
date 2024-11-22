@@ -9,6 +9,7 @@ export default function LogIn() {
     const [modalMessage, setModalMessage] = useState<string>('');
     const [modalTitle, setModalTitle] = useState<string>('');
     const [showModal, setShowModal] = useState<boolean>(false);
+    const router = useRouter();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
