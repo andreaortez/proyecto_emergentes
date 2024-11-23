@@ -3,7 +3,7 @@ import React from 'react';
 export default function Mensajes() {
     return (
         <>
-            <div className="mensajeria">
+            <div className="components gap-4" style={{ height: "40vw" }}>
                 <div className="card" style={{ width: "30%" }}>
                     <div className="card-header">
                         <h5>Mis conversaciones</h5>
@@ -88,7 +88,7 @@ export default function Mensajes() {
                         </div>
 
                         <div className="d-flex align-items-start justify-content-end mb-3">
-                            <div className="message p-2 rounded bg-light">
+                            <div className="message p-2 rounded chat">
                                 ¡Estoy bien, gracias por preguntar!
                             </div>
                             <img src="https://randomuser.me/api/portraits/women/1.jpg" className="rounded-circle ms-3" alt="Usuario 2" style={{ width: "40px", height: "40px" }} />

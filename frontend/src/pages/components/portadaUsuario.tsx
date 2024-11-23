@@ -10,15 +10,15 @@ export default function Portada() {
                 </div>
             </div>
 
-            <div className="usuario-card">
+            <div className="usuario-card hstack gap-3">
                 <img
-                    src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                    src="https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png"
                     alt="User Avatar"
-                    className="rounded-circle avatar-container"
+                    className="rounded-circle"
                     width="70"
                     height="70"
                 />
-                <div className="user-name">
+                <div className="user-name hstack gap-2">
                     <p>Nombre del Usuario</p>
                     <p>-</p>
                     <p>Rol</p>

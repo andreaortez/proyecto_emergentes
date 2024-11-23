@@ -16,23 +16,16 @@ export default function Navbar() {
                         <button className="btn btn2" type="submit">Buscar</button>
                     </form>
                     {/* User Profile */}
-                    <a
-                        className="nav-link dropdown-toggle d-flex align-items-center"
-                        href="#"
-                        id="navbarDropdown"
-                        role="button"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false"
-                    >
+                    <div className="hstack gap-2">
                         <img
-                            src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
+                            src="https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png"
                             alt="User Avatar"
                             className="rounded-circle"
-                            width="30"
-                            height="30"
+                            width="40"
+                            height="40"
                         />
-                        <span className="ms-2">User Name</span>
-                    </a>
+                        <span>User Name</span>
+                    </div>
                 </div>
             </nav >
         </>

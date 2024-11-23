@@ -219,9 +219,6 @@
 }
 
 .usuario-card {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
     background-color: white;
     height: 100px;
     padding: 10px;
@@ -233,23 +230,13 @@
     width: 77%;
 }
 
-.avatar-container {
-    margin-right: 15px;
-}
-
 .user-name {
     font-size: 20px;
     font-weight: 400;
-    margin: 0;
-    padding: 0;
-    align-content: flex-start;
-    justify-content: center;
-    display: flex;
 }
 
 .nav-elements {
     transition: color 0.3s ease-in-out;
-    color: black !important;
     gap: 10px;
 }
 
@@ -259,8 +246,20 @@
     border: none;
 }
 
-.gap {
-    margin-right: 10px;
+.nav-elements:hover #dashboard {
+    content: url(/imagenes/aplicaciones2.png);
+}
+
+.nav-elements:hover #chat {
+    content: url(/imagenes/usuarios-alt2.png)
+}
+
+.nav-elements:hover #miperfil {
+    content: url(/imagenes/usuario2.png)
+}
+
+.nav-elements:hover #proyectos {
+    content: url(/imagenes/plano2.png)
 }
 
 .grafica {
@@ -291,11 +290,12 @@
     margin-right: 20px;
 }
 
-.mensajeria {
+.components {
     display: flex;
-    gap: 20px;
     width: 100vw;
-    height: 40vw;
+    flex-direction: row;
+    align-self: stretch;
+    align-items: baseline;
 }
 
 .btn2 {
@@ -305,4 +305,36 @@
 
 .btn2:hover {
     background-color: #055E63 !important;
+}
+
+.chat {
+    background-color: #06b09a;
+    color: white;
+}
+
+.btn3 {
+    background-color: #EC221F !important;
+    color: white !important;
+}
+
+.btn3:hover {
+    background-color: #C00F0C !important;
+}
+
+.paddingLeft p {
+    padding-left: 7%;
+}
+
+.btn4 {
+    outline: 1px solid #06b09a !important;
+    color: #06b09a !important;
+}
+
+.btn4:hover {
+    background-color: #06b09a !important;
+    color: white !important;
+}
+
+.btn4:hover #btn-img-editar {
+    content: url(/imagenes/lapiz1.png);
 }
