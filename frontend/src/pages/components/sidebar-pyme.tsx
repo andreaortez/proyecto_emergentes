@@ -1,20 +1,30 @@
 import React from 'react';
-import Link from "next/link";
+import { useState } from 'react';
+import Dashboard from "./dashboardPYME";
+import Mensajeria from "./mensajeria";
+//import MiPerfil from "./components/MiPerfil";
 
 export default function Sidebar() {
+    const [currentView, setCurrentView] = useState("dashboard");
+
+    const handleViewChange = (view: string) => {
+        setCurrentView(view);
+    };
+
     return (
         <>
             <div className="d-flex">
-                {/* Sidebar */}
                 <div
                     id="sidebar"
-                    className="bg-light text-dark p-3"
-                    style={{ minHeight: '100vh', width: '250px' }}
+                    className="bg-light text-dark p-3 border-top"
+                    style={{ height: '90vh', width: '250px' }}
                 >
                     <h4 className="text-center">Menú</h4>
                     <ul className="nav flex-column">
                         <li className="nav-item ">
-                            <Link className="nav-link nav-elements" href="/Dashboard-pyme">
+                            <a className="nav-link nav-elements"
+                                onClick={() => handleViewChange("dashboard")}
+                            >
                                 <img
                                     src="/imagenes/monitor.png"
                                     alt="Dashboard Icon"
@@ -23,10 +33,12 @@ export default function Sidebar() {
                                     height="20"
                                 />
                                 Dashboard
-                            </Link>
+                            </a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link nav-elements" href="#">
+                            <a className="nav-link nav-elements"
+                                onClick={() => handleViewChange("mensajeria")}
+                            >
                                 <img
                                     src="/imagenes/usuarios-alt.png"
                                     alt="Dashboard Icon"
@@ -38,7 +50,9 @@ export default function Sidebar() {
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link nav-elements" href="#">
+                            <a className="nav-link nav-elements"
+                                onClick={() => handleViewChange("dashboard")}
+                            >
                                 <img
                                     src="/imagenes/usuario.png"
                                     alt="Dashboard Icon"
@@ -50,7 +64,9 @@ export default function Sidebar() {
                             </a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link nav-elements" href="#" data-bs-toggle="collapse" data-bs-target="#submenu">
+                            <a className="nav-link nav-elements"
+                                onClick={() => handleViewChange("dashboard")}
+                            >
                                 <img
                                     src="/imagenes/usuarios-alt.png"
                                     alt="Dashboard Icon"
@@ -60,27 +76,15 @@ export default function Sidebar() {
                                 />
                                 Mis Proyectos
                             </a>
-                            <div id="submenu" className="collapse">
-                                <ul className="nav flex-column ms-3">
-                                    <li className="nav-item">
-                                        <a className="nav-link nav-elements" href="#">
-                                            Mail
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link nav-elements" href="#">
-                                            Calendar
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link nav-elements" href="#">
-                                            E-commerce
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
                     </ul>
+                </div>
+                {/* Contenido Principal */}
+                <div className="flex-grow-1 p-4">
+                    {currentView === "dashboard" && <Dashboard />}
+                    {currentView === "mensajeria" && <Mensajeria />}
+                    {/*{currentView === "perfil" && <MiPerfil />}*/}
+                    {/*{currentView === "proyecots" && <Proyectos />}*/}
                 </div>
             </div>
         </>

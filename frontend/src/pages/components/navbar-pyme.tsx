@@ -13,7 +13,7 @@ export default function Navbar() {
                     {/* Search */}
                     <form className="d-flex" role="search">
                         <input className="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" />
-                        <button className="btn btn-outline-success pageButton" type="submit">Buscar</button>
+                        <button className="btn btn2" type="submit">Buscar</button>
                     </form>
                     {/* User Profile */}
                     <a

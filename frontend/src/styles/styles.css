@@ -192,14 +192,14 @@
 
 .portadaUsuario {
     position: relative;
-    background-image: url(../../public/imagenes/portada.jpg);
+    background-image: url(/imagenes/portada.jpg);
     background-size: cover;
     background-position: center;
     height: 150px;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
     color: white;
+    width: 100vw;
 }
 
 .title3 {
@@ -247,7 +247,6 @@
     display: flex;
 }
 
-
 .nav-elements {
     transition: color 0.3s ease-in-out;
     color: black !important;
@@ -290,5 +289,20 @@
 
 .estadisticas2 img {
     margin-right: 20px;
-    /* Espacio de 20px entre las imágenes */
+}
+
+.mensajeria {
+    display: flex;
+    gap: 20px;
+    width: 100vw;
+    height: 40vw;
+}
+
+.btn2 {
+    background-color: #06b09a !important;
+    color: white !important;
+}
+
+.btn2:hover {
+    background-color: #055E63 !important;
 }
