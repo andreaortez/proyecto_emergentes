@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Dashboard from "./dashboardPYME";
 import Mensajeria from "./mensajeria";
 import MiPerfil from "./miperfil";
+import Proyectos from "./misproyectos";
 
 export default function Sidebar() {
     const [currentView, setCurrentView] = useState("dashboard");
@@ -68,7 +69,7 @@ export default function Sidebar() {
                         </li>
                         <li className="nav-item">
                             <a className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
-                                onClick={() => handleViewChange("dashboard")}
+                                onClick={() => handleViewChange("proyectos")}
                             >
                                 <img
                                     src="/imagenes/plano.png"
@@ -89,7 +90,7 @@ export default function Sidebar() {
                     {currentView === "dashboard" && <Dashboard />}
                     {currentView === "mensajeria" && <Mensajeria />}
                     {currentView === "perfil" && <MiPerfil />}
-                    {/*{currentView === "proyectos" && <Proyectos />}*/}
+                    {currentView === "proyectos" && <Proyectos />}
                 </div>
             </div>
         </>
