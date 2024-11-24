@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Chat() {
     return (
-        <div className="card" style={{ width: "30%" }}>
+        <div className="card" style={{ width: "30%", height: '40vw' }}>
             <div className="card-header">
                 <h5>Mis conversaciones</h5>
             </div>

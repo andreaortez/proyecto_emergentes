@@ -4,7 +4,7 @@ import Mensaje from './mensajes'
 
 export default function Mensajes() {
     return (
-        <div className="components gap-4">
+        <div className="components gap-4 d-flex">
             <Chats />
             <Mensaje />
         </div>

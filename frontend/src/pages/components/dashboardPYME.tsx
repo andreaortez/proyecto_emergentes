@@ -1,10 +1,17 @@
 import React from 'react';
-import Portada from './portadaUsuario'
+import Portada from './portada'
+import UserName from './userName'
 
 export default function dashboard() {
     return (
         <>
-            <Portada />
+            <div className='vstack'>
+                <Portada />
+                <div className='p-4'>
+                    <UserName />
+                </div>
+            </div>
+
             <div className='grafica'>
                 <img
                     src="./imagenes/grafico.png"

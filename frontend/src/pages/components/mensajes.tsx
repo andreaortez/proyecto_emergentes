@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Mensajes() {
     return (
-        <div className="card" style={{ width: "43.5%" }}>
+        <div className="card" style={{ width: "43.5%", height: '40vw' }}>
             <div className="card-header">
                 <div className="d-flex align-items-center">
                     <img

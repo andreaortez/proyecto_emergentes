@@ -4,7 +4,7 @@ import UserInformation from './userInformation'
 
 export default function MiPerfil() {
     return (
-        <div className="components gap-4">
+        <div className="components gap-4 d-flex">
             <UserProfile />
             <UserInformation />
         </div >

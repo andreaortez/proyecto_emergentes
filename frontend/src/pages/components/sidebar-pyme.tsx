@@ -86,11 +86,13 @@ export default function Sidebar() {
                 </div>
 
                 {/* Contenido Principal */}
-                <div className="flex-grow-1 p-4">
+                <div className="d-flex">
                     {currentView === "dashboard" && <Dashboard />}
-                    {currentView === "mensajeria" && <Mensajeria />}
-                    {currentView === "perfil" && <MiPerfil />}
-                    {currentView === "proyectos" && <Proyectos />}
+                    <div className="p-4">
+                        {currentView === "mensajeria" && <Mensajeria />}
+                        {currentView === "perfil" && <MiPerfil />}
+                        {currentView === "proyectos" && <Proyectos />}
+                    </div>
                 </div>
             </div>
         </>

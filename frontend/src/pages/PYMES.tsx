@@ -6,7 +6,7 @@ export default function BackgroundText() {
     return (
         <>
             <Navbar />
-            <div style={{ display: 'flex' }}>
+            <div className='hstack'>
                 <Sidebar />
             </div>
         </>
