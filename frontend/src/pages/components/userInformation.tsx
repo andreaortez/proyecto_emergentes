@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function userInformation() {
     return (
-        <div className="card " style={{ width: "51%" }}>
+        <div className="card " style={{ width: "53.3%" }}>
             <div className="card-body">
                 <div className='hstack gap-3 align-items-center '>
                     <h5 className="card-title">Información Personal</h5>

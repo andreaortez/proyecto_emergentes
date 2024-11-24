@@ -219,7 +219,7 @@
 
 .usuario-card {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    width: 78%;
+    width: 82%;
     border: none !important;
     position: absolute;
     transform: translateY(-50%);
@@ -330,4 +330,8 @@
 
 .btn4:hover #btn-img-editar {
     content: url(/imagenes/lapiz1.png);
+}
+
+.windowPadding {
+    padding-top: 66px;
 }

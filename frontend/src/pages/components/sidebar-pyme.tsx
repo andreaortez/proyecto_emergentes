@@ -14,11 +14,11 @@ export default function Sidebar() {
 
     return (
         <>
-            <div className="d-flex">
+            <div className="d-flex windowPadding">
                 <div
                     id="sidebar"
                     className="bg-light text-body-secondary p-3 border-top"
-                    style={{ height: '90vh', width: '250px' }}
+                    style={{ width: '220px', height: '56.3vw' }}
                 >
                     <h4 className="text-center">Menú</h4>
                     <ul className="nav flex-column text-body-secondary">
@@ -84,6 +84,7 @@ export default function Sidebar() {
                         </li>
                     </ul>
                 </div>
+
 
                 {/* Contenido Principal */}
                 <div className="d-flex">
