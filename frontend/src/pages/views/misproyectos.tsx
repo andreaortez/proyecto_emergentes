@@ -1,5 +1,5 @@
 import react from 'react'
-import PCard from './proyectoCard'
+import PCard from '../components/proyectoCard'
 
 export default function MisProyectos() {
     return (

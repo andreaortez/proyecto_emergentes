@@ -1,6 +1,6 @@
 import React from 'react';
-import Chats from './chats'
-import Mensaje from './mensajes'
+import Chats from '../components/chats'
+import Mensaje from '../components/mensajes'
 
 export default function Mensajes() {
     return (

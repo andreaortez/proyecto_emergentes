@@ -1,6 +1,6 @@
 import React from 'react';
-import UserProfile from './userProfile'
-import UserInformation from './userInformation'
+import UserProfile from '../components/userProfile'
+import UserInformation from '../components/userInformation'
 
 export default function MiPerfil() {
     return (

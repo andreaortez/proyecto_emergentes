@@ -1,6 +1,8 @@
-import Link from "next/link";
+interface Parametros {
+    setCurrentView: (view: string) => void;
+}
 
-export default function Navbar() {
+export default function Navbar({ setCurrentView }: Parametros) {
     return (
         <>
             <nav className="navbar bg-body-tertiary fixed-top">
@@ -11,7 +13,10 @@ export default function Navbar() {
                         <span className="navbar-brand mb-0 h1 ms-2">$YUPI</span>
                     </a>
                     {/* Search */}
-                    <form className="d-flex" role="search">
+                    <form className="d-flex" role="search" onSubmit={(e) => {
+                        e.preventDefault();
+                        setCurrentView("searchProyects");
+                    }}>
                         <input className="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" />
                         <button className="btn btn2" type="submit">Buscar</button>
                     </form>

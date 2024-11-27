@@ -219,7 +219,7 @@
 
 .usuario-card {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    width: 82%;
+    width: 80.5%;
     border: none !important;
     position: absolute;
     transform: translateY(-50%);
@@ -334,4 +334,8 @@
 
 .windowPadding {
     padding-top: 66px;
+}
+
+.flex-grow {
+    flex-grow: 1;
 }

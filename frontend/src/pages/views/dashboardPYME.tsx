@@ -1,6 +1,6 @@
 import React from 'react';
-import Portada from './portada'
-import UserName from './userName'
+import Portada from '../components/portada'
+import UserName from '../components/userName'
 
 export default function dashboard() {
     return (
