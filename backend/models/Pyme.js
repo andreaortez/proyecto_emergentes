@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 //Pyme Schema
 const PymeSchema = new mongoose.Schema({
-    empresa: { type: String,required:true },
+    empresa: { type: String, required: false },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 });
 
