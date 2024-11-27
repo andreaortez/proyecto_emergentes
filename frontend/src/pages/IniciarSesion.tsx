@@ -13,7 +13,7 @@ export default function LogIn() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        axios.post('http://localhost:3000/IniciarSesion', { email, pass })
+        axios.post('http://localhost:3001/IniciarSesion', { email, pass })
             .then(result => {
                 if (result.data === "Sesion Iniciada") {
                     setModalTitle("¡Éxito!");
@@ -40,7 +40,7 @@ export default function LogIn() {
     };
 
     const handleNavigation = () => {
-        router.push('/Navegacion-pyme');
+        router.push('/PYMES');
     };
 
 

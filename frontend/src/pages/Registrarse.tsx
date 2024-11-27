@@ -22,7 +22,7 @@ export default function SignUp() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        axios.post('http://localhost:3000/Registrarse', { correo, contraseña, nombre, apellido, telefono, empresa, tipo })
+        axios.post('http://localhost:3001/Registrarse', { correo, contraseña, nombre, apellido, telefono, empresa, tipo })
             .then(result => {
                 if (result.data === "Pyme") {
                     console.log(result)
