@@ -15,7 +15,10 @@ export default function LogIn() {
         e.preventDefault();
         axios.post('http://localhost:3001/IniciarSesion', { email, pass })
             .then(result => {
-                if (result.data === "Sesion Iniciada") {
+                if (result.data.result === "Sesion Iniciada") {
+                    sessionStorage.setItem('user_id', result.data.user_id);
+                    window.location.href = "/PYMES";
+
                     setModalTitle("¡Éxito!");
                     setModalMessage("Inicio de sesión exitoso.");
                     setShowModal(true);
