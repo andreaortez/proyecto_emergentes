@@ -1,88 +1,73 @@
 import React from 'react';
-import Link from "next/link";
 
-export default function Sidebar() {
+interface Parametros {
+    setCurrentView: (view: string) => void;
+}
+
+export default function Sidebar({ setCurrentView }: Parametros) {
     return (
-        <>
-            <div className="d-flex">
-                {/* Sidebar */}
-                <div
-                    id="sidebar"
-                    className="bg-light text-dark p-3"
-                    style={{ minHeight: '100vh', width: '250px' }}
-                >
-                    <h4 className="text-center">Menú</h4>
-                    <ul className="nav flex-column">
-                        <li className="nav-item ">
-                            <Link className="nav-link nav-elements" href="/Dashboard-pyme">
-                                <img
-                                    src="/imagenes/monitor.png"
-                                    alt="Dashboard Icon"
-                                    className="nav-icon gap"
-                                    width="20"
-                                    height="20"
-                                />
-                                Dashboard
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link nav-elements" href="#">
-                                <img
-                                    src="/imagenes/usuarios-alt.png"
-                                    alt="Dashboard Icon"
-                                    className="nav-icon gap"
-                                    width="20"
-                                    height="20"
-                                />
-                                Chat Inversores
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link nav-elements" href="#">
-                                <img
-                                    src="/imagenes/usuario.png"
-                                    alt="Dashboard Icon"
-                                    className="nav-icon gap"
-                                    width="20"
-                                    height="20"
-                                />
-                                Mi Perfil
-                            </a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link nav-elements" href="#" data-bs-toggle="collapse" data-bs-target="#submenu">
-                                <img
-                                    src="/imagenes/usuarios-alt.png"
-                                    alt="Dashboard Icon"
-                                    className="nav-icon gap"
-                                    width="20"
-                                    height="20"
-                                />
-                                Mis Proyectos
-                            </a>
-                            <div id="submenu" className="collapse">
-                                <ul className="nav flex-column ms-3">
-                                    <li className="nav-item">
-                                        <a className="nav-link nav-elements" href="#">
-                                            Mail
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link nav-elements" href="#">
-                                            Calendar
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link nav-elements" href="#">
-                                            E-commerce
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+        <div className="d-flex windowPadding ">
+            <div
+                id="sidebar"
+                className="bg-light text-body-secondary p-3 border-top flex-grow"
+                style={{ width: '220px', minHeight: '100vh' }}
+            >
+                <h4 className="text-center">Menú</h4>
+                <nav className="nav flex-column text-body-secondary">
+                    <a className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
+                        onClick={() => setCurrentView("dashboard")}
+                    >
+                        <img
+                            src="/imagenes/aplicaciones.png"
+                            alt="Dashboard"
+                            className="nav-icon"
+                            width="20"
+                            height="20"
+                            id="dashboard"
+                        />
+                        Dashboard
+                    </a>
+                    <a className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
+                        onClick={() => setCurrentView("mensajeria")}
+                    >
+                        <img
+                            src="/imagenes/usuarios-alt.png"
+                            alt="Mensajeria"
+                            className="nav-icon"
+                            width="20"
+                            height="20"
+                            id="chat"
+                        />
+                        Chat Inversores
+                    </a>
+                    <a className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
+                        onClick={() => setCurrentView("perfil")}
+                    >
+                        <img
+                            src="/imagenes/usuario.png"
+                            alt="Dashboard Icon"
+                            className="nav-icon"
+                            width="20"
+                            height="20"
+                            id="miperfil"
+                        />
+                        Mi Perfil
+                    </a>
+                    <a className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
+                        onClick={() => setCurrentView("proyectos")}
+                    >
+                        <img
+                            src="/imagenes/plano.png"
+                            alt="Dashboard Icon"
+                            className="nav-icon"
+                            width="20"
+                            height="20"
+                            id="proyectos"
+                        />
+                        Mis Proyectos
+                    </a>
+                </nav>
             </div>
-        </>
+        </div>
     );
 };

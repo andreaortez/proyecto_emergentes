@@ -29,7 +29,7 @@ export default function LogIn() {
                         setModalMessage("El usuario no existe");
                         setShowModal(true);
                     }
-                    
+
                 }
             })
             .catch(() => {
@@ -40,7 +40,7 @@ export default function LogIn() {
     };
 
     const handleNavigation = () => {
-        router.push('/Dashboard-pyme');
+        router.push('/Navegacion-pyme');
     };
 
 
