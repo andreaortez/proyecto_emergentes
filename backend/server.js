@@ -34,7 +34,7 @@ app.post("/IniciarSesion", (req, res) => {
         console.log(User+User._id)
         if (User) {
             if (User.contraseña === pass) {
-                res.json("Sesion Iniciada")
+                res.status(200).send({ result:"Sesion Iniciada", user_id:User._id })
             } else {
                 res.json("contraseña incorrecta")
             }
