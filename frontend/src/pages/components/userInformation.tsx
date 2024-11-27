@@ -1,6 +1,12 @@
 import React from 'react';
 
-export default function userInformation() {
+interface User {
+    correo: string;
+    telefono: string;
+    direccion: string;
+}
+
+export default function userInformation({ correo, telefono, direccion }: User) {
     return (
         <div className="card " style={{ width: "53.3%" }}>
             <div className="card-body">
@@ -23,20 +29,24 @@ export default function userInformation() {
                     <div className="row align-items-start">
                         <div className="col">
                             <p className="card-text text-body-secondary mt-5 mb-2">Nombre</p>
-                            <p>Nombre</p>
+                            <p>{sessionStorage.getItem("nombre")}</p>
 
                             <p className="card-text text-body-secondary mt-5 mb-2">Correo Electrónico</p>
-                            <p>Correo Electrónico</p>
+                            <p>{`${correo}`}</p>
 
-                            <p className="card-text text-body-secondary mt-5 mb-2">Dirección</p>
-                            <p>Dirección</p>
+                            <p className="card-text text-body-secondary mt-5 mb-2">Rol</p>
+                            <p>{sessionStorage.getItem("rol")}</p>
+
                         </div>
                         <div className="col">
                             <p className="card-text text-body-secondary mt-5 mb-2">Apellido</p>
-                            <p>Apellido</p>
+                            <p>{sessionStorage.getItem("apellido")}</p>
 
                             <p className="card-text text-body-secondary mt-5 mb-2">Número de Teléfono</p>
-                            <p>Número de Teléfono</p>
+                            <p>{`${telefono}`}</p>
+
+                            <p className="card-text text-body-secondary mt-5 mb-2">Dirección</p>
+                            <p>{`${direccion}`}</p>
                         </div>
                     </div>
                 </div>

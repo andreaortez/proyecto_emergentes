@@ -13,9 +13,12 @@ export default function LogIn() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        axios.post('http://localhost:3000/IniciarSesion', { email, pass })
+        axios.post('http://localhost:3001/IniciarSesion', { email, pass })
             .then(result => {
-                if (result.data === "Sesion Iniciada") {
+                if (result.data.result === "Sesion Iniciada") {
+                    sessionStorage.setItem('user_id', result.data.user_id);
+                    window.location.href = "/PYMES";
+
                     setModalTitle("¡Éxito!");
                     setModalMessage("Inicio de sesión exitoso.");
                     setShowModal(true);
@@ -40,7 +43,7 @@ export default function LogIn() {
     };
 
     const handleNavigation = () => {
-        router.push('/Navegacion-pyme');
+        router.push('/PYMES');
     };
 
 

@@ -1,8 +1,38 @@
 import React from 'react';
 import Portada from '../components/portada'
 import UserName from '../components/userName'
+import axios from 'axios';
+import { useEffect } from 'react';
 
 export default function dashboard() {
+    const user_id = sessionStorage.getItem("user_id");
+
+    const cargarDatos = async () => {
+        try {
+            let url = "http://localhost:3001/MiPerfil";
+
+            const result = await axios.post(url, { user_id });
+
+            if (result.status === 200) {
+                sessionStorage.setItem('nombre', result.data.nombre);
+                sessionStorage.setItem('apellido', result.data.apellido);
+                sessionStorage.setItem('rol', result.data.rol);
+                sessionStorage.setItem('avatar', result.data.avatar);
+            }
+        } catch (error) {
+            console.error("Error al cargar los datos del usuario:", error);
+        }
+    };
+
+
+    useEffect(() => {
+        if (user_id) {
+            cargarDatos();
+        } else {
+            console.error("No se encontró user_id en el sessionStorage");
+        }
+    }, [user_id]);//se ejecuta solo si el id cambia
+
     return (
         <>
             <div className='vstack'>

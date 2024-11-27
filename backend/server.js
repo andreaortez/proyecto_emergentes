@@ -87,12 +87,12 @@ app.put("/User", (req, res) => {
         res.status(200).send(User);
     }).catch((err) => {res.json(err)});
  })
-app.get("/MiPerfil", (req, res) => { 
+app.post("/MiPerfil", (req, res) => { 
     const { user_id } = req.body;
     UserModel.findOne({ _id: user_id }).then(User => {
         console.log(User)
-        const { nombre, apellido,correo,telefono,direccion, rol } = User;
-        res.status(200).send({nombre, apellido,correo,telefono,direccion, rol});
+        const { nombre, apellido, correo, telefono, direccion, rol, avatar } = User;
+        res.status(200).send({nombre, apellido, correo, telefono, direccion, rol, avatar});
     }).catch((err) => {res.json(err)});
 })
 

@@ -30,7 +30,8 @@ export default function Mensajes() {
                     <div className="message p-2 rounded chat">
                         ¡Estoy bien, gracias por preguntar!
                     </div>
-                    <img src="https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png" className="rounded-circle ms-3" alt="Usuario 2" style={{ width: "40px", height: "40px" }} />
+                    <img src={sessionStorage.getItem("avatar") || "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png"}
+                        className="rounded-circle ms-3" alt="Usuario 2" style={{ width: "40px", height: "40px" }} />
                 </div>
 
                 <div className="d-flex align-items-start mb-3">
