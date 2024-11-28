@@ -64,17 +64,19 @@ mongoose.connect(mongoURI).then(() => console.log('Connected to MongoDB Atlas'))
 app.post("/IniciarSesion", async (req, res) => {
     const { email, pass } = req.body;
 
+    console.log(email + pass);
+
     try {
         // Buscar en MongoDB
         const user = await UserModel.findOne({ correo: email });
 
         if (!user) {
-            return res.status(404).json("El usuario no existe en MongoDB");
+            return res.status(404).send("El usuario no existe en MongoDB");
         }
 
         // Verificar contraseña
         if (user.contraseña !== pass) {
-            return res.status(401).json("Contraseña incorrecta");
+            return res.status(401).send("Contraseña incorrecta");
         }
 
         // Intentar iniciar sesión en Firebase
@@ -83,10 +85,10 @@ app.post("/IniciarSesion", async (req, res) => {
             // Usuario ya existe en Firebase, retornar éxito
             const pyme = await PymeModel.findOne({ userId: user._id });
             if (pyme) {
-                return res.status(200).json({ result: "Sesión Iniciada", user_id: user._id, pyme_id: pyme._id });
+                return res.status(200).send({ result: "Sesión Iniciada", user_id: user._id, pyme_id: pyme._id });
             } else {
                 const inv = await InversionistaModel.findOne({ userId: user._id });
-                return res.status(200).json({ result: "Sesión Iniciada", user_id: user._id,inversionista_id: inv._id });
+                return res.status(200).send({ result: "Sesión Iniciada", user_id: user._id,inversionista_id: inv._id });
             }
             
             
@@ -99,13 +101,13 @@ app.post("/IniciarSesion", async (req, res) => {
                     displayName: `${user.nombre} ${user.apellido}`,
                 });
 
-                return res.status(200).json({ result: "Sesión Iniciada", user_id: user._id, firebaseUser });
+                return res.status(200).send({ result: "Sesión Iniciada", user_id: user._id, firebaseUser });
             }
             throw error;
         }
     } catch (err) {
         console.error(err);
-        res.status(500).json("Error interno del servidor");
+        res.status(500).send("Error interno del servidor");
     }
 });
 
@@ -321,17 +323,8 @@ app.get("/ProyectosPyme", async (req, res) => {
 })
 
 app.get("/Proyectos", async (req, res) => {
-    const { project_id } = req.body;
     try { 
-        if (project_id) {
-            const proyecto = await ProjectModel.findById(project_id);
-            if (!proyecto) {
-                return res.status(404).send("Proyecto no encontrado.");
-            }
-            res.status(200).json(proyecto);
-        } else {
-            res.status(404).json("Se debe proveer un ID del Proyecto");
-        }
+        const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
     } catch (error) {
         console.error(error);
         res.status(500).send("Error al obtener los proyectos.");
