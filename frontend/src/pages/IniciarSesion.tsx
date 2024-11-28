@@ -46,7 +46,6 @@ export default function LogIn() {
         router.push('/PYMES');
     };
 
-
     return (
         <>
             {/* Form */}
