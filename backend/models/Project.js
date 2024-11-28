@@ -10,6 +10,7 @@ const ProjectSchema = new mongoose.Schema({
     meta: { type: Number, required: true },
     descripcion: { type: String },
     recaudado: { type: String, required: true },
+    owner: {type: mongoose.Schema.Types.ObjectId, ref: 'Pyme', required: true},
     inversionistas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'InvestorProject' }]
 });
 
