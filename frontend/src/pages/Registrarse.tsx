@@ -26,13 +26,16 @@ export default function SignUp() {
             .then(result => {
                 if (result.data === "Pyme") {
                     console.log(result)
-                    router.push('/Dashboard-pyme');
+                    sessionStorage.setItem('user_id', result.data.user_id);
+                    window.location.href = "/PYMES";
+                    router.push('/PYMES');
                 } else {
+                    {/* Por ahora abre iniciar sesion pero seria /Inversionista*/ }
                     router.push('/IniciarSesion');
                 }
             })
-            .catch((err) => {
-                console.log(err)
+            .catch((error) => {
+                console.log(error)
             });
     };
     return (

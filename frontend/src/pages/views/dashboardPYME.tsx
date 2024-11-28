@@ -24,7 +24,6 @@ export default function dashboard() {
         }
     };
 
-
     useEffect(() => {
         if (user_id) {
             cargarDatos();
