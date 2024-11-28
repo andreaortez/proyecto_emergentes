@@ -16,10 +16,6 @@ export default function SignUp() {
     //Pyme Data
     const [empresa, setEmpresa] = useState<string>("Escala");
 
-    const [modalMessage, setModalMessage] = useState<string>('');
-    const [modalTitle, setModalTitle] = useState<string>('');
-    const [showModal, setShowModal] = useState<boolean>(false);
-
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         axios.post('http://localhost:3001/Registrarse', { correo, contraseña, nombre, apellido, telefono, empresa, tipo })
@@ -27,6 +23,7 @@ export default function SignUp() {
                 if (result.data === "Pyme") {
                     console.log(result)
                     sessionStorage.setItem('user_id', result.data.user_id);
+                    sessionStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id)
                     window.location.href = "/PYMES";
                     router.push('/PYMES');
                 } else {

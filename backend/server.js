@@ -296,6 +296,7 @@ app.delete("/Proyecto", async (req, res) => {
         res.status(500).send("Error al eliminar el proyecto.");
     }
 });
+
 app.get("/ProyectosPyme", async (req, res) => {
     const { pyme_id } = req.body;
     try { 
