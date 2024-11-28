@@ -320,7 +320,36 @@ app.get("/ProyectosPyme", async (req, res) => {
 
 app.get("/Proyectos", async (req, res) => {
     try { 
-        const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
+        const proyectos = await ProjectModel.aggregate([
+            { $group: { _id: "$sector", proyectos: { $push: "$$ROOT" } } }
+        ]);
+
+        const response = {
+            economia: [],
+            salud: [],
+            educacion: [],
+            agricola: [],
+            ganaderia: [],
+            finanzas: [],
+            tecnologia: []
+        };
+
+        proyectos.forEach(item => {
+            if (response.hasOwnProperty(item._id.toLowerCase())) {
+                response[item._id.toLowerCase()] = item.proyectos;
+            }
+        });
+        return res.status(200).send({
+            msg: "Proyectos enviados",
+            economia: response.economia,
+            salud: response.salud,
+            educacion: response.educacion,
+            agricola: response.agricola,
+            ganaderia: response.ganaderia,
+            finanzas: response.finanzas,
+            tecnologia: response.tecnologia
+        });
+        
     } catch (error) {
         console.error(error);
         res.status(500).send("Error al obtener los proyectos.");

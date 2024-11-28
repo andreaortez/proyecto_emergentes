@@ -16,7 +16,10 @@ export default function LogIn() {
         e.preventDefault();
         axios.post('http://localhost:3001/IniciarSesion', { email, pass })
             .then(result => {
-                if (result.data.result === "Sesion Iniciada") {
+                console.log("->" + result.data);
+                console.log("-->" + result.data.result);
+                console.log("->*"+result);
+                if (result.data.result === "Sesión Iniciada") {
                     sessionStorage.setItem('user_id', result.data.user_id);
                     sessionStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id)
                     window.location.href = "/PYMES";
