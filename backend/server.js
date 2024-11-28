@@ -350,16 +350,8 @@ app.get("/Proyectos", async (req, res) => {
                 response[item._id.toLowerCase()] = item.proyectos;
             }
         });
-        return res.status(200).send({
-            msg: "Proyectos enviados",
-            economia: response.economia,
-            salud: response.salud,
-            educacion: response.educacion,
-            agricola: response.agricola,
-            ganaderia: response.ganaderia,
-            finanzas: response.finanzas,
-            tecnologia: response.tecnologia
-        });
+        
+        res.status(200).json(response);
         
     } catch (error) {
         console.error(error);
