@@ -5,13 +5,14 @@ import axios from 'axios';
 import { useEffect } from 'react';
 
 export default function dashboard() {
-    const user_id = sessionStorage.getItem("user_id");
-
+    //const user_id = sessionStorage.getItem("user_id");
+    const user_id = "6740030fb49ef05387991772";
     const cargarDatos = async () => {
         try {
             let url = "http://localhost:3001/MiPerfil";
 
             const result = await axios.post(url, { user_id });
+            console.log("->" + result);
 
             if (result.status === 200) {
                 sessionStorage.setItem('nombre', result.data.nombre);

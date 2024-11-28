@@ -6,24 +6,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-//Firebase
-const { initializeApp } = require("firebase/app");
-const {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-  } = require('firebase/auth');
-const { getAnalytics } = require("firebase/analytics");
-const firebaseConfig = {
-    apiKey: "AIzaSyAp6fQAui5RaZe1hS-r9v4da7RZO_WGkvg",
-    authDomain: "emergentes-821c5.firebaseapp.com",
-    projectId: "emergentes-821c5",
-    storageBucket: "emergentes-821c5.firebasestorage.app",
-    messagingSenderId: "810284799347",
-    appId: "1:810284799347:web:3906edfc2fefbb129fe106",
-    measurementId: "G-D825F0L32F"
-};
 const admin = require("firebase-admin");
 const serviceAccount = require("./config/firebase-admin.json");
 
@@ -111,24 +93,6 @@ app.post("/IniciarSesion", async (req, res) => {
     }
 });
 
-
-
-// app.post("/IniciarSesion", (req, res) => {
-//     const { email, pass } = req.body;
-//     UserModel.findOne({ correo: email }).then(User => {
-//         console.log(User+User._id)
-//         if (User) {
-//             if (User.contraseña === pass) {
-//                 res.status(200).send({ result:"Sesion Iniciada", user_id:User._id })
-//             } else {
-//                 res.json("contraseña incorrecta")
-//             }
-//         } else {
-//             res.json("El usuario no existe")
-//         }
-//     })
-// })
-
 app.post('/Registrarse', async (req, res) => {
     const { correo, contraseña, nombre, apellido, telefono, empresa, tipo } = req.body;
     const avatar = "https://cdn-icons-png.flaticon.com/512/4122/4122823.png";
@@ -164,77 +128,81 @@ app.post('/Registrarse', async (req, res) => {
     }
 });
 
-
-// app.post('/Registrarse', async (req, res) => {
-//     const { correo, contraseña, nombre, apellido, telefono, empresa, tipo } = req.body;
-//     const avatar = "https://cdn-icons-png.flaticon.com/512/4122/4122823.png";
-//     if (!correo || !contraseña || !nombre || !apellido || !telefono) {
-//         res.status(400).send("Complete todos los campos requeridos.");
-//     } else {
-//         if (tipo == 1) {
-//             if (empresa) {
-//                 const newUser = await UserModel.create({ avatar, correo, contraseña, nombre, apellido, telefono })
-//                 const pyme = await PymeModel.create({ empresa, userId: newUser._id});
-//                 return res.json(pyme);
-//             }
-//             else {
-//                 res.status(400).send("Complete todos los campos requeridos.");
-//             }
-//         } else {
-//             const newUser = await UserModel.create({ correo, contraseña, nombre, apellido, telefono })
-//             const inversionista = await InversionistaModel.create({ userId: newUser._id});
-//             return res.json(inversionista);
-//         }
-//     } 
-// })
-
 //Pymes
-app.put("/User", (req, res) => {
-    const { user_id } = req.body;
-    UserModel.findByIdAndUpdate(
-        user_id, 
-        { avatar,nombre, apellido,correo,telefono,direccion, rol }, 
-        { new: true, runValidators: true } // Return the updated document and use validators in schema
-    ).then(User => {
-        console.log(User)
-        res.status(200).send(User);
-    }).catch((err) => {res.json(err)});
- })
+app.put("/User", async (req, res) => {
+    const { user_id, avatar, nombre, apellido, correo, telefono, direccion, rol } = req.body;
+
+    if (!user_id) {
+        return res.status(400).send({ msg: "Se requiere el ID del usuario." });
+    }
+
+    try {
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            user_id,
+            { avatar, nombre, apellido, correo, telefono, direccion, rol },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).send({ msg: "Usuario no encontrado." });
+        }
+
+        res.status(200).send(updatedUser);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ msg: "Error al actualizar el usuario.", error: err.message });
+    }
+});
  
-app.post("/MiPerfil", (req, res) => { 
+ app.post("/MiPerfil", async (req, res) => {
     const { user_id } = req.body;
-    UserModel.findOne({ _id: user_id }).then(User => {
-        console.log(User)
-        const { nombre, apellido, correo, telefono, direccion, rol, avatar } = User;
-        res.status(200).send({nombre, apellido, correo, telefono, direccion, rol, avatar});
-    }).catch((err) => {res.json(err)});
-})
+
+    if (!user_id) {
+        return res.status(400).send({ msg: "Falta proveer ID del usuario." });
+    }
+
+    try {
+        const user = await UserModel.findById(user_id);
+
+        if (!user) {
+            return res.status(404).send({ msg: "Usuario no encontrado." });
+        }
+
+        const { nombre, apellido, correo, telefono, direccion, rol, avatar } = user;
+        res.status(200).send({ nombre, apellido, correo, telefono, direccion, rol, avatar });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ msg: "Error al obtener el perfil del usuario.", error: err.message });
+    }
+});
+
+
 
 app.post("/Proyecto", async (req, res) => {
     try {
-        const {pymeId, nombre, imagen, sector, meta, descripcion } = req.body;
+        const { pymeId, nombre, imagen, sector, meta, descripcion } = req.body;
         const estado = 1, recaudado = 0;
-        if (!nombre || !imagen || !sector||!meta) {
+        if (!nombre || !imagen || !sector || !meta) {
             res.status(400).send("Complete todos los campos requeridos.");
-        } else if (!pymeId) { 
+        } else if (!pymeId) {
             res.status(400).send("Falto enviar pymeId");
         } else {
-            const proyecto = await ProjectModel.create({pymeId, nombre, imagen,estado,sector,meta,descripcion,recaudado,owner: pymeId, })
+            const proyecto = await ProjectModel.create({ pymeId, nombre, imagen, estado, sector, meta, descripcion, recaudado, owner: pymeId, })
             pyme.proyectos.push(proyecto._id);
             await pyme.save();
             return res.status(201).json({
                 message: "Proyecto creado exitosamente.",
                 proyecto,
             });
-        }        
-    }catch (error) {
+        }
+    } catch (error) {
         console.error("Error creating project:", error);
         return res.status(500).send("Ocurrió un error al crear el proyecto.");
-    }  
-})
+    }
+});
 app.get("/Proyecto", async (req, res) => {
     const { project_id } = req.body;
-    try { 
+    try {
         if (project_id) {
             const proyecto = await ProjectModel.findById(project_id);
             if (!proyecto) {
@@ -248,7 +216,7 @@ app.get("/Proyecto", async (req, res) => {
         console.error(error);
         res.status(500).send("Error al obtener los proyectos.");
     }
-})
+});
 
 app.put("/Proyecto", async (req, res) => {
     const { project_id } = req.body;
@@ -301,10 +269,10 @@ app.delete("/Proyecto", async (req, res) => {
 
 app.get("/ProyectosPyme", async (req, res) => {
     const { pyme_id } = req.body;
-    try { 
+    try {
         if (pyme_id) {
             const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
-            console.log("->"+pyme_proyectos)
+            console.log("->" + pyme_proyectos)
             if (pyme_proyectos.length === 0) {
                 return res.status(404).send("No se han creado proyectos");
             }
@@ -316,10 +284,10 @@ app.get("/ProyectosPyme", async (req, res) => {
         console.error(error);
         res.status(500).send("Error al obtener los proyectos.");
     }
-})
+});
 
 app.get("/Proyectos", async (req, res) => {
-    try { 
+    try {
         const proyectos = await ProjectModel.aggregate([
             { $group: { _id: "$sector", proyectos: { $push: "$$ROOT" } } }
         ]);
@@ -354,7 +322,7 @@ app.get("/Proyectos", async (req, res) => {
         console.error(error);
         res.status(500).send("Error al obtener los proyectos.");
     }
-})
+});
 
 //Missing Endpoints
 app.post("/Enviar", (req, res) => { 
