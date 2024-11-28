@@ -189,14 +189,6 @@ app.post('/Registrarse', async (req, res) => {
 // })
 
 //Pymes
-app.get("/Dashboard", (req, res) => { 
-    const { user_id } = req.body;
-    UserModel.findOne({ _id: user_id }).then(User => {
-        console.log(User)
-        const { nombre, apellido, rol } = User;
-        res.status(200).send({nombre, apellido, rol});
-    }).catch((err) => {res.json(err)});
-})
 app.put("/User", (req, res) => {
     const { user_id } = req.body;
     UserModel.findByIdAndUpdate(
@@ -208,6 +200,7 @@ app.put("/User", (req, res) => {
         res.status(200).send(User);
     }).catch((err) => {res.json(err)});
  })
+ 
 app.post("/MiPerfil", (req, res) => { 
     const { user_id } = req.body;
     UserModel.findOne({ _id: user_id }).then(User => {
@@ -256,6 +249,7 @@ app.get("/Proyecto", async (req, res) => {
         res.status(500).send("Error al obtener los proyectos.");
     }
 })
+
 app.put("/Proyecto", async (req, res) => {
     const { project_id } = req.body;
     const { nombre, imagen, sector, meta, descripcion} = req.body;
@@ -285,6 +279,7 @@ app.put("/Proyecto", async (req, res) => {
         res.status(500).send("Error al actualizar el proyecto.");
     }
 });
+
 app.delete("/Proyecto", async (req, res) => {
     const { project_id } = req.params;
     try {
@@ -303,6 +298,7 @@ app.delete("/Proyecto", async (req, res) => {
         res.status(500).send("Error al eliminar el proyecto.");
     }
 });
+
 app.get("/ProyectosPyme", async (req, res) => {
     const { pyme_id } = req.body;
     try { 
