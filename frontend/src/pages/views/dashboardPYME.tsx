@@ -13,13 +13,11 @@ export default function dashboard() {
             setUserID(userID);
         }
     }, []);
-
+    
     const cargarDatos = async () => {
         try {
             let url = "http://localhost:3001/MiPerfil";
             const result = await axios.post(url, { user_id: ID });
-
-            console.log(result);
 
             if (result.status === 200) {
                 sessionStorage.setItem('nombre', result.data.nombre);
