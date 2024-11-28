@@ -10,10 +10,10 @@ const ProjectSchema = new mongoose.Schema({
     meta: { type: Number, required: true },
     descripcion: { type: String },
     recaudado: { type: String, required: true },
-    owner: {type: mongoose.Schema.Types.ObjectId, ref: 'Pyme', required: true},
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'pymes', required: true },
     inversionistas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'InvestorProject' }]
 });
 
-const ProjectModel = mongoose.model("Proyecto", ProjectSchema)
+const ProjectModel = mongoose.model("proyectos", ProjectSchema)
 console.log(ProjectModel)
 module.exports = ProjectModel
