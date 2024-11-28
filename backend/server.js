@@ -201,14 +201,25 @@ app.put("/User", (req, res) => {
     }).catch((err) => {res.json(err)});
  })
  
-app.post("/MiPerfil", (req, res) => { 
-    const { user_id } = req.body;
+ app.post("/MiPerfil", (req, res) => { 
+    const { user_id } = req.body; // Cambiar req.body por req.query
+    
+    if (!user_id) {
+        return res.status(400).json({ error: "user_id es requerido" });
+    }
+    
     UserModel.findOne({ _id: user_id }).then(User => {
-        console.log(User)
-        const { nombre, apellido, correo, telefono, direccion, rol, avatar } = User;
-        res.status(200).send({nombre, apellido, correo, telefono, direccion, rol, avatar});
-    }).catch((err) => {res.json(err)});
-})
+        if (User) {
+            const { nombre, apellido, correo, telefono, direccion, rol, avatar } = User;
+            res.status(200).send({ nombre, apellido, correo, telefono, direccion, rol, avatar });
+        } else {
+            res.status(404).send({ error: "Usuario no encontrado" });
+        }
+    }).catch((err) => {
+        res.status(500).send({ error: "Error del servidor", detalles: err });
+    });
+});
+
 
 app.post("/Proyecto", async (req, res) => {
     try {
@@ -233,7 +244,7 @@ app.post("/Proyecto", async (req, res) => {
     }  
 })
 app.get("/Proyecto", async (req, res) => {
-    const { project_id } = req.body;
+    const { project_id } = req.query;
     try { 
         if (project_id) {
             const proyecto = await ProjectModel.findById(project_id);
@@ -300,7 +311,7 @@ app.delete("/Proyecto", async (req, res) => {
 });
 
 app.get("/ProyectosPyme", async (req, res) => {
-    const { pyme_id } = req.body;
+    const { pyme_id } = req.query;
     try { 
         if (pyme_id) {
             const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });

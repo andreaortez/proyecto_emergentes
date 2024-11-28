@@ -11,18 +11,22 @@ export default function LogIn() {
     const [showModal, setShowModal] = useState<boolean>(false);
     const router = useRouter();
     const [page, setPage] = useState<boolean>(false);
+    //const [userid, setID] = useState("id");
+    //const [tipoid, setTID] = useState("id2");
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         axios.post('http://localhost:3001/IniciarSesion', { email, pass })
             .then(result => {
-                console.log("->" + result.data);
-                console.log("-->" + result.data.result);
-                console.log("->*"+result);
                 if (result.data.result === "Sesión Iniciada") {
+                    //setID(result.data.user_id);
+                    //setTID(result.data.pyme_id || result.data.inversionista_id);
                     sessionStorage.setItem('user_id', result.data.user_id);
-                    sessionStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id)
-                    window.location.href = "/PYMES";
+                    sessionStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id);
+
+                    console.log("prueba");
+                    console.log(sessionStorage.getItem('user_id'));
+                    console.log(sessionStorage.getItem('tipo_id'));
 
                     setPage(true);
                     setModalTitle("¡Éxito!");

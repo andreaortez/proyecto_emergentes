@@ -1,8 +1,27 @@
+import { useEffect, useState } from 'react';
+
 interface Parametros {
     setCurrentView: (view: string) => void;
 }
 
 export default function Navbar({ setCurrentView }: Parametros) {
+    const [avatar, setAvatar] = useState("https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png");
+    const [nombre, setNombre] = useState("Nombre");
+    const [apellido, setApellido] = useState("Apellido");
+
+    useEffect(() => {
+        const userAvatar = sessionStorage.getItem("avatar");
+        const userNombre = sessionStorage.getItem("nombre");
+        const userApellido = sessionStorage.getItem("apellido");
+
+        if (userAvatar && userNombre && userApellido) {
+            setAvatar(userAvatar);
+            setNombre(userNombre);
+            setApellido(userApellido);
+        }
+    }, []);
+
+
     return (
         <nav className="navbar bg-body-tertiary fixed-top">
             <div className="container-fluid">
@@ -22,13 +41,13 @@ export default function Navbar({ setCurrentView }: Parametros) {
                 {/* User Profile */}
                 <div className="hstack gap-2">
                     <img
-                        src={sessionStorage.getItem("avatar") || "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png"}
+                        src={avatar}
                         alt="User Avatar"
                         className="rounded-circle"
                         width="40"
                         height="40"
                     />
-                    <span>{sessionStorage.getItem("nombre")} {sessionStorage.getItem("apellido")}</span>
+                    <span>{nombre} {apellido}</span>
                 </div>
             </div>
         </nav >
