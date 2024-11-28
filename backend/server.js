@@ -176,8 +176,6 @@ app.put("/User", async (req, res) => {
     }
 });
 
-
-
 app.post("/Proyecto", async (req, res) => {
     try {
         const { pymeId, nombre, imagen, sector, meta, descripcion } = req.body;
@@ -201,8 +199,8 @@ app.post("/Proyecto", async (req, res) => {
     }
 });
 app.get("/Proyecto", async (req, res) => {
-    const { project_id } = req.body;
-    try {
+    const { project_id } = req.query;
+    try { 
         if (project_id) {
             const proyecto = await ProjectModel.findById(project_id);
             if (!proyecto) {
@@ -268,8 +266,8 @@ app.delete("/Proyecto", async (req, res) => {
 });
 
 app.get("/ProyectosPyme", async (req, res) => {
-    const { pyme_id } = req.body;
-    try {
+    const { pyme_id } = req.query;
+    try { 
         if (pyme_id) {
             const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
             console.log("->" + pyme_proyectos)
@@ -307,16 +305,8 @@ app.get("/Proyectos", async (req, res) => {
                 response[item._id.toLowerCase()] = item.proyectos;
             }
         });
-        return res.status(200).send({
-            msg: "Proyectos enviados",
-            economia: response.economia,
-            salud: response.salud,
-            educacion: response.educacion,
-            agricola: response.agricola,
-            ganaderia: response.ganaderia,
-            finanzas: response.finanzas,
-            tecnologia: response.tecnologia
-        });
+        
+        res.status(200).json(response);
         
     } catch (error) {
         console.error(error);

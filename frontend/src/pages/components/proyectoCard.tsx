@@ -1,16 +1,22 @@
-import react from 'react'
+interface Proyecto {
+    nombre: string;
+    imagen: string;
+    meta: number;
+    descripcion: string;
+    recaudado: number;
+}
 
-export default function ProyectoCard() {
+export default function ProyectoCard({ nombre, imagen, meta, descripcion, recaudado }: Proyecto) {
     return (
         <div className="card mb-3" style={{ maxWidth: "540px" }}>
             <div className="row g-0">
                 <div className="col-md-4">
-                    <img src="https://st3.depositphotos.com/27539598/33623/i/950/depositphotos_336231316-stock-photo-vertical-business-background-of-group.jpg" className="img-fluid rounded-start" alt="..." />
+                    <img src={`${imagen}`} className="img-fluid rounded-start" alt="..." />
                 </div>
                 <div className="col-md-8">
                     <div className="card-body">
                         <div className='hstack'>
-                            <h5 className="card-title">Proyecto #1</h5>
+                            <h5 className="card-title">{`${nombre}`}</h5>
                             <a className='ms-auto'>
                                 <img src="./imagenes/editar.png"
                                     alt="editar"
@@ -21,7 +27,7 @@ export default function ProyectoCard() {
                             </a>
                         </div>
 
-                        <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <p className="card-text">{`${descripcion}`}</p>
                         <div className='hstack'>
                             <div className='hstack gap-2'>
                                 <img src="./imagenes/objetivos.png"
@@ -29,7 +35,7 @@ export default function ProyectoCard() {
                                     width="25px"
                                     height="25px"
                                 />
-                                <span className='textColor'>Meta</span>
+                                <span className='textColor'>{`${meta}`}</span>
                             </div>
                             <div className='hstack gap-2 ms-auto'>
                                 <img src="./imagenes/mano.png"
@@ -37,7 +43,7 @@ export default function ProyectoCard() {
                                     width="30px"
                                     height="30px"
                                 />
-                                <span className='textColor'>Recaudado</span>
+                                <span className='textColor'>{`${recaudado}`}</span>
                             </div>
                         </div>
                         <div className='hstack gap-3 mt-4'>

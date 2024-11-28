@@ -2,17 +2,22 @@ import React from 'react';
 import Portada from '../components/portada'
 import UserName from '../components/userName'
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function dashboard() {
-    //const user_id = sessionStorage.getItem("user_id");
-    const user_id = "6740030fb49ef05387991772";
+    const [ID, setUserID] = useState("ID");
+
+    useEffect(() => {
+        const userID = sessionStorage.getItem("user_id");
+        if (userID) {
+            setUserID(userID);
+        }
+    }, []);
+    
     const cargarDatos = async () => {
         try {
             let url = "http://localhost:3001/MiPerfil";
-
-            const result = await axios.post(url, { user_id });
-            console.log("->" + result);
+            const result = await axios.post(url, { user_id: ID });
 
             if (result.status === 200) {
                 sessionStorage.setItem('nombre', result.data.nombre);
@@ -26,12 +31,12 @@ export default function dashboard() {
     };
 
     useEffect(() => {
-        if (user_id) {
+        if (ID) {
             cargarDatos();
         } else {
             console.error("No se encontró user_id en el sessionStorage");
         }
-    }, [user_id]);//se ejecuta solo si el id cambia
+    }, [ID]);//se ejecuta solo si el id cambia
 
     return (
         <>
