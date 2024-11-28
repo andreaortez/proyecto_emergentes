@@ -81,10 +81,18 @@ app.post("/IniciarSesion", async (req, res) => {
         try {
             const userRecord = await admin.auth().getUserByEmail(email);
             // Usuario ya existe en Firebase, retornar éxito
-            return res.status(200).json({ result: "Sesión Iniciada", user_id: user._id });
+            const pyme = await PymeModel.findOne({ userId: user._id });
+            if (pyme) {
+                return res.status(200).json({ result: "Sesión Iniciada", user_id: user._id, pyme_id: pyme._id });
+            } else {
+                const inv = await InversionistaModel.findOne({ userId: user._id });
+                return res.status(200).json({ result: "Sesión Iniciada", user_id: user._id,inversionista_id: inv._id });
+            }
+            
+            
         } catch (error) {
             if (error.code === 'auth/user-not-found') {
-                // Si el usuario no está en Firebase, crearlo
+                // Si el usuario no está en Firebase, crearlo, esto es temporal capaz se quite
                 const firebaseUser = await admin.auth().createUser({
                     email,
                     password: pass,
@@ -100,6 +108,7 @@ app.post("/IniciarSesion", async (req, res) => {
         res.status(500).json("Error interno del servidor");
     }
 });
+
 
 
 // app.post("/IniciarSesion", (req, res) => {
@@ -207,16 +216,26 @@ app.post("/MiPerfil", (req, res) => {
 })
 
 app.post("/Proyecto", async (req, res) => {
-    const {pymeId, nombre, imagen, sector, meta, descripcion } = req.body;
-    const estado = 1, recaudado = 0;
-    if (!nombre || !imagen || !sector||!meta) {
-        res.status(400).send("Complete todos los campos requeridos.");
-    } else if (!pymeId) { 
-        res.status(400).send("Falto enviar pymeId");
-    } else {
-        const proyecto = await ProjectModel.create({pymeId, nombre, imagen,estado,sector,meta,descripcion,recaudado })
-        return res.json("Proyecto Creado");
-    } 
+    try {
+        const {pymeId, nombre, imagen, sector, meta, descripcion } = req.body;
+        const estado = 1, recaudado = 0;
+        if (!nombre || !imagen || !sector||!meta) {
+            res.status(400).send("Complete todos los campos requeridos.");
+        } else if (!pymeId) { 
+            res.status(400).send("Falto enviar pymeId");
+        } else {
+            const proyecto = await ProjectModel.create({pymeId, nombre, imagen,estado,sector,meta,descripcion,recaudado,owner: pymeId, })
+            pyme.proyectos.push(proyecto._id);
+            await pyme.save();
+            return res.status(201).json({
+                message: "Proyecto creado exitosamente.",
+                proyecto,
+            });
+        }        
+    }catch (error) {
+        console.error("Error creating project:", error);
+        return res.status(500).send("Ocurrió un error al crear el proyecto.");
+    }  
 })
 app.get("/Proyecto", async (req, res) => {
     const { project_id } = req.body;
@@ -282,6 +301,42 @@ app.delete("/Proyecto", async (req, res) => {
         res.status(500).send("Error al eliminar el proyecto.");
     }
 });
+app.get("/ProyectosPyme", async (req, res) => {
+    const { pyme_id } = req.body;
+    try { 
+        if (pyme_id) {
+            const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
+            console.log("->"+pyme_proyectos)
+            if (pyme_proyectos.length === 0) {
+                return res.status(404).send("No se han creado proyectos");
+            }
+            res.status(200).json(pyme_proyectos);
+        } else {
+            res.status(404).json("Se debe proveer un ID de la pyme");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error al obtener los proyectos.");
+    }
+})
+
+app.get("/Proyectos", async (req, res) => {
+    const { project_id } = req.body;
+    try { 
+        if (project_id) {
+            const proyecto = await ProjectModel.findById(project_id);
+            if (!proyecto) {
+                return res.status(404).send("Proyecto no encontrado.");
+            }
+            res.status(200).json(proyecto);
+        } else {
+            res.status(404).json("Se debe proveer un ID del Proyecto");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error al obtener los proyectos.");
+    }
+})
 
 //Missing Endpoints
 app.post("/Enviar", (req, res) => { 
