@@ -64,6 +64,8 @@ mongoose.connect(mongoURI).then(() => console.log('Connected to MongoDB Atlas'))
 app.post("/IniciarSesion", async (req, res) => {
     const { email, pass } = req.body;
 
+    console.log(email + pass);
+
     try {
         // Buscar en MongoDB
         const user = await UserModel.findOne({ correo: email });
@@ -328,12 +330,37 @@ app.get("/ProyectosPyme", async (req, res) => {
 })
 
 app.get("/Proyectos", async (req, res) => {
-    try {
-        const proyectos = await ProjectModel.find();
-        if (proyectos.length === 0) {
-            return res.status(404).send("No se encontraron proyectos.");
-        }
-        res.status(200).json(proyectos);
+    try { 
+        const proyectos = await ProjectModel.aggregate([
+            { $group: { _id: "$sector", proyectos: { $push: "$$ROOT" } } }
+        ]);
+
+        const response = {
+            economia: [],
+            salud: [],
+            educacion: [],
+            agricola: [],
+            ganaderia: [],
+            finanzas: [],
+            tecnologia: []
+        };
+
+        proyectos.forEach(item => {
+            if (response.hasOwnProperty(item._id.toLowerCase())) {
+                response[item._id.toLowerCase()] = item.proyectos;
+            }
+        });
+        return res.status(200).send({
+            msg: "Proyectos enviados",
+            economia: response.economia,
+            salud: response.salud,
+            educacion: response.educacion,
+            agricola: response.agricola,
+            ganaderia: response.ganaderia,
+            finanzas: response.finanzas,
+            tecnologia: response.tecnologia
+        });
+        
     } catch (error) {
         console.error(error);
         res.status(500).send("Error al obtener los proyectos.");

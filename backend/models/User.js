@@ -12,6 +12,6 @@ const UserSchema = new mongoose.Schema({
     telefono: { type: String, required: true, unique: true },
 });
 
-const UserModel = mongoose.model("User", UserSchema)
+const UserModel = mongoose.model("users", UserSchema)
 console.log(UserModel)
 module.exports = UserModel
