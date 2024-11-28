@@ -1,9 +1,38 @@
+//.env
 require('dotenv').config();
 
+//MongoDB
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+//Firebase
+const { initializeApp } = require("firebase/app");
+const {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+  } = require('firebase/auth');
+const { getAnalytics } = require("firebase/analytics");
+const firebaseConfig = {
+    apiKey: "AIzaSyAp6fQAui5RaZe1hS-r9v4da7RZO_WGkvg",
+    authDomain: "emergentes-821c5.firebaseapp.com",
+    projectId: "emergentes-821c5",
+    storageBucket: "emergentes-821c5.firebasestorage.app",
+    messagingSenderId: "810284799347",
+    appId: "1:810284799347:web:3906edfc2fefbb129fe106",
+    measurementId: "G-D825F0L32F"
+};
+const admin = require("firebase-admin");
+const serviceAccount = require("./config/firebase-admin.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+
+//Modelos de Base de Datos
 const UserModel = require('./models/User');
 const PymeModel = require('./models/Pyme');
 const InversionistaModel = require('./models/Inversionista');
@@ -14,6 +43,10 @@ const ProjectModel = require('./models/Project');
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+//Firebase
+// const firebaseApp = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(firebaseApp);
 
 const mongoURI = process.env.MONGO_URI;
 
@@ -28,44 +61,121 @@ mongoose.connect(mongoURI).then(() => console.log('Connected to MongoDB Atlas'))
     });
 
 ///LogIn-SignUp
-app.post("/IniciarSesion", (req, res) => {
+app.post("/IniciarSesion", async (req, res) => {
     const { email, pass } = req.body;
-    UserModel.findOne({ correo: email }).then(User => {
-        console.log(User+User._id)
-        if (User) {
-            if (User.contraseña === pass) {
-                res.status(200).send({ result:"Sesion Iniciada", user_id:User._id })
-            } else {
-                res.json("contraseña incorrecta")
-            }
-        } else {
-            res.json("El usuario no existe")
+
+    try {
+        // Buscar en MongoDB
+        const user = await UserModel.findOne({ correo: email });
+
+        if (!user) {
+            return res.status(404).json("El usuario no existe en MongoDB");
         }
-    })
-})
+
+        // Verificar contraseña
+        if (user.contraseña !== pass) {
+            return res.status(401).json("Contraseña incorrecta");
+        }
+
+        // Intentar iniciar sesión en Firebase
+        try {
+            const userRecord = await admin.auth().getUserByEmail(email);
+            // Usuario ya existe en Firebase, retornar éxito
+            return res.status(200).json({ result: "Sesión Iniciada", user_id: user._id });
+        } catch (error) {
+            if (error.code === 'auth/user-not-found') {
+                // Si el usuario no está en Firebase, crearlo
+                const firebaseUser = await admin.auth().createUser({
+                    email,
+                    password: pass,
+                    displayName: `${user.nombre} ${user.apellido}`,
+                });
+
+                return res.status(200).json({ result: "Sesión Iniciada", user_id: user._id, firebaseUser });
+            }
+            throw error;
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json("Error interno del servidor");
+    }
+});
+
+
+// app.post("/IniciarSesion", (req, res) => {
+//     const { email, pass } = req.body;
+//     UserModel.findOne({ correo: email }).then(User => {
+//         console.log(User+User._id)
+//         if (User) {
+//             if (User.contraseña === pass) {
+//                 res.status(200).send({ result:"Sesion Iniciada", user_id:User._id })
+//             } else {
+//                 res.json("contraseña incorrecta")
+//             }
+//         } else {
+//             res.json("El usuario no existe")
+//         }
+//     })
+// })
 
 app.post('/Registrarse', async (req, res) => {
     const { correo, contraseña, nombre, apellido, telefono, empresa, tipo } = req.body;
     const avatar = "https://cdn-icons-png.flaticon.com/512/4122/4122823.png";
+
     if (!correo || !contraseña || !nombre || !apellido || !telefono) {
-        res.status(400).send("Complete todos los campos requeridos.");
-    } else {
-        if (tipo == 1) {
-            if (empresa) {
-                const newUser = await UserModel.create({ avatar, correo, contraseña, nombre, apellido, telefono })
-                const pyme = await PymeModel.create({ empresa, userId: newUser._id});
-                return res.json(pyme);
-            }
-            else {
-                res.status(400).send("Complete todos los campos requeridos.");
-            }
+        return res.status(400).send("Complete todos los campos requeridos.");
+    }
+
+    try {
+        // Crear en Firebase
+        const firebaseUser = await admin.auth().createUser({
+            email: correo,
+            password: contraseña,
+            displayName: `${nombre} ${apellido}`,
+        });
+
+        // Crear en MongoDB
+        let newUser;
+        if (tipo === 1 && empresa) {
+            newUser = await UserModel.create({ avatar, correo, contraseña, nombre, apellido, telefono });
+            const pyme = await PymeModel.create({ empresa, userId: newUser._id });
+            return res.status(201).json({ pyme, firebaseUser });
+        } else if (tipo !== 1) {
+            newUser = await UserModel.create({ correo, contraseña, nombre, apellido, telefono });
+            const inversionista = await InversionistaModel.create({ userId: newUser._id });
+            return res.status(201).json({ inversionista, firebaseUser });
         } else {
-            const newUser = await UserModel.create({ correo, contraseña, nombre, apellido, telefono })
-            const inversionista = await InversionistaModel.create({ userId: newUser._id});
-            return res.json(inversionista);
+            return res.status(400).send("Complete todos los campos requeridos.");
         }
-    } 
-})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json("Error al registrarse");
+    }
+});
+
+
+// app.post('/Registrarse', async (req, res) => {
+//     const { correo, contraseña, nombre, apellido, telefono, empresa, tipo } = req.body;
+//     const avatar = "https://cdn-icons-png.flaticon.com/512/4122/4122823.png";
+//     if (!correo || !contraseña || !nombre || !apellido || !telefono) {
+//         res.status(400).send("Complete todos los campos requeridos.");
+//     } else {
+//         if (tipo == 1) {
+//             if (empresa) {
+//                 const newUser = await UserModel.create({ avatar, correo, contraseña, nombre, apellido, telefono })
+//                 const pyme = await PymeModel.create({ empresa, userId: newUser._id});
+//                 return res.json(pyme);
+//             }
+//             else {
+//                 res.status(400).send("Complete todos los campos requeridos.");
+//             }
+//         } else {
+//             const newUser = await UserModel.create({ correo, contraseña, nombre, apellido, telefono })
+//             const inversionista = await InversionistaModel.create({ userId: newUser._id});
+//             return res.json(inversionista);
+//         }
+//     } 
+// })
 
 //Pymes
 app.put("/User", (req, res) => {
