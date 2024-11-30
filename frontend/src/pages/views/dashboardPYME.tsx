@@ -5,19 +5,23 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 export default function dashboard() {
-    const [ID, setUserID] = useState("ID");
+    const userID = sessionStorage.getItem("user_id");
+    //const [ID, setUserID] = useState("");
 
-    useEffect(() => {
-        const userID = sessionStorage.getItem("user_id");
-        if (userID) {
-            setUserID(userID);
-        }
-    }, []);
-    
+    // useEffect(() => {
+    //     const userID = sessionStorage.getItem("user_id");
+
+    //     if (userID) {
+    //         setUserID(userID);
+    //     }
+    // }, []);
+
     const cargarDatos = async () => {
         try {
             let url = "http://localhost:3001/MiPerfil";
-            const result = await axios.post(url, { user_id: ID });
+            
+            console.log("user_id in PymeDash:", userID);
+            const result = await axios.post(url, { user_id: userID });
 
             if (result.status === 200) {
                 sessionStorage.setItem('nombre', result.data.nombre);
@@ -31,12 +35,12 @@ export default function dashboard() {
     };
 
     useEffect(() => {
-        if (ID) {
+        if (userID) {
             cargarDatos();
         } else {
             console.error("No se encontró user_id en el sessionStorage");
         }
-    }, [ID]);//se ejecuta solo si el id cambia
+    }, [userID]);//se ejecuta solo si el id cambia
 
     return (
         <>
