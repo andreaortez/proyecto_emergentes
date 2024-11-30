@@ -154,21 +154,26 @@ app.put("/User", async (req, res) => {
     }
 });
  
- app.post("/MiPerfil", async (req, res) => {
+app.post("/MiPerfil", async (req, res) => {
     const { user_id } = req.body;
+    console.log("ID recibido en el backend:", user_id);
 
     if (!user_id) {
         return res.status(400).send({ msg: "Falta proveer ID del usuario." });
     }
+    //const userIDObject = new mongoose.Types.ObjectId(user_id);
 
     try {
-        const user = await UserModel.findById(user_id);
+        const user = await UserModel.findOne({ _id: user_id });
+        //const user = usuario;
 
         if (!user) {
+            console.log("Se entro a usuario no encontrado");
             return res.status(404).send({ msg: "Usuario no encontrado." });
         }
 
         const { nombre, apellido, correo, telefono, direccion, rol, avatar } = user;
+        console.log("nombre",nombre);
         res.status(200).send({ nombre, apellido, correo, telefono, direccion, rol, avatar });
     } catch (err) {
         console.error(err);
