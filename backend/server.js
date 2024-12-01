@@ -6,11 +6,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+//Gemini
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
 const admin = require("firebase-admin");
 const serviceAccount = require("./config/firebase-admin.json");
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(serviceAccount),
 });
 
 
@@ -19,6 +22,8 @@ const UserModel = require('./models/User');
 const PymeModel = require('./models/Pyme');
 const InversionistaModel = require('./models/Inversionista');
 const ProjectModel = require('./models/Project');
+const InvestorProjectModel = require('./models/InvestorProject');
+
 
 //const nodemon = require('nodemon');
 // Initialize Express app
@@ -29,6 +34,17 @@ app.use(cors());
 //Firebase
 // const firebaseApp = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(firebaseApp);
+
+//Implementacion IA
+
+
+// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API);
+// const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+// const prompt = "Explain how AI works";
+
+// const result = await model.generateContent(prompt);
+// console.log(result.response.text());
 
 const mongoURI = process.env.MONGO_URI;
 
@@ -70,10 +86,10 @@ app.post("/IniciarSesion", async (req, res) => {
                 return res.status(200).send({ result: "Sesión Iniciada", user_id: user._id, pyme_id: pyme._id });
             } else {
                 const inv = await InversionistaModel.findOne({ userId: user._id });
-                return res.status(200).send({ result: "Sesión Iniciada", user_id: user._id,inversionista_id: inv._id });
+                return res.status(200).send({ result: "Sesión Iniciada", user_id: user._id, inversionista_id: inv._id });
             }
-            
-            
+
+
         } catch (error) {
             if (error.code === 'auth/user-not-found') {
                 // Si el usuario no está en Firebase, crearlo, esto es temporal capaz se quite
@@ -154,7 +170,7 @@ app.put("/User", async (req, res) => {
         res.status(500).send({ msg: "Error al actualizar el usuario.", error: err.message });
     }
 });
- 
+
 app.post("/MiPerfil", async (req, res) => {
     const { user_id } = req.body;
     //console.log("ID recibido en el backend:", user_id);
@@ -174,7 +190,7 @@ app.post("/MiPerfil", async (req, res) => {
         }
 
         const { nombre, apellido, correo, telefono, direccion, rol, avatar } = user;
-        console.log("nombre",nombre);
+        console.log("nombre", nombre);
         res.status(200).send({ nombre, apellido, correo, telefono, direccion, rol, avatar });
     } catch (err) {
         console.error(err);
@@ -206,7 +222,7 @@ app.post("/Proyecto", async (req, res) => {
 });
 app.get("/Proyecto", async (req, res) => {
     const { project_id } = req.query;
-    try { 
+    try {
         if (project_id) {
             const proyecto = await ProjectModel.findById(project_id);
             if (!proyecto) {
@@ -225,28 +241,28 @@ app.get("/Proyecto", async (req, res) => {
 //update proyecto
 app.put("/Proyecto", async (req, res) => {
     const { project_id } = req.body;
-    const { nombre, imagen, sector, meta, descripcion} = req.body;
+    const { nombre, imagen, sector, meta, descripcion } = req.body;
     try {
         if (project_id) {
-            if (!nombre || !imagen || !sector||!meta) {
+            if (!nombre || !imagen || !sector || !meta) {
                 res.status(400).send("Complete todos los campos requeridos.");
             } else {
                 const updatedProject = await ProjectModel.findByIdAndUpdate(
-                    project_id, 
-                    { nombre, imagen, sector, meta, descripcion, estado, recaudado }, 
+                    project_id,
+                    { nombre, imagen, sector, meta, descripcion, estado, recaudado },
                     { new: true, runValidators: true } // Return the updated document and use validators in schema
                 );
 
                 if (!updatedProject) {
                     return res.status(404).send("Proyecto no encontrado.");
                 }
-                res.status(200).json(updatedProject);                
+                res.status(200).json(updatedProject);
             }
-            
+
         } else {
             res.status(404).json("Se debe proveer un ID del Proyecto");
         }
-        
+
     } catch (error) {
         console.error(error);
         res.status(500).send("Error al actualizar el proyecto.");
@@ -274,7 +290,7 @@ app.delete("/Proyecto", async (req, res) => {
 
 app.get("/ProyectosPyme", async (req, res) => {
     const { pyme_id } = req.query;
-    try { 
+    try {
         if (pyme_id) {
             const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
             //console.log("->" + pyme_proyectos)
@@ -311,24 +327,103 @@ app.get("/Proyectos", async (req, res) => {
                 response[item._id.toLowerCase()] = item.proyectos;
             }
         });
-        
+
         res.status(200).json(response);
-        
+
     } catch (error) {
         console.error(error);
         res.status(500).send("Error al obtener los proyectos.");
     }
 });
 
+app.delete('/User', async (req, res) => {
+    const { user_id } = req.body;
+
+    try {
+        // Buscar el usuario para identificar su rol
+        if (!user_id) {
+            return res.status(305).json({ message: 'Se debe proveer el id user' });
+        }
+        const user = await UserModel.findById(user_id);
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        // Iniciar una transacción para garantizar consistencia
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
+        try {
+            const isPyme = await PymeModel.exists({ userId: user_id }).session(session);
+            const isInversionista = await InversionistaModel.exists({ userId: user_id }).session(session);
+            // Eliminar datos relacionados según el rol del usuario
+            if (isPyme) {
+                // Eliminar la pyme
+                const pyme = await PymeModel.find({ userId: user_id }, null, { session });
+                const proyectos = await ProjectModel.find({ pymeId: pyme._id }).session(session);
+                if (proyectos.length > 0) {
+                    await ProjectModel.deleteMany({ pymeId: pyme._id }).session(session);
+                }
+
+                await PymeModel.deleteMany({ userId: user_id }, { session });
+            } else if (isInversionista) {
+                // Eliminar las inversiones del inversionista
+                const inversionista = await InversionistaModel.findOne({ userId: user_id });
+
+                // Eliminar las inversiones en la tabla intermedia 'InvestorProject'
+                const inversiones = await InvestorProjectModel.find({ investorId: inversionista._id }).session(session);
+                if (inversiones.length > 0) {
+                    await InvestorProjectModel.deleteMany({ investorId: inversionista._id }).session(session);
+                }
+
+                // Eliminar la relación de inversión en los proyectos
+                const proyectos = await ProjectModel.find({ inversionistas: inversionista._id }).session(session);
+                if (proyectos.length > 0) {
+                    await ProjectModel.updateMany(
+                        { inversionistas: inversionista._id },
+                        { $pull: { inversionistas: inversionista._id } },
+                        { session }
+                    );
+                }
+
+                // Eliminar el registro del inversionista
+                await InversionistaModel.deleteOne({ userId: user_id }, { session });
+            }
+
+            // Eliminar el usuario de Firebase
+            console.log("->" + user.correo)
+            const user_fb = await admin.auth().getUserByEmail(user.correo); // Obtiene el usuario por correo
+            await admin.auth().deleteUser(user_fb.uid);
+
+            // Eliminar el usuario de MongoDB
+            await UserModel.deleteOne({ _id: user_id }, { session });
+
+            // Confirmar la transacción
+            await session.commitTransaction();
+            session.endSession();
+
+            res.json({ message: 'Usuario y datos relacionados eliminados con éxito' });
+        } catch (error) {
+            // Revertir transacción si algo falla
+            await session.abortTransaction();
+            session.endSession();
+            throw error;
+        }
+    } catch (error) {
+        console.error("Error al eliminar usuario:", error);
+        res.status(500).json({ message: 'Error al eliminar usuario', details: error.message });
+    }
+});
+
 //Missing Endpoints
-app.post("/Enviar", (req, res) => { 
+app.post("/Enviar", (req, res) => {
     //con datos de contacto envia correo 
 })
-app.put("/Avatar", async (req, res) => { 
+app.put("/Avatar", async (req, res) => {
     //Modifica la direccion de imagen del avatar
     //no se si habria un folder o algo para cuando se acceda a una imagen local
 })
-app.post("/Mensajeria", async (req, res) => { 
+app.post("/Mensajeria", async (req, res) => {
     //No se como seria Mensajeria exactamente todavia pero aja
 })
 
@@ -340,28 +435,3 @@ const port = process.env.PORT;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-
-
-
-
-// const newUser = await UserModel.create({ correo, contraseña, nombre, apellido, telefono })
-//     .then(users => res.json(users))
-//     .catch(err => res.json(err)) 
-
-// console.log(email + "-" + pass)
-    // const nuevoUsuario = new UserModel({
-    //     nombre: "Carlos López",
-    //     correo: "carlos.garcia@example.com",
-    //     contraseña: "miSuperContraseña",
-    //   });
-      
-    //   nuevoUsuario.save()
-    //     .then(() => {
-    //       console.log("Usuario insertado exitosamente");
-    //       mongoose.connection.close(); // Cerrar conexión después de insertar
-    //     })
-    //     .catch(err => {
-    //       console.error("Error al insertar usuario:", err);
-    //     });
-    // res.json("so")
-    

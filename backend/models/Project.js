@@ -9,7 +9,7 @@ const ProjectSchema = new mongoose.Schema({
     sector: { type: String, required: true },
     meta: { type: Number, required: true },
     descripcion: { type: String },
-    recaudado: { type: String, required: true },
+    recaudado: { type: Number, required: true, default: 0 },
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'pymes', required: true },
     inversionistas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'InvestorProject' }]
 });
