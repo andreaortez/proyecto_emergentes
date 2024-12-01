@@ -89,7 +89,7 @@ export default function MisProyectos() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-12">
+                        <div className="d-flex justify-content-end mt-3">
                             <button type="submit" className="btn btn2">
                                 Crear Proyecto
                             </button>
