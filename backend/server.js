@@ -129,6 +129,7 @@ app.post('/Registrarse', async (req, res) => {
 });
 
 //Pymes
+//modificar usuario
 app.put("/User", async (req, res) => {
     const { user_id, avatar, nombre, apellido, correo, telefono, direccion, rol } = req.body;
 
@@ -156,7 +157,7 @@ app.put("/User", async (req, res) => {
  
 app.post("/MiPerfil", async (req, res) => {
     const { user_id } = req.body;
-    console.log("ID recibido en el backend:", user_id);
+    //console.log("ID recibido en el backend:", user_id);
 
     if (!user_id) {
         return res.status(400).send({ msg: "Falta proveer ID del usuario." });
@@ -168,7 +169,7 @@ app.post("/MiPerfil", async (req, res) => {
         //const user = usuario;
 
         if (!user) {
-            console.log("Se entro a usuario no encontrado");
+            console.log("usuario no encontrado");
             return res.status(404).send({ msg: "Usuario no encontrado." });
         }
 
@@ -221,6 +222,7 @@ app.get("/Proyecto", async (req, res) => {
     }
 });
 
+//update proyecto
 app.put("/Proyecto", async (req, res) => {
     const { project_id } = req.body;
     const { nombre, imagen, sector, meta, descripcion} = req.body;
@@ -275,13 +277,12 @@ app.get("/ProyectosPyme", async (req, res) => {
     try { 
         if (pyme_id) {
             const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
-            console.log("->" + pyme_proyectos)
-            if (pyme_proyectos.length === 0) {
-                return res.status(404).send("No se han creado proyectos");
-            }
+            //console.log("->" + pyme_proyectos)
+            
+            //en caso de no tener proyectos, retorna una lista vacia
             res.status(200).json(pyme_proyectos);
         } else {
-            res.status(404).json("Se debe proveer un ID de la pyme");
+            res.status(400).json("Se debe proveer un ID de la pyme");
         }
     } catch (error) {
         console.error(error);

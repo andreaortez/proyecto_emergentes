@@ -19,19 +19,9 @@ export default function LogIn() {
         axios.post('http://localhost:3001/IniciarSesion', { email, pass })
             .then(result => {
                 if (result.data.result === "Sesión Iniciada") {
-                    //setID(result.data.user_id);
-                    //setTID(result.data.pyme_id || result.data.inversionista_id);
-                    sessionStorage.setItem('user_id', result.data.user_id);
-                    sessionStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id);
-
-                    console.log("prueba");
-                    console.log(sessionStorage.getItem('user_id'));
-                    console.log(sessionStorage.getItem('tipo_id'));
-
+                    localStorage.setItem('user_id', result.data.user_id);
+                    localStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id);
                     setPage(true);
-                    setModalTitle("¡Éxito!");
-                    setModalMessage("Inicio de sesión exitoso.");
-                    setShowModal(true);
                 } else {
                     setPage(false);
 
@@ -105,7 +95,7 @@ export default function LogIn() {
                         </div>
                     </div>
                     <div className="text-center">
-                        <button className="pageButton btn" type="submit">
+                        <button className="pageButton btn" type="submit" onClick={() => handleNavigation()}>
                             Iniciar Sesión
                         </button>
                     </div>

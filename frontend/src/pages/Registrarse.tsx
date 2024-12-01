@@ -67,13 +67,13 @@ export default function SignUp() {
                             <label htmlFor="formGroupExampleInput" className="form-label">Nombre</label>
                             <input
                                 onChange={(input) => setNombre(input.target.value)}
-                                type="text" className="form-control" aria-label="Nombre" />
+                                type="text" className="form-control" aria-label="Nombre" required />
                         </div>
                         <div className="col-6 mb-3">
                             <label htmlFor="Apellido" className="form-label">Apellido</label>
                             <input
                                 onChange={(input) => setApellido(input.target.value)}
-                                type="text" className="form-control" aria-label="Apellido" />
+                                type="text" className="form-control" aria-label="Apellido" required />
                         </div>
                     </div>
                     <div className="row">
@@ -81,13 +81,13 @@ export default function SignUp() {
                             <label htmlFor="inputEmail4" className="form-label">Correo electrónico</label>
                             <input
                                 onChange={(input) => setCorreo(input.target.value)}
-                                type="email" className="form-control" aria-label="Correo" />
+                                type="email" className="form-control" aria-label="Correo" required />
                         </div>
                         <div className="col-6 mb-3">
                             <label htmlFor="nombre" className="form-label">Número de teléfono</label>
                             <input
                                 onChange={(input) => setTelefono(input.target.value)}
-                                type="text" className="form-control" aria-label="Numero" />
+                                type="text" className="form-control" aria-label="Numero" required />
                         </div>
                     </div>
                     <div className="row">
@@ -95,11 +95,11 @@ export default function SignUp() {
                             <label htmlFor="inputPassword4" className="form-label">Contraseña</label>
                             <input
                                 onChange={(input) => setContraseña(input.target.value)}
-                                type="password" className="form-control" aria-label="Contraseña" />
+                                type="password" className="form-control" aria-label="Contraseña" required />
                         </div>
                         <div className="col-6 mb-3">
                             <label htmlFor="inputState" className="form-label">Tipo de cuenta</label>
-                            <select id="inputState" className="form-select">
+                            <select id="inputState" className="form-select" required>
                                 <option selected>PYME</option>
                                 <option>Inversionista</option>
                             </select>

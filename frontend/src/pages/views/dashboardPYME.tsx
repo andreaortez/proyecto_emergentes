@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 export default function dashboard() {
-    const userID = sessionStorage.getItem("user_id");
+    const userID = localStorage.getItem("user_id");
     //const [ID, setUserID] = useState("");
 
     // useEffect(() => {
@@ -19,15 +19,15 @@ export default function dashboard() {
     const cargarDatos = async () => {
         try {
             let url = "http://localhost:3001/MiPerfil";
-            
-            console.log("user_id in PymeDash:", userID);
+
+            //console.log("user_id in PymeDash:", userID);
             const result = await axios.post(url, { user_id: userID });
 
             if (result.status === 200) {
-                sessionStorage.setItem('nombre', result.data.nombre);
-                sessionStorage.setItem('apellido', result.data.apellido);
-                sessionStorage.setItem('rol', result.data.rol);
-                sessionStorage.setItem('avatar', result.data.avatar);
+                localStorage.setItem('nombre', result.data.nombre);
+                localStorage.setItem('apellido', result.data.apellido);
+                localStorage.setItem('rol', result.data.rol);
+                localStorage.setItem('avatar', result.data.avatar);
             }
         } catch (error) {
             console.error("Error al cargar los datos del usuario:", error);
