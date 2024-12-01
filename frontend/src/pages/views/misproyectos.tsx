@@ -18,13 +18,16 @@ export default function MisProyectos() {
     useEffect(() => {
         const fetchProyectos = async () => {
             try {
-                console.log("prueba3")
-                console.log(pyme_id);
+                //console.log("pyme_id desde sessionStorage:", pyme_id);
                 const response = await axios.get('http://localhost:3001/ProyectosPyme', {
                     params: { pyme_id }
                 });
-                setProyectos(response.data);
-                console.log(response.data);
+                if (response.data.length > 0) {
+                    setProyectos(response.data);
+                } else {
+                    console.warn("No hay proyectos para este pyme_id.");
+                    setProyectos([]);
+                }
             } catch (error) {
                 console.error("Error al cargar los proyectos:", error);
             }
@@ -43,16 +46,21 @@ export default function MisProyectos() {
                 <div className="card-body">
                     <h5 className="card-title mb-4">Mis Proyectos</h5>
                     <div className='row'>
-                        {proyectos.map((proyecto, index) => (
-                            <div className="col" key={index}>
-                                <PCard nombre={proyecto.nombre}
-                                    imagen={proyecto.imagen}
-                                    meta={proyecto.meta}
-                                    descripcion={proyecto.descripcion}
-                                    recaudado={proyecto.recaudado}
-                                />
-                            </div>
-                        ))}
+                        {proyectos.length > 0 ? (//imprime los proyectos
+                            proyectos.map((proyecto, index) => (
+                                <div className="col" key={index}>
+                                    <PCard
+                                        nombre={proyecto.nombre}
+                                        imagen={proyecto.imagen}
+                                        meta={proyecto.meta}
+                                        descripcion={proyecto.descripcion}
+                                        recaudado={proyecto.recaudado}
+                                    />
+                                </div>
+                            ))
+                        ) : (//si no hay proyectos imprime un mensaje
+                            <p>No tienes proyectos para mostrar.</p>
+                        )}
                     </div>
                 </div>
             </div>
