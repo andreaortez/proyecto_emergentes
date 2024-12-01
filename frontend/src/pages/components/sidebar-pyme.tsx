@@ -13,7 +13,7 @@ export default function Sidebar({ setCurrentView }: Parametros) {
                 style={{ width: '220px', minHeight: '100vh' }}
             >
                 <h4 className="text-center">Menú</h4>
-                <nav className="nav flex-column text-body-secondary">
+                <nav className="nav flex-column text-body-secondary nav-pills">
                     <a className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
                         onClick={() => setCurrentView("dashboard")}
                     >
@@ -66,6 +66,21 @@ export default function Sidebar({ setCurrentView }: Parametros) {
                         />
                         Mis Proyectos
                     </a>
+                    <nav className="nav nav-pills flex-column ">
+                        <a className="nav-link ms-3 my-1 nav-elements text-body-secondary d-flex align-items-center gap-2"
+                            onClick={() => setCurrentView("crearProyectos")}
+                        >
+                            <img
+                                src="/imagenes/crear.png"
+                                alt="Dashboard Icon"
+                                className="nav-icon"
+                                width="20"
+                                height="20"
+                                id="crear"
+                            />
+                            Crear Proyecto</a>
+                    </nav>
+
                 </nav>
             </div>
         </div>

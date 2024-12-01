@@ -100,7 +100,8 @@ export default function SignUp() {
                         <div className="col-6 mb-3">
                             <label htmlFor="inputState" className="form-label">Tipo de cuenta</label>
                             <select id="inputState" className="form-select" required>
-                                <option selected>PYME</option>
+                                <option selected disabled value="">Elija su tipo de cuenta...</option>
+                                <option>PYME</option>
                                 <option>Inversionista</option>
                             </select>
                         </div>

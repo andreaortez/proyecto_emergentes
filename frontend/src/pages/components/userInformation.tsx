@@ -65,6 +65,10 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
                     sessionStorage.setItem("avatar", result.data.avatar);
                     setShowModal(false);
 
+                    <div className="alert alert-success" role="alert">
+                        ¡Su usuario se ha modificado con éxito!
+                    </div>
+
                     //window.location.reload();
                 })
         }
