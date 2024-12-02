@@ -310,12 +310,13 @@
 }
 
 .btn3 {
-    background-color: #EC221F !important;
-    color: white !important;
+    outline: 1px solid #055E63 !important;
+    color: #055E63 !important;
 }
 
 .btn3:hover {
-    background-color: #C00F0C !important;
+    background-color: #055E63 !important;
+    color: white !important;
 }
 
 .paddingLeft p {
