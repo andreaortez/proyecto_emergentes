@@ -13,6 +13,11 @@ export default function CrearProyectos() {
     //const [telefono2, setTelefono] = useState<string>('');
     //const [direccion2, setDireccion] = useState<string>('');
 
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>('');
+    const [body, setBody] = useState<string>('');
+
+
     const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
         if (file) {
@@ -35,10 +40,21 @@ export default function CrearProyectos() {
                     sector: sector,
                     meta: metaInt,
                     descripcion: descripcion,
+                }).then(response => {
+                    // Éxito
+                    setTitle('Proyecto creado exitosamente');
+                    setBody(`El proyecto "${nombre}" se ha creado correctamente.`);
+                    setShowModal(true);
                 });
             } catch (error) {
-                console.error("Error al crear proyecto:", error);
+                setTitle('Error al crear el proyecto');
+                setBody('Ocurrió un problema al crear el proyecto. Inténtalo nuevamente.');
+                setShowModal(true);
             }
+        } else {
+            setTitle('Error de identificación');
+            setBody('No se encontró un ID válido para la pyme.');
+            setShowModal(true);
         }
     }
 
@@ -88,18 +104,22 @@ export default function CrearProyectos() {
                                         <option>Ganadería</option>
                                         <option>Finanzas</option>
                                         <option>Tecnología</option>
+                                        <option>Arte</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div className="d-flex justify-content-end mt-3">
-                            <button type="button" className="btn btn2" onClick={handleCreateProject}>
+                            <button type="button" className="btn btn2" onClick={handleCreateProject} >
                                 Crear Proyecto
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
+
+            {/* Modal */}
+            {showModal && <Modal title={title} body={body} onClose={() => setShowModal(false)} />}
         </div>
     );
 };

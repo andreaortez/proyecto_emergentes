@@ -13,13 +13,15 @@ export default function Tab({ Sectores }: Sectores) {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div className="navbar-nav">
-                        <a className="nav-link underline" onClick={() => Sectores('economia')}>Economía</a>
+                        <a className="nav-link underline" onClick={() => Sectores('todos')}>Todos</a>
+                        <a className="nav-link" onClick={() => Sectores('economía')}>Economía</a>
                         <a className="nav-link" onClick={() => Sectores('salud')}>Salud</a>
-                        <a className="nav-link" onClick={() => Sectores('educacion')}>Educación</a>
-                        <a className="nav-link" onClick={() => Sectores('agricola')}>Agrícola</a>
-                        <a className="nav-link" onClick={() => Sectores('ganaderia')}>Ganadería</a>
+                        <a className="nav-link" onClick={() => Sectores('educación')}>Educación</a>
+                        <a className="nav-link" onClick={() => Sectores('agrícola')}>Agrícola</a>
+                        <a className="nav-link" onClick={() => Sectores('ganadería')}>Ganadería</a>
                         <a className="nav-link" onClick={() => Sectores('finanzas')}>Finanzas</a>
-                        <a className="nav-link" onClick={() => Sectores('tecnologia')}>Tecnología</a>
+                        <a className="nav-link" onClick={() => Sectores('tecnología')}>Tecnología</a>
+                        <a className="nav-link" onClick={() => Sectores('arte')}>Arte</a>
                     </div>
                 </div>
             </div>

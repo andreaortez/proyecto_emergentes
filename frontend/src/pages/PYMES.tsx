@@ -25,6 +25,7 @@ export default function BackgroundText() {
                         {currentView === "perfil" && <MiPerfil />}
                         {currentView === "proyectos" && <Proyectos />}
                         {currentView === "crearProyectos" && <CrearProyecto />}
+                        {currentView === "searchProyects" && <SearchProyects />}
                     </div>
                 </div>
             </div>
