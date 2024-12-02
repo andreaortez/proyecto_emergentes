@@ -1,5 +1,6 @@
 const ProjectModel = require('../models/Project');
 const Project = require('../models/Project');
+const PymeModel = require('../models/Pyme');
 const InvestorProject = require('../models/InvestorProject');
 const mongoose = require('mongoose');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -122,7 +123,7 @@ exports.getAllProjects = async (req, res) => {
             ganadería: [],
             finanzas: [],
             tecnología: [],
-            artes: []
+            arte: []
         };
 
         proyectos.forEach(item => {
