@@ -123,7 +123,11 @@ exports.getAllProjects = async (req, res) => {
             ganadería: [],
             finanzas: [],
             tecnología: [],
+<<<<<<< HEAD
             arte: [],
+=======
+            arte: []
+>>>>>>> 67bdd488b0036f8dd29b248cbb5b1ca384eb7e10
         };
 
         proyectos.forEach(item => {
