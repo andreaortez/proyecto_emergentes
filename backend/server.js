@@ -20,7 +20,6 @@ connectDB();
 app.use('/', require('./routes/authRoutes'));
 app.use('/', require('./routes/projectRoutes'));
 app.use('/', require('./routes/userRoutes'));
-// Add more routes as needed
 
 // Error handling middleware
 app.use(errorHandler);

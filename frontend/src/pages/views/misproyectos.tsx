@@ -48,7 +48,7 @@ export default function MisProyectos() {
                     <div className='row'>
                         {proyectos.length > 0 ? (//imprime los proyectos
                             proyectos.map((proyecto, index) => (
-                                <div className="col" key={index}>
+                                <div className="col-md-6 mb-4" key={index}>
                                     <PCard
                                         nombre={proyecto.nombre}
                                         imagen={proyecto.imagen}
