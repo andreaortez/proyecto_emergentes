@@ -47,27 +47,22 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
 
         const user_id = sessionStorage.getItem("user_id");
         if (user_id) {
-            axios
-                .put('http://localhost:3001/User', {
-                    user_id,
-                    avatar: tempAvatar,
-                    nombre: tempNombre,
-                    apellido: tempApellido,
-                    correo: tempCorreo,
-                    telefono: tempTelefono,
-                    direccion: tempDireccion,
-                    rol: tempRol
-                })
+            axios.put('http://localhost:3001/User', {
+                user_id,
+                avatar: tempAvatar,
+                nombre: tempNombre,
+                apellido: tempApellido,
+                correo: tempCorreo,
+                telefono: tempTelefono,
+                direccion: tempDireccion,
+                rol: tempRol
+            })
                 .then(result => {
                     sessionStorage.setItem("nombre", result.data.nombre);
                     sessionStorage.setItem("apellido", result.data.apellido);
                     sessionStorage.setItem("rol", result.data.rol);
                     sessionStorage.setItem("avatar", result.data.avatar);
                     setShowModal(false);
-
-                    <div className="alert alert-success" role="alert">
-                        ¡Su usuario se ha modificado con éxito!
-                    </div>
 
                     //window.location.reload();
                 })
