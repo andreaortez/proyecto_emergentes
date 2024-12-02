@@ -4,9 +4,10 @@ interface ModalParams {
     title: string;
     body: string;
     onClose: () => void;
+    footer?: React.ReactNode;
 }
 
-export default function Modal({ title, body, onClose }: ModalParams) {
+export default function Modal({ title, body, onClose, footer }: ModalParams) {
     return (
         <div className="modal show d-block" tabIndex={-1}>
             <div className="modal-dialog modal-dialog-centered">
@@ -18,6 +19,11 @@ export default function Modal({ title, body, onClose }: ModalParams) {
                     <div className="modal-body">
                         <p>{`${body}`}</p>
                     </div>
+                    {footer && (
+                        <div className="modal-footer">
+                            {footer}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
