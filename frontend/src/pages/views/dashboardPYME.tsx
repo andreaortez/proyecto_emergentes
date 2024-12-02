@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 export default function dashboard() {
-    const userID = localStorage.getItem("user_id");
+    const userID = sessionStorage.getItem("user_id");
     //const [ID, setUserID] = useState("");
 
     // useEffect(() => {
@@ -24,10 +24,10 @@ export default function dashboard() {
             const result = await axios.post(url, { user_id: userID });
 
             if (result.status === 200) {
-                localStorage.setItem('nombre', result.data.nombre);
-                localStorage.setItem('apellido', result.data.apellido);
-                localStorage.setItem('rol', result.data.rol);
-                localStorage.setItem('avatar', result.data.avatar);
+                sessionStorage.setItem('nombre', result.data.nombre);
+                sessionStorage.setItem('apellido', result.data.apellido);
+                sessionStorage.setItem('rol', result.data.rol);
+                sessionStorage.setItem('avatar', result.data.avatar);
             }
         } catch (error) {
             console.error("Error al cargar los datos del usuario:", error);

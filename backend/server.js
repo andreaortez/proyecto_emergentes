@@ -198,6 +198,7 @@ app.post("/MiPerfil", async (req, res) => {
     }
 });
 
+//crear proyecto
 app.post("/Proyecto", async (req, res) => {
     try {
         const { pymeId, nombre, imagen, sector, meta, descripcion } = req.body;
@@ -294,7 +295,7 @@ app.get("/ProyectosPyme", async (req, res) => {
         if (pyme_id) {
             const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
             //console.log("->" + pyme_proyectos)
-            
+
             //en caso de no tener proyectos, retorna una lista vacia
             res.status(200).json(pyme_proyectos);
         } else {
