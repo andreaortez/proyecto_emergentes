@@ -42,7 +42,7 @@ export default function CrearProyectos() {
                     descripcion: descripcion,
                 }).then(response => {
                     // Éxito
-                    setTitle('Proyecto creado exitosamente');
+                    setTitle('Proyecto creado éxitosamente');
                     setBody(`El proyecto "${nombre}" se ha creado correctamente.`);
                     setShowModal(true);
                 });

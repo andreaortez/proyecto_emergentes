@@ -75,7 +75,7 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
                         //window.location.reload();
                     })
             } catch (error) {
-                setTitle('Error!');
+                setTitle('¡Error!');
                 setBody('Ocurrió un problema al editar su usuario. Inténtalo nuevamente.');
                 setShowModal(true);
             }

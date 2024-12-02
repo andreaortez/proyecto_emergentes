@@ -21,7 +21,7 @@ export default function ProyectoCard({ nombre, imagen, sector, descripcion }: Pr
 
                         <p className="card-text">{`${descripcion}`}</p>
                         <div className='hstack gap-3 mt-3'>
-                            <button type="button" className="btn btn4 rounded-pill">Ver Proyecto</button>
+                            <button type="button" className="btn btn3 rounded-pill">Ver Proyecto</button>
                             <button type="button" className="btn btn2 rounded-pill">Agregar a mi lista</button>
                         </div>
                     </div>

@@ -48,7 +48,7 @@ export default function ProyectoCard({ nombre, imagen, meta, descripcion, recaud
                         </div>
                         <div className='hstack gap-3 mt-4'>
                             <button type="button" className="btn btn2 ms-auto rounded-pill">Ver Proyecto</button>
-                            <button type="button" className="btn btn3 rounded-pill">Eliminar</button>
+                            <button type="button" className="btn btn-danger rounded-pill">Eliminar</button>
                         </div>
                     </div>
 
