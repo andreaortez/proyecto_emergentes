@@ -203,24 +203,27 @@ app.post("/Proyecto", async (req, res) => {
     try {
         const { pymeId, nombre, imagen, sector, meta, descripcion } = req.body;
         const estado = 1, recaudado = 0;
-        if (!nombre || !imagen || !sector || !meta) {
-            res.status(400).send("Complete todos los campos requeridos.");
-        } else if (!pymeId) {
+        //if (!nombre || !imagen || !sector || !meta) {
+        //res.status(400).send("Complete todos los campos requeridos.");
+        //}
+        if (!pymeId) {
             res.status(400).send("Falto enviar pymeId");
         } else {
             const proyecto = await ProjectModel.create({ pymeId, nombre, imagen, estado, sector, meta, descripcion, recaudado, owner: pymeId, })
-            pyme.proyectos.push(proyecto._id);
+            /*pyme.proyectos.push(proyecto._id);
             await pyme.save();
             return res.status(201).json({
                 message: "Proyecto creado exitosamente.",
                 proyecto,
-            });
+            });*/
         }
     } catch (error) {
-        console.error("Error creating project:", error);
+        console.error("Error creando un proyecto:", error);
         return res.status(500).send("Ocurrió un error al crear el proyecto.");
     }
 });
+
+
 app.get("/Proyecto", async (req, res) => {
     const { project_id } = req.query;
     try {
