@@ -18,7 +18,7 @@ export default function MisProyectos() {
         const fetchProyectos = async () => {
             try {
                 //console.log("pyme_id desde sessionStorage:", pyme_id);
-                const response = await axios.get('http://localhost:3001/ProyectosPyme', {
+                const response = await axios.post('http://localhost:3001/Proyecto', {
                     params: { pyme_id }
                 });
                 if (response.data.length > 0) {

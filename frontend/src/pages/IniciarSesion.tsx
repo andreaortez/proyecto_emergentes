@@ -19,8 +19,8 @@ export default function LogIn() {
         axios.post('http://localhost:3001/IniciarSesion', { email, pass })
             .then(result => {
                 if (result.data.result === "Sesión Iniciada") {
-                    localStorage.setItem('user_id', result.data.user_id);
-                    localStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id);
+                    sessionStorage.setItem('user_id', result.data.user_id);
+                    sessionStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id);
                     setPage(true);
                 } else {
                     setPage(false);
