@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from "react";
 import axios from 'axios';
+import Modal from '../components/modal'
 
 interface User {
     correo: string;
@@ -9,8 +10,6 @@ interface User {
 }
 
 export default function UserInformation({ correo, telefono, direccion }: User) {
-    const [showModal, setShowModal] = useState<boolean>(false);
-
     const [nombre, setNombre] = useState<string>(sessionStorage.getItem("nombre") || '');
     const [apellido, setApellido] = useState<string>(sessionStorage.getItem("apellido") || '');
     const [rol, setRol] = useState<string>(sessionStorage.getItem("rol") || '');
@@ -27,6 +26,11 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
     const [tempTelefono, setTempTelefono] = useState(telefono);
     const [tempDireccion, setTempDireccion] = useState(direccion);
     const [tempAvatar, setTempAvatar] = useState(avatar);
+
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [showMessage, setMessage] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>('');
+    const [body, setBody] = useState<string>('');
 
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
@@ -47,25 +51,34 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
 
         const user_id = sessionStorage.getItem("user_id");
         if (user_id) {
-            axios.put('http://localhost:3001/User', {
-                user_id,
-                avatar: tempAvatar,
-                nombre: tempNombre,
-                apellido: tempApellido,
-                correo: tempCorreo,
-                telefono: tempTelefono,
-                direccion: tempDireccion,
-                rol: tempRol
-            })
-                .then(result => {
-                    sessionStorage.setItem("nombre", result.data.nombre);
-                    sessionStorage.setItem("apellido", result.data.apellido);
-                    sessionStorage.setItem("rol", result.data.rol);
-                    sessionStorage.setItem("avatar", result.data.avatar);
-                    setShowModal(false);
-
-                    //window.location.reload();
+            try {
+                axios.put('http://localhost:3001/User', {
+                    user_id,
+                    avatar: tempAvatar,
+                    nombre: tempNombre,
+                    apellido: tempApellido,
+                    correo: tempCorreo,
+                    telefono: tempTelefono,
+                    direccion: tempDireccion,
+                    rol: tempRol
                 })
+                    .then(result => {
+                        sessionStorage.setItem("nombre", result.data.nombre);
+                        sessionStorage.setItem("apellido", result.data.apellido);
+                        sessionStorage.setItem("rol", result.data.rol);
+                        sessionStorage.setItem("avatar", result.data.avatar);
+                        setShowModal(false);
+
+                        setTitle('¡Éxito!');
+                        setBody("Su usuario se ha editado correctamente.");
+                        setMessage(true);
+                        //window.location.reload();
+                    })
+            } catch (error) {
+                setTitle('Error!');
+                setBody('Ocurrió un problema al editar su usuario. Inténtalo nuevamente.');
+                setShowModal(true);
+            }
         }
     };
 
@@ -192,6 +205,9 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
                     </div >
                 )
             }
+
+            {/* Modal */}
+            {showMessage && <Modal title={title} body={body} onClose={() => setMessage(false)} />}
         </>
     );
 };

@@ -14,7 +14,7 @@ export default function ProyectoCard({ nombre, imagen, sector, descripcion }: Pr
                 <div className="hstack">
                     <div className="d-flex justify-content-center align-items-center" style={{ width: '200px', height: '200px' }}>
                         <img src={`${imagen}`} alt="Imagen"
-                            style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                            style={{ objectFit: 'cover', height: '100%' }} />
                     </div>
                     <div className="card-body">
                         <h5 className="card-title">{`${nombre}`}</h5>
