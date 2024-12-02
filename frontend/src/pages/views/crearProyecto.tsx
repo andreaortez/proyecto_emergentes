@@ -88,6 +88,7 @@ export default function CrearProyectos() {
                                         <option>Ganadería</option>
                                         <option>Finanzas</option>
                                         <option>Tecnología</option>
+                                        <option>Arte</option>
                                     </select>
                                 </div>
                             </div>

@@ -209,13 +209,14 @@ app.post("/Proyecto", async (req, res) => {
         if (!pymeId) {
             res.status(400).send("Falto enviar pymeId");
         } else {
+            const pyme = await PymeModel.findById(pymeId);
             const proyecto = await ProjectModel.create({ pymeId, nombre, imagen, estado, sector, meta, descripcion, recaudado, owner: pymeId, })
-            /*pyme.proyectos.push(proyecto._id);
+            pyme.proyectos.push(proyecto._id);
             await pyme.save();
             return res.status(201).json({
                 message: "Proyecto creado exitosamente.",
                 proyecto,
-            });*/
+            });
         }
     } catch (error) {
         console.error("Error creando un proyecto:", error);
@@ -317,13 +318,14 @@ app.get("/Proyectos", async (req, res) => {
         ]);
 
         const response = {
-            economia: [],
+            economía: [],
             salud: [],
-            educacion: [],
-            agricola: [],
-            ganaderia: [],
+            educación: [],
+            agrícola: [],
+            ganadería: [],
             finanzas: [],
-            tecnologia: []
+            tecnología: [],
+            arte: []
         };
 
         proyectos.forEach(item => {

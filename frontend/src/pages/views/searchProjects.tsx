@@ -21,17 +21,22 @@ export default function Search() {
                 const response = await axios.get('http://localhost:3001/Proyectos');
 
                 const allProyectos: Proyecto[] = [
-                    ...response.data.economia,
+                    ...response.data.economía,
                     ...response.data.salud,
-                    ...response.data.educacion,
-                    ...response.data.agricola,
-                    ...response.data.ganaderia,
+                    ...response.data.educación,
+                    ...response.data.agrícola,
+                    ...response.data.ganadería,
                     ...response.data.finanzas,
-                    ...response.data.tecnologia,
+                    ...response.data.tecnología,
+                    ...response.data.arte,
                 ];
 
                 if (sector) {
-                    setProyectos(allProyectos.filter((proyecto) => proyecto.sector.toLowerCase() === sector));
+                    if (sector === "todos") {
+                        setProyectos(allProyectos);
+                    } else {
+                        setProyectos(allProyectos.filter((proyecto) => proyecto.sector.toLowerCase() === sector));
+                    }
                 } else {
                     setProyectos(allProyectos);
                 }

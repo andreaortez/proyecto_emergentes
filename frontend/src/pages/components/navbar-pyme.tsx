@@ -36,7 +36,9 @@ export default function Navbar({ setCurrentView }: Parametros) {
                     setCurrentView("searchProyects");
                 }}>
                     <input className="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" />
-                    <button className="btn btn2" type="submit">Buscar</button>
+                    <button className="btn btn2" type="submit">
+                        Buscar
+                    </button>
                 </form>
                 {/* User Profile */}
                 <div className="hstack gap-2">
