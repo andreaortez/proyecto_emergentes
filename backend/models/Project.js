@@ -7,11 +7,13 @@ const ProjectSchema = new mongoose.Schema({
     imagen: { type: String, required: true },
     estado: { type: Number, required: true }, //Estado 1-Proyecto Abierto(verde), 2-Proyecto Ejecucion(amarillo), 3-Proyecto Cerrado(rojo)
     sector: { type: String, required: true },
-    meta: { type: Number, required: true },
     descripcion: { type: String },
+    meta: { type: Number, required: true },
     recaudado: { type: Number, required: true, default: 0 },
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'pymes', required: true },
-    inversionistas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'InvestorProject' }]
+    inversionistas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'InvestorProject' }],
+
+    aprobadasInversion: [{ type: mongoose.Schema.Types.ObjectId, ref: 'InvestorProject' }] // Inversiones aprobadas
 });
 
 const ProjectModel = mongoose.model("proyectos", ProjectSchema)
