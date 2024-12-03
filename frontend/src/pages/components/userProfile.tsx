@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
-import Modal from '../components/modal';
+import Modal from '../modals/modal';
 import { useRouter } from 'next/router';
 
 export default function userProfile() {

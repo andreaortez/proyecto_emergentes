@@ -1,7 +1,7 @@
 import react from 'react'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Modal from '../components/modal'
+import Modal from '../modals/modal'
 
 export default function CrearProyectos() {
     const pyme_id = sessionStorage.getItem("tipo_id");

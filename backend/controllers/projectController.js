@@ -96,7 +96,7 @@ exports.getProjectsByPyme = async (req, res) => {
     try {
         if (pyme_id) {
             const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
-            //console.log("->" + pyme_proyectos)
+            console.log("->" + pyme_proyectos)
 
             //en caso de no tener proyectos, retorna una lista vacia
             res.status(200).json(pyme_proyectos);

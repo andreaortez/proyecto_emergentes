@@ -52,7 +52,7 @@ export default function Search() {
     return (
         <div className="vstack gap-3">
             <Tab Sectores={setSector} />
-            <Proyectos proyectos={proyectos} />
+            <Proyectos proyectos={proyectos} editar={false} />
         </div>
     );
 };
