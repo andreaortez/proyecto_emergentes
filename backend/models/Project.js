@@ -10,10 +10,9 @@ const ProjectSchema = new mongoose.Schema({
     descripcion: { type: String },
     meta: { type: Number, required: true },
     recaudado: { type: Number, required: true, default: 0 },
-    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'pymes', required: true },
     inversionistas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'InvestorProject' }],
 
-    aprobadasInversion: [{ type: mongoose.Schema.Types.ObjectId, ref: 'InvestorProject' }] // Inversiones aprobadas
+    //aprobadasInversion: [{ type: mongoose.Schema.Types.ObjectId, ref: 'InvestorProject' }] // Inversiones aprobadas
 });
 
 const ProjectModel = mongoose.model("proyectos", ProjectSchema)

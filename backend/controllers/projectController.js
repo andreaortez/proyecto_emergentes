@@ -1,5 +1,6 @@
 const ProjectModel = require('../models/Project');
 const Project = require('../models/Project');
+const PymeModel = require('../models/Pyme');
 const InvestorProject = require('../models/InvestorProject');
 const mongoose = require('mongoose');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -93,13 +94,19 @@ exports.deleteProject = async (req, res) => {
 };
 exports.getProjectsByPyme = async (req, res) => {
     const { pyme_id } = req.query;
+    //const { pyme_id } = req.body;
     try {
         if (pyme_id) {
             const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
-            //console.log("->" + pyme_proyectos)
+            const proyectos_id = await ProjectModel.find({ pymeId: pyme_id }, { _id: 1 });
 
-            //en caso de no tener proyectos, retorna una lista vacia
-            res.status(200).json(pyme_proyectos);
+            res.status(200).json(
+                {
+                    success: true,
+                    pyme_proyectos,
+                    proyectos_id
+                }
+            );
         } else {
             res.status(400).json("Se debe proveer un ID de la pyme");
         }
@@ -112,6 +119,11 @@ exports.getAllProjects = async (req, res) => {
     try {
         const proyectos = await ProjectModel.aggregate([
             { $group: { _id: "$sector", proyectos: { $push: "$$ROOT" } } }
+        ]);
+        const proyectos_id = await ProjectModel.aggregate([
+            {
+                $project: { _id: 1 }
+            }
         ]);
 
         const response = {
@@ -130,8 +142,14 @@ exports.getAllProjects = async (req, res) => {
                 response[item._id.toLowerCase()] = item.proyectos;
             }
         });
-
-        res.status(200).json(response);
+        //console.log(proyectos_id)
+        res.status(200).json(
+            {
+                success: true,
+                response,
+                proyectos_id
+            }
+        );
 
     } catch (error) {
         console.error(error);
@@ -140,13 +158,14 @@ exports.getAllProjects = async (req, res) => {
 };
 exports.getProjectGraphs = async (req, res) => {
     try {
-        const { projectId } = req.params;
-        if (!projectId) {
+        //const { project_id } = req.body;
+        const { project_id } = req.query;
+        if (!project_id) {
             return res.status(205).json({ error: 'Falta proveer id del proyecto' });
         }
 
         // Verificar que el proyecto existe
-        const project = await Project.findById(projectId);
+        const project = await Project.findById(project_id);
         if (!project) {
             return res.status(404).json({ error: 'Proyecto no encontrado' });
         }
@@ -166,22 +185,22 @@ exports.getProjectGraphs = async (req, res) => {
 
         const [diario, semanal, mensual] = await Promise.all([
             InvestorProject.aggregate([
-                { $match: { projectId: mongoose.Types.ObjectId(projectId), investmentDate: { $gte: startOfDay } } },
+                { $match: { projectId: new mongoose.Types.ObjectId(project_id), investmentDate: { $gte: startOfDay } } },
                 { $group: { _id: null, total: { $sum: '$amount' } } },
             ]),
             InvestorProject.aggregate([
-                { $match: { projectId: mongoose.Types.ObjectId(projectId), investmentDate: { $gte: startOfWeek } } },
+                { $match: { projectId: new mongoose.Types.ObjectId(project_id), investmentDate: { $gte: startOfWeek } } },
                 { $group: { _id: null, total: { $sum: '$amount' } } },
             ]),
             InvestorProject.aggregate([
-                { $match: { projectId: mongoose.Types.ObjectId(projectId), investmentDate: { $gte: startOfMonth } } },
+                { $match: { projectId: new mongoose.Types.ObjectId(project_id), investmentDate: { $gte: startOfMonth } } },
                 { $group: { _id: null, total: { $sum: '$amount' } } },
             ]),
         ]);
 
         // 3. Recaudación/ingresos por mes
         const recaudacionMensual = await InvestorProject.aggregate([
-            { $match: { projectId: mongoose.Types.ObjectId(projectId) } },
+            { $match: { projectId: new mongoose.Types.ObjectId(project_id) } },
             {
                 $group: {
                     _id: { year: { $year: '$investmentDate' }, month: { $month: '$investmentDate' } },
@@ -213,11 +232,13 @@ exports.getProjectGraphs = async (req, res) => {
 exports.getRiskProfile = async (req, res) => {
 
     try {
-        const { projectId } = req.params;
-        if (!projectId) {
+        //const { project_id } = req.body;
+        const { project_id } = req.query;
+        if (!project_id) {
             return res.status(205).json({ error: 'Falta proveer id del proyecto' });
         }
-        const project = await Project.findById(projectId).populate('inversionistas');
+        const project = await Project.findById(project_id);
+        //.populate('inversionistas') -> para mostrar info de ref
 
         //Project's financial data
         const { nombre, recaudado, meta, inversionistas, estado } = project;
@@ -246,13 +267,31 @@ exports.getRiskProfile = async (req, res) => {
         Basado en la información proporcionada, calcula el nivel de riesgo del proyecto, el estado de financiamiento y el estado de los inversionistas.
         `;
 
+
         //Gemini 
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
         const result = await model.generateContent(prompt);
+        console.log("result:", result.response.text());
 
         // Response
-        const riskProfile = JSON.parse(result.response.text()); // The generated text from Gemini
+        let riskProfile;
+        try {
+            // Extraer solo el bloque JSON de la respuesta
+            const jsonMatch = result.response.text().match(/```json([\s\S]*?)```/);
+            if (!jsonMatch || jsonMatch.length < 2) {
+                throw new Error('No se encontró un bloque JSON válido en la respuesta de Gemini');
+            }
+            const jsonString = jsonMatch[1].trim(); // Bloque JSON limpio
+            riskProfile = JSON.parse(jsonString);
+        } catch (parseError) {
+            console.error('Error parsing JSON from Gemini:', parseError);
+            console.error('Response from Gemini:', result.response.text());
+            return res.status(500).json({
+                success: false,
+                message: 'Error parsing JSON from Gemini. Verifica el formato del prompt.',
+            });
+        }
 
         //Risk 
         res.status(200).json({
