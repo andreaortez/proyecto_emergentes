@@ -2,6 +2,25 @@ const UserModel = require('../models/User');
 const PymeModel = require('../models/Pyme');
 const InversionistaModel = require('../models/Inversionista');
 const admin = require('../config/firebase');
+const nodemailer = require('nodemailer');
+
+// Configurar el transporte para Outlook o Gmail
+const transporter = nodemailer.createTransport({
+    service: 'Gmail', // Cambia a 'Outlook' si usas Outlook
+    auth: {
+      user: 'tatigarcia1611@gmail.com', // Tu correo
+      pass: process.env.Pass, // Tu contraseña o token de aplicación
+    },
+  });
+  
+  // Verificar conexión con el servidor de correo
+  transporter.verify((error, success) => {
+    if (error) {
+      console.log('Error al conectar con el servicio de correo:', error);
+    } else {
+      console.log('El servidor de correo está listo para enviar mensajes');
+    }
+  });
 
 exports.login = async (req, res) => {
     const { email, pass } = req.body;
@@ -83,4 +102,26 @@ exports.register = async (req, res) => {
         console.error(error);
         res.status(500).json("Error al registrarse");
     }
+};
+exports.sendEmail = async (req, res) => {
+    const { nombre, correo, mensaje } = req.body;
+
+    // Configurar el correo a enviar
+    const mailOptions = {
+        from: correo, // Correo desde el cual se envía
+        to: 'tatigarcia1611@gmail.com', // Correo del destinatario
+        subject: `Nuevo mensaje de ${nombre}`, // Asunto del correo
+        text: `Has recibido un mensaje de ${nombre} (${correo}):\n\n${mensaje}`,
+    };
+
+    // Enviar el correo
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('Error al enviar el correo:', error);
+            res.status(500).json({ error: 'Error al enviar el correo' });
+        } else {
+            console.log('Correo enviado:', info.response);
+            res.status(200).json({ message: 'Correo enviado exitosamente' });
+        }
+    });
 };
