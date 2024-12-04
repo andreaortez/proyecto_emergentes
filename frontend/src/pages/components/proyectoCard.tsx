@@ -1,5 +1,6 @@
 import VerProyecto from "../modals/verProyecto";
 import { useEffect, useState } from 'react';
+import EditarProyecto from "../modals/editarProyecto";
 
 interface Proyecto {
     id: string;
@@ -9,12 +10,16 @@ interface Proyecto {
     meta: number;
     descripcion: string;
     recaudado: string;
+    estado: number;
+    inversionistas: string[];
     buttons?: React.ReactNode;
     editar: boolean;
 }
 
-export default function ProyectoCard({ nombre, imagen, sector, meta, descripcion, recaudado, buttons, editar }: Proyecto) {
+export default function ProyectoCard({ id, nombre, imagen, sector, meta, descripcion, recaudado, estado, inversionistas, buttons, editar }: Proyecto) {
     const [showModal, setShowModal] = useState<boolean>(false);
+    const [showEditModal, setShowEditModal] = useState<boolean>(false);
+
     return (
         <>
             <div className="card mb-3">
@@ -27,14 +32,15 @@ export default function ProyectoCard({ nombre, imagen, sector, meta, descripcion
                         <div className="card-body">
                             <div className='hstack'>
                                 <h5 className="card-title">{`${nombre}`}</h5>
-                                {editar && (<a className='ms-auto'>
-                                    <img src="./imagenes/editar.png"
-                                        alt="editar"
-                                        width="20px"
-                                        height="20px"
-                                        className='mb-3'
-                                    />
-                                </a>)}
+                                {editar && (
+                                    <a className='ms-auto' onClick={() => setShowEditModal(true)}>
+                                        <img src="./imagenes/editar.png"
+                                            alt="editar"
+                                            width="20px"
+                                            height="20px"
+                                            className='mb-3'
+                                        />
+                                    </a>)}
                             </div>
                             <p className="card-text">{`${descripcion}`}</p>
                             <div className='hstack gap-3 mt-3'>
@@ -46,8 +52,11 @@ export default function ProyectoCard({ nombre, imagen, sector, meta, descripcion
                 </div>
             </div >
 
-            {/* Modal*/}
-            {showModal && <VerProyecto nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} recaudado={recaudado} onClose={() => setShowModal(false)} />}
+            {/* Ver Proyecto*/}
+            {showModal && <VerProyecto nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} recaudado={recaudado} estado={estado} inversionistas={inversionistas} onClose={() => setShowModal(false)} />}
+
+            {/* Editar Proyecto*/}
+            {showEditModal && <EditarProyecto id={id} nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} recaudado={recaudado} estado={estado} onClose={() => setShowEditModal(false)} />}
         </>
     );
 };

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Proyectos from '../components/listarProyectos'
 import Modal from '../modals/modal';
-import { ObjectId } from 'mongodb';
 
 interface Proyecto {
     id: string;
@@ -12,12 +11,12 @@ interface Proyecto {
     meta: number;
     descripcion: string;
     recaudado: string;
-    estado: string;
+    estado: number;
+    inversionistas: string[];
 }
 
 export default function MisProyectos() {
     const [proyectos, setProyectos] = useState<Proyecto[]>([]);
-    const [ids, setIds] = useState<ObjectId[]>([]);
     const pyme_id = sessionStorage.getItem("tipo_id");
     const [project_id, setProject_id] = useState<string | null>(null);
 
@@ -33,11 +32,12 @@ export default function MisProyectos() {
                 const response = await axios.get('http://localhost:3001/ProyectosPyme', {
                     params: { pyme_id }
                 });
+
+                console.log(response.data.pyme_proyectos);
                 setProyectos(response.data.pyme_proyectos.length > 0 ? response.data.pyme_proyectos.map((proyecto: any) => ({
                     ...proyecto,
                     id: proyecto._id
                 })) : []);
-                setIds(response.data.proyectos_id.length > 0 ? response.data.proyectos_id.map((idObj: { _id: any }) => idObj._id.toString()) : []);
             } catch (error) {
                 console.error("Error al cargar los proyectos:", error);
             }
@@ -62,12 +62,14 @@ export default function MisProyectos() {
                 await axios.delete("http://localhost:3001/Proyecto/", {
                     params: { project_id }
                 });
+                setShowConfirmModal(false);
                 setTitle('¡Éxito!');
                 setBody('Se ha eliminado el proyecto con éxito.');
                 setShowModal(true);
                 //actualizar los proyectos sin el proyecto eliminado
                 setProyectos((prevProyectos) => prevProyectos.filter(proyecto => proyecto.id !== project_id));
             } catch (error) {
+                setShowConfirmModal(false);
                 setTitle('¡Error!');
                 setBody('Ocurrió un problema al eliminar el proyecto.');
                 setShowModal(true);
@@ -77,20 +79,13 @@ export default function MisProyectos() {
         }
     }
 
-    // Cierra el modal de confirmación cuando el modal de resultado se cierra
-    useEffect(() => {
-        if (!showModal) {
-            setShowConfirmModal(false);
-        }
-    }, [showModal]);
-
     return (
         <>
             <div className="components">
                 <div style={{ width: "77.8%" }}>
                     {proyectos.length > 0 ? (//imprime los proyectos
                         <Proyectos
-                            proyectos={proyectos.map((proyecto, index) => ({
+                            proyectos={proyectos.map((proyecto) => ({
                                 ...proyecto,
                                 buttons: (
                                     <button

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import InverstorsList from '../components/investorsList';
-import Iconos from '../components/iconos';
+import Iconos from '../elements/iconos';
 
 interface Proyecto {
     nombre: string;
@@ -9,11 +9,32 @@ interface Proyecto {
     meta: number;
     descripcion: string;
     recaudado: string;
+    estado: number;
+    inversionistas: string[];
     onClose: () => void;
     footer?: React.ReactNode;
 }
 
-export default function verProyecto({ nombre, imagen, sector, meta, descripcion, recaudado, onClose, footer }: Proyecto) {
+export default function verProyecto({ nombre, imagen, sector, meta, descripcion, recaudado, estado, inversionistas, onClose, footer }: Proyecto) {
+    const [estadoString, setEstadoString] = useState<string>('');
+
+    useEffect(() => {
+        switch (estado) {
+            case 1:
+                setEstadoString("Proyecto Abierto");
+                break;
+            case 2:
+                setEstadoString("Proyecto en Ejecución");
+                break;
+            case 3:
+                setEstadoString("Proyecto Cerrado");
+                break;
+            default:
+                setEstadoString("Estado desconocido");
+                break;
+        }
+    }, [estado]);
+
     return (
         <div className="modal show d-block" tabIndex={-1}>
             <div className="modal-dialog modal-dialog-centered modal-lg">
@@ -22,7 +43,7 @@ export default function verProyecto({ nombre, imagen, sector, meta, descripcion,
                         <button type="button" className="btn-close" aria-label="Close" onClick={onClose}></button>
                     </div>
                     <div className='hstack'>
-                        {/* informarcion */}
+                        {/* informacion */}
                         <div className="modal-body border-end col-md-7">
                             <div className="row g-0">
                                 <div className="col-md-4">
@@ -34,7 +55,7 @@ export default function verProyecto({ nombre, imagen, sector, meta, descripcion,
                                             <svg width="40" height="40">
                                                 <circle cx="15" cy="15" r="15" fill="#15ae5d"></circle>
                                             </svg>
-                                            <h5 className="card-text">Proyecto abierto</h5>
+                                            <h5 className="card-text">{estadoString}</h5>
                                         </div>
 
                                         <h5 className="card-title">{`${nombre}`}</h5>
@@ -65,9 +86,8 @@ export default function verProyecto({ nombre, imagen, sector, meta, descripcion,
                             <h2>Inversionistas</h2>
                             <p className="textColor"># inversionistas</p>
                             <div className="list-group" data-bs-spy="scroll">{/* falta hacerlo scroll */}
-                                <li className="list-group-item">
-                                    <InverstorsList />
-                                </li>
+                                <InverstorsList />
+
                             </div>
                         </div>
 

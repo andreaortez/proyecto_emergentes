@@ -9,6 +9,8 @@ interface Proyecto {
     meta: number;
     descripcion: string;
     recaudado: string;
+    estado: number;
+    inversionistas: string[];
     buttons?: React.ReactNode;
 }
 
@@ -33,6 +35,8 @@ export default function Proyectos({ proyectos, titulo, editar }: Lista) {
                         meta={proyecto.meta}
                         descripcion={proyecto.descripcion}
                         recaudado={proyecto.recaudado}
+                        estado={proyecto.estado}
+                        inversionistas={proyecto.inversionistas}
                         buttons={proyecto.buttons}
                         editar={editar}
                     />
