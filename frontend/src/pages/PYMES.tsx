@@ -7,7 +7,8 @@ import Mensajeria from "./views/mensajeria";
 import MiPerfil from "./views/miperfil";
 import Proyectos from "./views/misproyectos";
 import SearchProyects from "./views/searchProjects";
-import CrearProyecto from "./views/crearProyecto"
+import CrearProyecto from "./views/crearProyecto";
+import VerUsuarios from './views/verUsuario';
 
 export default function BackgroundText() {
     const [currentView, setCurrentView] = useState("dashboard");
@@ -44,6 +45,7 @@ export default function BackgroundText() {
                         {currentView === "proyectos" && <Proyectos />}
                         {currentView === "crearProyectos" && <CrearProyecto />}
                         {currentView === "searchProyects" && <SearchProyects />}
+                        {currentView === "usuarios" && <VerUsuarios />}
                     </div>
                 </div>
             </div>

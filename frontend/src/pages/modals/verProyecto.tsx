@@ -1,5 +1,6 @@
 import React from 'react';
 import InverstorsList from '../components/investorsList';
+import Iconos from '../components/iconos';
 
 interface Proyecto {
     nombre: string;
@@ -43,39 +44,9 @@ export default function verProyecto({ nombre, imagen, sector, meta, descripcion,
                                 </div>
                                 <div className="card-body">
                                     <div className='hstack justify-content-between'>
-                                        <div className='hstack gap-2'>
-                                            <a>
-                                                <img src="./imagenes/objetivos.png"
-                                                    alt="meta"
-                                                    width="20px"
-                                                    height="20px"
-                                                    className='mb-3'
-                                                />
-                                            </a>
-                                            <p className="card-text mb-3"><small className="textColor">{"L. " + `${meta}`}</small></p>
-                                        </div>
-                                        <div className='hstack gap-2'>
-                                            <a>
-                                                <img src="./imagenes/mano.png"
-                                                    alt="recaudado"
-                                                    width="20px"
-                                                    height="20px"
-                                                    className='mb-3'
-                                                />
-                                            </a>
-                                            <p className="card-text mb-3"><small className="textColor">{"L. " + `${recaudado}`}</small></p>
-                                        </div>
-                                        <div className='hstack gap-2'>
-                                            <a>
-                                                <img src="./imagenes/dinero.png"
-                                                    alt="sector"
-                                                    width="20px"
-                                                    height="20px"
-                                                    className='mb-3'
-                                                />
-                                            </a>
-                                            <p className="card-text mb-3"><small className="textColor">{`${sector}`}</small></p>
-                                        </div>
+                                        <Iconos imagen={"./imagenes/objetivos.png"} texto={"L. " + `${meta}`} />
+                                        <Iconos imagen={"./imagenes/mano.png"} texto={"L. " + `${recaudado}`} />
+                                        <Iconos imagen={"./imagenes/dinero.png"} texto={`${sector}`} />
                                     </div>
                                     <p className="card-text"><small className="text-body-secondary">{`${descripcion}`}</small></p>
                                     <div className='d-flex justify-content-center align-items-center'>
