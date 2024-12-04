@@ -38,6 +38,8 @@ exports.addInvestor = async (req, res) => {
     user_investor.invest_projects.push(newInvestment._id);
     await user_investor.save();
 
+    
+
     return res.status(200).json({
         message: "Inversión registrada correctamente",
         nuevo_monto: user_investor.monto_bolsa,
