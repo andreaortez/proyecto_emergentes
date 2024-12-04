@@ -12,6 +12,8 @@ interface Proyecto {
     meta: number;
     descripcion: string;
     recaudado: string;
+    estado: number;
+    inversionistas: string[];
     buttons?: React.ReactNode;
 }
 
