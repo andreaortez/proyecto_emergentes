@@ -1,7 +1,6 @@
-import react from 'react'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import Modal from '../components/modal'
+import Modal from '../modals/modal'
 
 export default function CrearProyectos() {
     const pyme_id = sessionStorage.getItem("tipo_id");
@@ -15,7 +14,7 @@ export default function CrearProyectos() {
 
     const [showModal, setShowModal] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
-    const [body, setBody] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
 
 
     const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,17 +42,17 @@ export default function CrearProyectos() {
                 }).then(response => {
                     // Éxito
                     setTitle('Proyecto creado éxitosamente');
-                    setBody(`El proyecto "${nombre}" se ha creado correctamente.`);
+                    setMessage(`El proyecto "${nombre}" se ha creado correctamente.`);
                     setShowModal(true);
                 });
             } catch (error) {
                 setTitle('Error al crear el proyecto');
-                setBody('Ocurrió un problema al crear el proyecto. Inténtalo nuevamente.');
+                setMessage('Ocurrió un problema al crear el proyecto. Inténtalo nuevamente.');
                 setShowModal(true);
             }
         } else {
             setTitle('Error de identificación');
-            setBody('No se encontró un ID válido para la pyme.');
+            setMessage('No se encontró un ID válido para la pyme.');
             setShowModal(true);
         }
     }
@@ -64,8 +63,8 @@ export default function CrearProyectos() {
                 <div className="card-body">
                     <h5 className="card-title mb-4">Crear Proyecto</h5>
                     <form className="row g-3 needs-validation" noValidate>
-                        <div className='hstack gap-4 p-4'>
-                            <div className='border-end d-flex flex-column align-items-center'>
+                        <div className='hstack p-4'>
+                            <div className='d-flex flex-column align-items-center'>
                                 <h6 className="card-title mb-4">Imagen del Proyecto</h6>
                                 <div className="mb-3 me-4">
                                     <label htmlFor="avatar" className="form-label">Subir foto</label>
@@ -76,36 +75,39 @@ export default function CrearProyectos() {
                                 </div>
                             </div>
 
-                            <div className='vstack'>
-                                <div className="row mb-3 align-items-center">
-                                    <div className="col-md-6">
-                                        <label htmlFor="titulo" className="form-label">Título</label>
-                                        <input type="text" className="form-control" id="titulo" onChange={(e) => setNombre(e.target.value)} required />
+                            {/* informacion */}
+                            <div className='vstack border-start'>
+                                <div className='ms-4'>
+                                    <div className="row mb-3 align-items-center">
+                                        <div className="col-md-6">
+                                            <label htmlFor="titulo" className="form-label">Título</label>
+                                            <input type="text" className="form-control" id="titulo" onChange={(e) => setNombre(e.target.value)} required />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="meta" className="form-label">Meta</label>
+                                            <input type="text" className="form-control" id="meta" onChange={(e) => setMeta(e.target.value)} required />
+                                        </div>
                                     </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="meta" className="form-label">Meta</label>
-                                        <input type="text" className="form-control" id="meta" onChange={(e) => setMeta(e.target.value)} required />
+
+                                    <div className="mb-3">
+                                        <label htmlFor="descripcion" className="form-label mb-3">Descripción</label>
+                                        <textarea className="form-control" id="descripcion" rows={3} onChange={(e) => setDescripcion(e.target.value)} required />
                                     </div>
-                                </div>
 
-                                <div className="mb-3">
-                                    <label htmlFor="descripcion" className="form-label mb-3">Descripción</label>
-                                    <textarea className="form-control" id="descripcion" rows={3} onChange={(e) => setDescripcion(e.target.value)} required />
-                                </div>
-
-                                <div className="mb-3">
-                                    <label htmlFor="sector" className="form-label mb-3">Sector</label>
-                                    <select className="form-select" id="sector" onChange={(e) => setSector(e.target.value)} required >
-                                        <option selected disabled value="">Elija Sector...</option>
-                                        <option>Economía</option>
-                                        <option>Salud</option>
-                                        <option>Educación</option>
-                                        <option>Agrícola</option>
-                                        <option>Ganadería</option>
-                                        <option>Finanzas</option>
-                                        <option>Tecnología</option>
-                                        <option>Arte</option>
-                                    </select>
+                                    <div className="mb-3">
+                                        <label htmlFor="sector" className="form-label mb-3">Sector</label>
+                                        <select className="form-select" id="sector" onChange={(e) => setSector(e.target.value)} required >
+                                            <option selected disabled value="">Elija Sector...</option>
+                                            <option>Economía</option>
+                                            <option>Salud</option>
+                                            <option>Educación</option>
+                                            <option>Agrícola</option>
+                                            <option>Ganadería</option>
+                                            <option>Finanzas</option>
+                                            <option>Tecnología</option>
+                                            <option>Arte</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +121,7 @@ export default function CrearProyectos() {
             </div>
 
             {/* Modal */}
-            {showModal && <Modal title={title} body={body} onClose={() => setShowModal(false)} />}
+            {showModal && <Modal title={title} message={message} onClose={() => setShowModal(false)} />}
         </div>
     );
 };

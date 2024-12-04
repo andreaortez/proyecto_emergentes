@@ -2,12 +2,12 @@ import React from 'react';
 
 interface ModalParams {
     title: string;
-    body: string;
+    message: string;
     onClose: () => void;
     footer?: React.ReactNode;
 }
 
-export default function Modal({ title, body, onClose, footer }: ModalParams) {
+export default function Modal({ title, message, onClose, footer }: ModalParams) {
     return (
         <div className="modal show d-block" tabIndex={-1}>
             <div className="modal-dialog modal-dialog-centered">
@@ -17,7 +17,7 @@ export default function Modal({ title, body, onClose, footer }: ModalParams) {
                         <button type="button" className="btn-close" aria-label="Close" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
-                        <p>{`${body}`}</p>
+                        <p>{`${message}`}</p>
                     </div>
                     {footer && (
                         <div className="modal-footer">

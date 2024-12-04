@@ -1,8 +1,9 @@
 import React from 'react';
 import UserProfile from '../components/userProfile'
-import UserInformation from '../components/userInformation'
+import UserInformation from '../components/viewInformation'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Proyectos from '../components/listarProyectos';
 
 interface User {
     correo: string;
@@ -10,7 +11,7 @@ interface User {
     direccion: string;
 }
 
-export default function MiPerfil() {
+export default function VerUsuarios() {
     const user_id = sessionStorage.getItem("user_id");
     const [user, setUser] = useState<User | null>(null);
 
@@ -34,9 +35,12 @@ export default function MiPerfil() {
     }
 
     return (
-        <div className="components gap-4 d-flex">
-            <UserProfile flag={true} />
-            <UserInformation correo={user.correo} telefono={user.telefono} direccion={user.direccion} />
+        <div className="components">
+            <div className="align-items-start gap-4 d-flex">
+                <UserProfile flag={false} />
+                <UserInformation correo={user.correo} telefono={user.telefono} direccion={user.direccion} />
+            </div>
+            {/*  <Proyectos /> */}
         </div >
     );
 };

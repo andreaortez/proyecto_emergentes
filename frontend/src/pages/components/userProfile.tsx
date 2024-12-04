@@ -1,10 +1,14 @@
 import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
-import Modal from '../components/modal';
+import Modal from '../modals/modal';
 import { useRouter } from 'next/router';
 
-export default function userProfile() {
+interface buttons {
+    flag: boolean;
+}
+
+export default function userProfile({ flag }: buttons) {
     const router = useRouter();
     const user_id = sessionStorage.getItem("user_id");
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -41,7 +45,8 @@ export default function userProfile() {
     return (
         <>
             <div className="card text-center" style={{ width: "18rem" }}>
-                <div className="card-body">
+                <div className="card-body"
+                    style={{ height: "100%" }}>
                     <h5 className="card-title">{sessionStorage.getItem("nombre")} {sessionStorage.getItem("apellido")}</h5>
                     <h6 className="card-subtitle mb-2 text-body-secondary fw-light">{sessionStorage.getItem("rol")}</h6>
                     <img
@@ -51,28 +56,36 @@ export default function userProfile() {
                         width="120"
                         height="120"
                     />
-                    <button type="button" className="btn btn-danger" onClick={() => { setShowConfirmModal(true); }}>Eliminar Cuenta</button>
+                    {flag &&
+                        <button type="button"
+                            className="btn btn-danger"
+                            onClick={() => { setShowConfirmModal(true); }}>
+                            Eliminar Cuenta
+                        </button>}
+
                 </div>
-            </div>
+            </div >
 
             {/* Modal de confirmación */}
-            {showConfirmModal && (
-                <Modal
-                    title="Confirmación de Eliminación"
-                    body="¿Está seguro de que desea eliminar su cuenta?"
-                    onClose={() => setShowConfirmModal(false)}
-                    footer={
-                        <>
-                            <button className="btn btn-secondary" onClick={() => setShowConfirmModal(false)}>
-                                Cancelar
-                            </button>
-                            <button className="btn btn-danger" onClick={handleConfirmDelete}>
-                                Eliminar
-                            </button>
-                        </>
-                    }
-                />
-            )}
+            {
+                showConfirmModal && (
+                    <Modal
+                        title="Confirmación de Eliminación"
+                        body="¿Está seguro de que desea eliminar su cuenta?"
+                        onClose={() => setShowConfirmModal(false)}
+                        footer={
+                            <>
+                                <button className="btn btn-secondary" onClick={() => setShowConfirmModal(false)}>
+                                    Cancelar
+                                </button>
+                                <button className="btn btn-danger" onClick={handleConfirmDelete}>
+                                    Eliminar
+                                </button>
+                            </>
+                        }
+                    />
+                )
+            }
 
             {/* Modal de resultado*/}
             {showModal && <Modal title={title} body={body} onClose={() => setShowModal(false)} />}

@@ -2,17 +2,17 @@ import Link from "next/link";
 import { useState } from "react";
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Modal from './modals/modal'
 
 export default function LogIn() {
     const [email, setEmail] = useState<string>();
     const [pass, setPass] = useState<string>();
-    const [modalMessage, setModalMessage] = useState<string>('');
-    const [modalTitle, setModalTitle] = useState<string>('');
-    const [showModal, setShowModal] = useState<boolean>(false);
     const router = useRouter();
     const [page, setPage] = useState<boolean>(false);
-    //const [userid, setID] = useState("id");
-    //const [tipoid, setTID] = useState("id2");
+
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
@@ -26,18 +26,18 @@ export default function LogIn() {
                     setPage(false);
 
                     if (result.data === "contraseña incorrecta") {
-                        setModalMessage("Contraseña incorrecta.");
+                        setMessage("Contraseña incorrecta.");
                     } else {
-                        setModalMessage("El usuario no existe");
+                        setMessage("El usuario no existe");
                     }
 
-                    setModalTitle("¡Error!");
+                    setTitle("¡Error!");
                     setShowModal(true);
                 }
             })
             .catch(() => {
-                setModalTitle("¡Error!");
-                setModalMessage("No se pudo conectar con el servidor. Intenta nuevamente más tarde.");
+                setTitle("¡Error!");
+                setMessage("No se pudo conectar con el servidor. Intenta nuevamente más tarde.");
                 setShowModal(true);
             });
     };
@@ -116,42 +116,20 @@ export default function LogIn() {
                 <img src="imagenes/FondoLI.png" alt="Iniciar Sesión" width="100%" height="630px" />
             </div >
 
-
             {/* Modal */}
-            {
-                showModal && (
-                    <div className="modal fade show d-block" tabIndex={-1} style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
-                        <div className="modal-dialog modal-dialog-centered">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title">{modalTitle}</h5>
-                                    <button
-                                        type="button"
-                                        className="btn-close"
-                                        aria-label="Close"
-                                        onClick={() => setShowModal(false)}
-                                    ></button>
-                                </div>
-                                <div className="modal-body">
-                                    <p>{modalMessage}</p>
-                                </div>
-                                <div className="modal-footer">
-                                    <button
-                                        type="button"
-                                        className="btn btn-secondary pageButton"
-                                        onClick={() => {
-                                            setShowModal(false);
-                                            handleNavigation();
-                                        }}
-                                    >
-                                        Cerrar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div >
-                )
-            }
+            {showModal && <Modal title={title} message={message}
+                onClose={() => setShowModal(false)}
+                footer={
+                    <button
+                        type="button"
+                        className="btn btn-secondary pageButton"
+                        onClick={() => {
+                            setShowModal(false);
+                            handleNavigation();
+                        }}
+                    >
+                        Cerrar
+                    </button>} />}
         </>
     );
 };
