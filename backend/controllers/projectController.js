@@ -4,6 +4,7 @@ const PymeModel = require('../models/Pyme');
 const InvestorProject = require('../models/InvestorProject');
 const mongoose = require('mongoose');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const InvestorProjectModel = require('../models/InvestorProject');
 
 exports.createProject = async (req, res) => {
     try {
@@ -91,10 +92,29 @@ exports.deleteProject = async (req, res) => {
     try {
         if (project_id) {
             const deletedProject = await ProjectModel.findByIdAndDelete(project_id);
-
             if (!deletedProject) {
                 return res.status(404).send("Proyecto no encontrado.");
             }
+
+            await PymeModel.updateMany(
+                { proyectos: project_id },
+                { $pull: { proyectos: project_id } }
+            );
+
+            const investorProjects = await InvestorProjectModel.find({ projectId: project_id });
+            const investorProjectIds = investorProjects.map(investment => investment._id);
+
+            await InvestorProjectModel.deleteMany({ projectId: project_id });
+
+            await InversionistaModel.updateMany(
+                { save_projects: { $in: investorProjectIds } },
+                { $pull: { save_projects: { $in: investorProjectIds } } }
+            );
+            await InversionistaModel.updateMany(
+                { invest_projects: { $in: investorProjectIds } },
+                { $pull: { invest_projects: { $in: investorProjectIds } } }
+            );
+
             res.status(200).send("Proyecto eliminado exitosamente.");
         } else {
             res.status(404).json("Se debe proveer un ID del Proyecto");
