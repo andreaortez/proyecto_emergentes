@@ -80,7 +80,19 @@ export default function Sidebar({ setCurrentView }: Parametros) {
                             />
                             Crear Proyecto</a>
                     </nav>
-
+                    <a className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
+                        onClick={() => setCurrentView("usuarios")}
+                    >
+                        <img
+                            src="/imagenes/plano.png"
+                            alt="Dashboard Icon"
+                            className="nav-icon"
+                            width="20"
+                            height="20"
+                            id="proyectos"
+                        />
+                        Ver usuario
+                    </a>
                 </nav>
             </div>
         </div>

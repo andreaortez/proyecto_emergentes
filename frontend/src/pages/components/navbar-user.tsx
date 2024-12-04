@@ -26,7 +26,7 @@ export default function Navbar({ setCurrentView }: Parametros) {
         <nav className="navbar bg-body-tertiary fixed-top">
             <div className="container-fluid">
                 {/* Logo */}
-                <a className="navbar-brand d-flex align-items-center" href="#">
+                <a className="navbar-brand d-flex align-items-center">
                     <img src="./imagenes/logo.png" alt="Logo" width="40" height="40" className="d-inline-block align-text-top" />
                     <span className="navbar-brand mb-0 h1 ms-2">$YUPI</span>
                 </a>

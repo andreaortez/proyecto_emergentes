@@ -88,7 +88,7 @@ exports.updateProject = async (req, res) => {
     }
 };
 exports.deleteProject = async (req, res) => {
-    const { project_id } = req.params;
+    const { project_id } = req.query;
     try {
         if (project_id) {
             const deletedProject = await ProjectModel.findByIdAndDelete(project_id);

@@ -344,3 +344,9 @@
 .flex-grow {
     flex-grow: 1;
 }
+
+.lightText {
+    color: gray;
+    font-weight: lighter;
+    font-size: larger;
+}
