@@ -35,7 +35,7 @@ exports.addInvestor = async (req, res) => {
     proyecto.inversionistas.push(newInvestment._id);
     await proyecto.save();
 
-    user_investor.save_projects.push(newInvestment._id);
+    user_investor.invest_projects.push(newInvestment._id);
     await user_investor.save();
 
     return res.status(200).json({

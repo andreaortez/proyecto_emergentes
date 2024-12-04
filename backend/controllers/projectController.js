@@ -32,11 +32,23 @@ exports.getProject = async (req, res) => {
     const { project_id } = req.body;
     try {
         if (project_id) {
-            const proyecto = await ProjectModel.findById(project_id);
+            const proyecto = await ProjectModel.findById(project_id)
+                .populate({
+                    path: 'inversionistas',
+                    populate: {
+                        path: 'investorId',
+                        model: 'inversionistas'
+                    }
+                });
+
             if (!proyecto) {
                 return res.status(404).send("Proyecto no encontrado.");
             }
-            res.status(200).json(proyecto);
+            const proyectoTransformado = {
+                ...proyecto.toObject(), // Convierte el documento de Mongoose a un objeto plano
+                inversionistas: proyecto.inversionistas.map(inv => inv.investorId) // Extrae solo los datos de `investorId`
+            };
+            res.status(200).json(proyectoTransformado);
         } else {
             res.status(404).json("Se debe proveer un ID del Proyecto");
         }
@@ -93,12 +105,25 @@ exports.deleteProject = async (req, res) => {
     }
 };
 exports.getProjectsByPyme = async (req, res) => {
-    const { pyme_id } = req.query;
-    //const { pyme_id } = req.body;
+    //const { pyme_id } = req.query;
+    const { pyme_id } = req.body;
     try {
         if (pyme_id) {
-            const pyme_proyectos = await ProjectModel.find({ pymeId: pyme_id });
             const proyectos_id = await ProjectModel.find({ pymeId: pyme_id }, { _id: 1 });
+            const proyectos = await ProjectModel.find({ pymeId: pyme_id }).populate({
+                path: 'inversionistas',
+                populate: {
+                    path: 'investorId',
+                    model: 'inversionistas'
+                }
+            });
+            const pyme_proyectos = proyectos.map(proyecto => {
+                const proyectoPlano = proyecto.toObject();
+                return {
+                    ...proyectoPlano,
+                    inversionistas: proyecto.inversionistas.map(inv => inv.investorId)
+                };
+            });
 
             res.status(200).json(
                 {
@@ -118,7 +143,40 @@ exports.getProjectsByPyme = async (req, res) => {
 exports.getAllProjects = async (req, res) => {
     try {
         const proyectos = await ProjectModel.aggregate([
-            { $group: { _id: "$sector", proyectos: { $push: "$$ROOT" } } }
+            {
+                $lookup: {
+                    from: "investorprojects",
+                    localField: "_id",
+                    foreignField: "projectId",
+                    as: "inversionistas"
+                }
+            },
+            {
+                $lookup: {
+                    from: "inversionistas",
+                    localField: "inversionistas.investorId",
+                    foreignField: "_id",
+                    as: "detallesInversionistas"
+                }
+            },
+            {
+                $addFields: {
+                    inversionistas: "$detallesInversionistas"
+                }
+            },
+            {
+                $project: {
+                    "detallesInversionistas": 0
+                }
+            },
+            {
+                $group: {
+                    _id: "$sector",
+                    proyectos: {
+                        $push: "$$ROOT" // Preserva todos los datos del proyecto
+                    }
+                }
+            }
         ]);
         const proyectos_id = await ProjectModel.aggregate([
             {
