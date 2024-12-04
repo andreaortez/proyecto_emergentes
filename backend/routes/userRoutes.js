@@ -10,7 +10,5 @@ const router = express.Router();
 router.post('/MiPerfil', getUser);
 router.put('/User', updateUser);
 router.delete('/User', deleteUser);
-//router.get('/ProyectosPyme', getProjectsByPyme);
-//router.get('/Proyectos', getAllProjects);
 
 module.exports = router;
