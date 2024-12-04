@@ -5,10 +5,14 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 interface Proyecto {
+    id: string;
     nombre: string;
     imagen: string;
     sector: string;
+    meta: number;
     descripcion: string;
+    recaudado: string;
+    buttons?: React.ReactNode;
 }
 
 export default function Search() {
@@ -20,15 +24,16 @@ export default function Search() {
             try {
                 const response = await axios.get('http://localhost:3001/Proyectos');
 
+                console.log(response.data);
                 const allProyectos: Proyecto[] = [
-                    ...response.data.economía,
-                    ...response.data.salud,
-                    ...response.data.educación,
-                    ...response.data.agrícola,
-                    ...response.data.ganadería,
-                    ...response.data.finanzas,
-                    ...response.data.tecnología,
-                    ...response.data.arte,
+                    ...response.data.response.economía,
+                    ...response.data.response.salud,
+                    ...response.data.response.educación,
+                    ...response.data.response.agrícola,
+                    ...response.data.response.ganadería,
+                    ...response.data.response.finanzas,
+                    ...response.data.response.tecnología,
+                    ...response.data.response.arte,
                 ];
 
                 if (sector) {

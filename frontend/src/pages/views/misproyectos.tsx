@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Proyectos from '../components/listarProyectos'
 import Modal from '../modals/modal';
+import { ObjectId } from 'mongodb';
 
 interface Proyecto {
     id: string;
@@ -16,6 +17,7 @@ interface Proyecto {
 
 export default function MisProyectos() {
     const [proyectos, setProyectos] = useState<Proyecto[]>([]);
+    const [ids, setIds] = useState<ObjectId[]>([]);
     const pyme_id = sessionStorage.getItem("tipo_id");
     const [project_id, setProject_id] = useState<string | null>(null);
 
@@ -31,7 +33,11 @@ export default function MisProyectos() {
                 const response = await axios.get('http://localhost:3001/ProyectosPyme', {
                     params: { pyme_id }
                 });
-                setProyectos(response.data.length > 0 ? response.data : []);
+                setProyectos(response.data.pyme_proyectos.length > 0 ? response.data.pyme_proyectos.map((proyecto: any) => ({
+                    ...proyecto,
+                    id: proyecto._id
+                })) : []);
+                setIds(response.data.proyectos_id.length > 0 ? response.data.proyectos_id.map((idObj: { _id: any }) => idObj._id.toString()) : []);
             } catch (error) {
                 console.error("Error al cargar los proyectos:", error);
             }
@@ -53,23 +59,30 @@ export default function MisProyectos() {
     const handledeleteProject = async () => {
         if (project_id) {
             try {
-                console.log("project_id" + project_id)
-                await axios.delete(`http://localhost:3001/Proyecto/${project_id}`);
-                // Éxito
+                await axios.delete("http://localhost:3001/Proyecto/", {
+                    params: { project_id }
+                });
                 setTitle('¡Éxito!');
                 setBody('Se ha eliminado el proyecto con éxito.');
                 setShowModal(true);
+                //actualizar los proyectos sin el proyecto eliminado
                 setProyectos((prevProyectos) => prevProyectos.filter(proyecto => proyecto.id !== project_id));
             } catch (error) {
-                console.log(error);
                 setTitle('¡Error!');
                 setBody('Ocurrió un problema al eliminar el proyecto.');
                 setShowModal(true);
             }
         } else {
-            console.log("no tengo el id");
+            console.log("No tengo el ID del proyecto");
         }
     }
+
+    // Cierra el modal de confirmación cuando el modal de resultado se cierra
+    useEffect(() => {
+        if (!showModal) {
+            setShowConfirmModal(false);
+        }
+    }, [showModal]);
 
     return (
         <>
@@ -77,7 +90,7 @@ export default function MisProyectos() {
                 <div style={{ width: "77.8%" }}>
                     {proyectos.length > 0 ? (//imprime los proyectos
                         <Proyectos
-                            proyectos={proyectos.map(proyecto => ({
+                            proyectos={proyectos.map((proyecto, index) => ({
                                 ...proyecto,
                                 buttons: (
                                     <button
@@ -85,8 +98,7 @@ export default function MisProyectos() {
                                         type="button"
                                         className="btn btn-danger rounded-pill"
                                         onClick={() => {
-                                            console.log("Project ID al hacer clic: " + proyecto.id);
-                                            handleConfirmDelete(proyecto.id)
+                                            handleConfirmDelete(proyecto.id);
                                         }}
                                     >
                                         Eliminar
