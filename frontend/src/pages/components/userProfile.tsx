@@ -14,7 +14,7 @@ export default function userProfile({ flag }: buttons) {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
-    const [body, setBody] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
 
     const deleteUser = async () => {
         if (user_id) {
@@ -24,14 +24,14 @@ export default function userProfile({ flag }: buttons) {
                 });
                 // Éxito
                 setTitle('¡Éxito!');
-                setBody('Se ha eliminado su usuario con éxito.');
+                setMessage('Se ha eliminado su usuario con éxito.');
                 setShowModal(true);
 
                 router.push('/');
             } catch (error) {
                 console.log(error);
                 setTitle('¡Error!');
-                setBody('Ocurrió un problema al eliminar su usuario.');
+                setMessage('Ocurrió un problema al eliminar su usuario.');
                 setShowModal(true);
             }
         };
@@ -71,7 +71,7 @@ export default function userProfile({ flag }: buttons) {
                 showConfirmModal && (
                     <Modal
                         title="Confirmación de Eliminación"
-                        body="¿Está seguro de que desea eliminar su cuenta?"
+                        message="¿Está seguro de que desea eliminar su cuenta?"
                         onClose={() => setShowConfirmModal(false)}
                         footer={
                             <>
@@ -88,7 +88,7 @@ export default function userProfile({ flag }: buttons) {
             }
 
             {/* Modal de resultado*/}
-            {showModal && <Modal title={title} body={body} onClose={() => setShowModal(false)} />}
+            {showModal && <Modal title={title} message={message} onClose={() => setShowModal(false)} />}
         </>
     );
 };

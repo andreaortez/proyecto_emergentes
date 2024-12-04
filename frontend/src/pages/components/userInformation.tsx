@@ -30,7 +30,7 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showMessage, setMessage] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
-    const [body, setBody] = useState<string>('');
+    const [message, setMessage2] = useState<string>('');
 
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
@@ -70,13 +70,13 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
                         setShowModal(false);
 
                         setTitle('¡Éxito!');
-                        setBody("Su usuario se ha editado correctamente.");
+                        setMessage2("Su usuario se ha editado correctamente.");
                         setMessage(true);
                         //window.location.reload();
                     })
             } catch (error) {
                 setTitle('¡Error!');
-                setBody('Ocurrió un problema al editar su usuario. Inténtalo nuevamente.');
+                setMessage2('Ocurrió un problema al editar su usuario. Inténtalo nuevamente.');
                 setShowModal(true);
             }
         }
@@ -207,7 +207,7 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
             }
 
             {/* Modal */}
-            {showMessage && <Modal title={title} body={body} onClose={() => setMessage(false)} />}
+            {showMessage && <Modal title={title} message={message} onClose={() => setMessage(false)} />}
         </>
     );
 };

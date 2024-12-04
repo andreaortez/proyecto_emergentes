@@ -23,7 +23,7 @@ export default function MisProyectos() {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
-    const [body, setBody] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
 
     useEffect(() => {
         const fetchProyectos = async () => {
@@ -64,14 +64,14 @@ export default function MisProyectos() {
                 });
                 setShowConfirmModal(false);
                 setTitle('¡Éxito!');
-                setBody('Se ha eliminado el proyecto con éxito.');
+                setMessage('Se ha eliminado el proyecto con éxito.');
                 setShowModal(true);
                 //actualizar los proyectos sin el proyecto eliminado
                 setProyectos((prevProyectos) => prevProyectos.filter(proyecto => proyecto.id !== project_id));
             } catch (error) {
                 setShowConfirmModal(false);
                 setTitle('¡Error!');
-                setBody('Ocurrió un problema al eliminar el proyecto.');
+                setMessage('Ocurrió un problema al eliminar el proyecto.');
                 setShowModal(true);
             }
         } else {
@@ -112,7 +112,7 @@ export default function MisProyectos() {
             {showConfirmModal && (
                 <Modal
                     title="Confirmación de Eliminación"
-                    body="¿Está seguro de que desea eliminar el proyecto?"
+                    message="¿Está seguro de que desea eliminar el proyecto?"
                     onClose={() => setShowConfirmModal(false)}
                     footer={
                         <>
@@ -128,7 +128,7 @@ export default function MisProyectos() {
             )}
 
             {/* Modal de resultado*/}
-            {showModal && <Modal title={title} body={body} onClose={() => setShowModal(false)} />}
+            {showModal && <Modal title={title} message={message} onClose={() => setShowModal(false)} />}
         </>
     );
 };
