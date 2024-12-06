@@ -6,44 +6,15 @@ const InvestorProjectModel = require('../models/InvestorProject');
 const fs = require('fs');
 const path = require('path');
 
-const isWebURL = (url) => {
-    const webURLRegex = /^(http|https):\/\/[^ "]+$/;
-    return webURLRegex.test(url);
-};
-
 exports.updateUser = async (req, res) => {
     const { user_id, avatar, nombre, apellido, correo, telefono, direccion, rol } = req.body;
 
     if (!user_id) {
         return res.status(400).send({ msg: "Se requiere el ID del usuario." });
     }
-    console.log("Avatar de Front: ",avatar)
-
-    let avatarPath = avatar;
+    console.log("Avatar de Front: ", avatar)
 
     try {
-        if (avatar && !isWebURL(avatar)) {
-            const base64Regex = /^data:image\/(png|jpeg|jpg);base64,/;
-            if (base64Regex.test(avatar)) {
-                // Extraer el formato de la imagen
-                const extension = avatar.match(/^data:image\/(png|jpeg|jpg);base64,/)[1];
-                const base64Data = avatar.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
-                const buffer = Buffer.from(base64Data, 'base64');
-
-                // Generar un nombre único para el archivo
-                const fileName = `${Date.now()}.${extension}`;
-                const uploadPath = path.join(__dirname, '../public/uploads', fileName);
-
-                // Guardar el archivo en la carpeta pública
-                fs.writeFileSync(uploadPath, buffer);
-
-                // Crear la URL pública del archivo
-                avatarPath = `/uploads/${fileName}`;
-            } else {
-                return res.status(400).send({ msg: "Formato de avatar no válido." });
-            }
-        }
-
         const updatedUser = await UserModel.findByIdAndUpdate(
             user_id,
             { avatar, nombre, apellido, correo, telefono, direccion, rol },
