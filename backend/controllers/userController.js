@@ -17,6 +17,7 @@ exports.updateUser = async (req, res) => {
     if (!user_id) {
         return res.status(400).send({ msg: "Se requiere el ID del usuario." });
     }
+    console.log("Avatar de Front: ",avatar)
 
     let avatarPath = avatar;
 
