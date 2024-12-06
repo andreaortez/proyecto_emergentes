@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios';
 import Modal from '../modals/modal'
 
@@ -10,74 +10,62 @@ interface User {
 }
 
 export default function UserInformation({ correo, telefono, direccion }: User) {
-    const [nombre, setNombre] = useState<string>(sessionStorage.getItem("nombre") || '');
-    const [apellido, setApellido] = useState<string>(sessionStorage.getItem("apellido") || '');
-    const [rol, setRol] = useState<string>(sessionStorage.getItem("rol") || '');
-    const [avatar, setAvatar] = useState<string>(sessionStorage.getItem("avatar") || '');
-    const [correo2, setCorreo] = useState<string>(correo);
-    const [telefono2, setTelefono] = useState<string>(telefono);
-    const [direccion2, setDireccion] = useState<string>(direccion);
-
-    // Estados temporales para la edición
-    const [tempNombre, setTempNombre] = useState(nombre);
-    const [tempCorreo, setTempCorreo] = useState(correo);
-    const [tempRol, setTempRol] = useState(rol);
-    const [tempApellido, setTempApellido] = useState(apellido);
-    const [tempTelefono, setTempTelefono] = useState(telefono);
-    const [tempDireccion, setTempDireccion] = useState(direccion);
-    const [tempAvatar, setTempAvatar] = useState(avatar);
+    const nombre = sessionStorage.getItem("nombre") || "";
+    const apellido = sessionStorage.getItem("apellido") || "";
+    const rol = sessionStorage.getItem("rol") || "";
+    const avatar = sessionStorage.getItem("avatar") || "";
 
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [showMessage, setMessage] = useState<boolean>(false);
+    const [showMessage, setShowMessage] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
-    const [message, setMessage2] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
 
-    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files ? e.target.files[0] : null;
-        if (file) {
-            const imageURL = URL.createObjectURL(file);
-            setTempAvatar(imageURL);
-        }
+    const [formData, setFormData] = useState({
+        nombre,
+        correo,
+        rol,
+        apellido,
+        telefono,
+        direccion,
+        avatar,
+    });
+
+    useEffect(() => {
+        setFormData({ nombre, correo, rol, apellido, telefono, direccion, avatar });
+    }, [nombre, correo, rol, apellido, telefono, direccion, avatar]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setFormData((prev) => ({ ...prev, [id]: value }));
     };
 
     const handleSaveChanges = () => {
-        setNombre(tempNombre);
-        setCorreo(tempCorreo);
-        setRol(tempRol);
-        setApellido(tempApellido);
-        setTelefono(tempTelefono);
-        setDireccion(tempDireccion);
-        setAvatar(tempAvatar);
-
         const user_id = sessionStorage.getItem("user_id");
         if (user_id) {
+
             try {
                 axios.put('http://localhost:3001/User', {
                     user_id,
-                    avatar: tempAvatar,
-                    nombre: tempNombre,
-                    apellido: tempApellido,
-                    correo: tempCorreo,
-                    telefono: tempTelefono,
-                    direccion: tempDireccion,
-                    rol: tempRol
+                    ...formData,
                 })
                     .then(result => {
+                        console.log("user:" + user_id)
                         sessionStorage.setItem("nombre", result.data.nombre);
                         sessionStorage.setItem("apellido", result.data.apellido);
                         sessionStorage.setItem("rol", result.data.rol);
                         sessionStorage.setItem("avatar", result.data.avatar);
-                        setShowModal(false);
 
+                        setShowModal(false);
                         setTitle('¡Éxito!');
-                        setMessage2("Su usuario se ha editado correctamente.");
-                        setMessage(true);
+                        setMessage("Su usuario se ha editado correctamente.");
+                        setShowMessage(true);
                         //window.location.reload();
                     })
             } catch (error) {
+                setShowModal(false);
                 setTitle('¡Error!');
-                setMessage2('Ocurrió un problema al editar su usuario. Inténtalo nuevamente.');
-                setShowModal(true);
+                setMessage('Ocurrió un problema al editar su usuario. Inténtalo nuevamente.');
+                setShowMessage(true);
             }
         }
     };
@@ -109,7 +97,7 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
                                 <p>{nombre}</p>
 
                                 <p className="card-text text-body-secondary mt-5 mb-2">Correo Electrónico</p>
-                                <p>{correo2}</p>
+                                <p>{correo}</p>
 
                                 <p className="card-text text-body-secondary mt-5 mb-2">Rol</p>
                                 <p>{rol}</p>
@@ -120,10 +108,10 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
                                 <p>{apellido}</p>
 
                                 <p className="card-text text-body-secondary mt-5 mb-2">Número de Teléfono</p>
-                                <p>{telefono2}</p>
+                                <p>{telefono}</p>
 
                                 <p className="card-text text-body-secondary mt-5 mb-2">Dirección</p>
-                                <p>{direccion2}</p>
+                                <p>{direccion}</p>
                             </div>
                         </div>
                     </div>
@@ -144,56 +132,47 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
                                 </div>
                                 <div className="modal-body">
                                     <div className='hstack gap-4 p-4'>
-                                        <div className='border-end d-flex flex-column align-items-center'>
+                                        <div className="me-4 d-flex flex-column align-items-center justify-content-start text-center">
                                             <img
-                                                src={sessionStorage.getItem("avatar") || "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png"}
+                                                src={avatar || "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png"}
                                                 alt="User Avatar"
                                                 className="rounded-circle mb-3 mt-3 border"
                                                 width="120"
                                                 height="120"
                                             />
-                                            <div className="mb-3 me-4">
-                                                <label htmlFor="avatar" className="form-label">Editar Foto de Perfil</label>
-                                                <input className="form-control form-control-sm mb-4" id="avatar" type="file" onChange={handleAvatarChange} />
-
-                                                <label htmlFor="avatar2" className="form-label">O copiar link</label>
-                                                <input type="text" id="avatar2" className="form-control mb-4" value={tempAvatar} onChange={(e) => setTempAvatar(e.target.value)} />
+                                            <div className="mb-3">
+                                                <label htmlFor="avatar" className="form-label">Copiar link de la imagen</label>
+                                                <input type="text" id="avatar" className="form-control mb-4" value={formData.avatar} onChange={handleInputChange} />
                                             </div>
                                         </div>
 
-                                        <div>
-                                            <div className='row '>
-                                                <div className='col'>
-                                                    <label htmlFor="nombre" className="form-label">Nombre</label>
-                                                    <input type="text" id="nombre" className="form-control mb-4" value={tempNombre} onChange={(e) => setTempNombre(e.target.value)} />
 
-                                                    <label htmlFor="correo" className="form-label">Correo Electrónico</label>
-                                                    <input type="email" id="correo" className="form-control mb-4" value={tempCorreo} onChange={(e) => setTempCorreo(e.target.value)} />
+                                        <div className='row border-start'>
+                                            <div className='col ms-4'>
+                                                <label htmlFor="nombre" className="form-label">Nombre</label>
+                                                <input type="text" id="nombre" className="form-control mb-4" value={formData.nombre} onChange={handleInputChange} />
 
-                                                    <label htmlFor="rol" className="form-label">Rol</label>
-                                                    <input type="text" id="rol" className="form-control" value={tempRol} onChange={(e) => setTempRol(e.target.value)} />
-                                                </div>
-                                                <div className='col'>
-                                                    <label htmlFor="apellido" className="form-label">Apellido</label>
-                                                    <input type="text" id="apellido" className="form-control mb-4" value={tempApellido} onChange={(e) => setTempApellido(e.target.value)} />
+                                                <label htmlFor="correo" className="form-label">Correo Electrónico</label>
+                                                <input type="email" id="correo" className="form-control mb-4" value={formData.correo} onChange={handleInputChange} />
 
-                                                    <label htmlFor="telefono" className="form-label">Número de Teléfono</label>
-                                                    <input type="text" id="telefono" className="form-control mb-4" value={tempTelefono} onChange={(e) => setTempTelefono(e.target.value)} />
+                                                <label htmlFor="rol" className="form-label">Rol</label>
+                                                <input type="text" id="rol" className="form-control" value={formData.rol} onChange={handleInputChange} />
+                                            </div>
+                                            <div className='col'>
+                                                <label htmlFor="apellido" className="form-label">Apellido</label>
+                                                <input type="text" id="apellido" className="form-control mb-4" value={formData.apellido} onChange={handleInputChange} />
 
-                                                    <label htmlFor="direccion" className="form-label">Dirección</label>
-                                                    <input type="text" id="direccion" className="form-control" value={tempDireccion} onChange={(e) => setTempDireccion(e.target.value)} />
-                                                </div>
+                                                <label htmlFor="telefono" className="form-label">Número de Teléfono</label>
+                                                <input type="text" id="telefono" className="form-control mb-4" value={formData.telefono} onChange={handleInputChange} />
+
+                                                <label htmlFor="direccion" className="form-label">Dirección</label>
+                                                <input type="text" id="direccion" className="form-control" value={formData.direccion} onChange={handleInputChange} />
                                             </div>
                                         </div>
                                     </div>
 
                                 </div>
                                 <div className="modal-footer gap-2">
-                                    <button type="button"
-                                        className="btn btn-secondary"
-                                        onClick={() => { setShowModal(false); }}>
-                                        Cerrar
-                                    </button>
                                     <button type="button"
                                         className="btn btn2"
                                         onClick={handleSaveChanges}
@@ -207,7 +186,7 @@ export default function UserInformation({ correo, telefono, direccion }: User) {
             }
 
             {/* Modal */}
-            {showMessage && <Modal title={title} message={message} onClose={() => setMessage(false)} />}
+            {showMessage && <Modal title={title} message={message} onClose={() => setShowMessage(false)} />}
         </>
     );
 };

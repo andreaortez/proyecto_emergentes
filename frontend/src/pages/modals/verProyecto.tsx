@@ -10,9 +10,13 @@ interface Proyecto {
     descripcion: string;
     recaudado: string;
     estado: number;
-    inversionistas: string[];
+    inversionistas: Inversionista[];
     onClose: () => void;
     footer?: React.ReactNode;
+}
+
+interface Inversionista {
+
 }
 
 export default function verProyecto({ nombre, imagen, sector, meta, descripcion, recaudado, estado, inversionistas, onClose, footer }: Proyecto) {
@@ -86,6 +90,7 @@ export default function verProyecto({ nombre, imagen, sector, meta, descripcion,
                             <h2>Inversionistas</h2>
                             <p className="textColor"># inversionistas</p>
                             <div className="list-group" data-bs-spy="scroll">{/* falta hacerlo scroll */}
+
                                 <InverstorsList />
 
                             </div>

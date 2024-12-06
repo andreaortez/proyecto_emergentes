@@ -1,5 +1,5 @@
 import VerProyecto from "../modals/verProyecto";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import EditarProyecto from "../modals/editarProyecto";
 
 interface Proyecto {
@@ -11,9 +11,13 @@ interface Proyecto {
     descripcion: string;
     recaudado: string;
     estado: number;
-    inversionistas: string[];
+    inversionistas: Inversionista[];
     buttons?: React.ReactNode;
     editar: boolean;
+}
+
+interface Inversionista {
+
 }
 
 export default function ProyectoCard({ id, nombre, imagen, sector, meta, descripcion, recaudado, estado, inversionistas, buttons, editar }: Proyecto) {
@@ -56,7 +60,7 @@ export default function ProyectoCard({ id, nombre, imagen, sector, meta, descrip
             {showModal && <VerProyecto nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} recaudado={recaudado} estado={estado} inversionistas={inversionistas} onClose={() => setShowModal(false)} />}
 
             {/* Editar Proyecto*/}
-            {showEditModal && <EditarProyecto id={id} nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} recaudado={recaudado} estado={estado} onClose={() => setShowEditModal(false)} />}
+            {showEditModal && <EditarProyecto project_id={id} nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} onClose={() => setShowEditModal(false)} />}
         </>
     );
 };
