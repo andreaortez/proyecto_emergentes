@@ -14,18 +14,6 @@ export default function BackgroundText() {
     const [currentView, setCurrentView] = useState("dashboard");
     const [userId, setUserId] = useState(sessionStorage.getItem('user_id'));
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const user_id = sessionStorage.getItem("user_id");
-            if (user_id !== userId) {
-                setUserId(user_id); // Actualiza el estado si cambia el user_id
-            }
-        }, 1000);
-
-        return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonte
-    }, [userId]);
-
-
     if (!userId) {
         return <p>Se está cargando el contenido</p>;
     }

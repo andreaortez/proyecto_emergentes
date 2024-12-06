@@ -17,7 +17,8 @@ interface Proyecto {
 }
 
 interface Inversionista {
-
+    id: string;
+    userId: string;
 }
 
 export default function ProyectoCard({ id, nombre, imagen, sector, meta, descripcion, recaudado, estado, inversionistas, buttons, editar }: Proyecto) {
@@ -48,7 +49,7 @@ export default function ProyectoCard({ id, nombre, imagen, sector, meta, descrip
                             </div>
                             <p className="card-text">{`${descripcion}`}</p>
                             <div className='hstack gap-3 mt-3'>
-                                <button type="button" className="btn btn2 rounded-pill" onClick={() => setShowModal(true)}>Ver Proyecto</button>
+                                <button type="button" className="btn btn2 rounded-pill" onClick={() => { setShowModal(true) }}>Ver Proyecto</button>
                                 {buttons && buttons}
                             </div>
                         </div>

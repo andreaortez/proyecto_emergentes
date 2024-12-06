@@ -67,11 +67,8 @@ export default function EditarProyecto({ project_id, nombre, imagen, sector, met
                             <form className="row g-3 needs-validation" noValidate>
                                 <div className='hstack p-4'>
                                     {/* imagen */}
-                                    <div className=" me-4 d-flex flex-column align-items-center justify-content-start text-center">
+                                    <div className='d-flex flex-column align-items-center justify-content-center text-center'>
                                         <h6 className="card-title mb-4">Imagen del Proyecto</h6>
-                                        <div className="d-flex justify-content-center align-items-center" style={{ width: '200px', height: '200px' }}>
-                                            <img src={`${imagen}`} alt="Imagen" style={{ objectFit: 'cover', maxWidth: '100%', maxHeight: '100%' }} />
-                                        </div>
                                         <div className="mb-3 mt-3">
                                             <label htmlFor="imagen" className="form-label">Copiar link de la imagen</label>
                                             <input type="text" id="imagen" className="form-control mb-4" value={formData.imagen} onChange={handleInputChange} />
