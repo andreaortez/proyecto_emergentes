@@ -2,6 +2,7 @@ const ProjectModel = require('../models/Project');
 const Project = require('../models/Project');
 const PymeModel = require('../models/Pyme');
 const InvestorProject = require('../models/InvestorProject');
+const Inversionista = require('../models/Inversionista')
 const mongoose = require('mongoose');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const InvestorProjectModel = require('../models/InvestorProject');
@@ -125,8 +126,8 @@ exports.deleteProject = async (req, res) => {
     }
 };
 exports.getProjectsByPyme = async (req, res) => {
-    //const { pyme_id } = req.query;
-    const { pyme_id } = req.body;
+    const { pyme_id } = req.query;
+    //const { pyme_id } = req.body;
     try {
         if (pyme_id) {
             const proyectos_id = await ProjectModel.find({ pymeId: pyme_id }, { _id: 1 });
