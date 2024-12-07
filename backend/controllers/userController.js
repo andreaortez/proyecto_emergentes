@@ -6,52 +6,41 @@ const InvestorProjectModel = require('../models/InvestorProject');
 const fs = require('fs');
 const path = require('path');
 
-const isWebURL = (url) => {
-    const webURLRegex = /^(http|https):\/\/[^ "]+$/;
-    return webURLRegex.test(url);
-};
-
 exports.updateUser = async (req, res) => {
-    const { user_id, avatar, nombre, apellido, correo, telefono, direccion, rol } = req.body;
+    const { user_id, avatar, correo, telefono, direccion, tipo
+        , empresa
+        , nombre, apellido, monto
+    } = req.body;
 
-    if (!user_id) {
+    if (!user_id || !tipo) {
         return res.status(400).send({ msg: "Se requiere el ID del usuario." });
     }
-    console.log("Avatar de Front: ",avatar)
-
-    let avatarPath = avatar;
+    console.log("Avatar de Front: ", avatar)
 
     try {
-        if (avatar && !isWebURL(avatar)) {
-            const base64Regex = /^data:image\/(png|jpeg|jpg);base64,/;
-            if (base64Regex.test(avatar)) {
-                // Extraer el formato de la imagen
-                const extension = avatar.match(/^data:image\/(png|jpeg|jpg);base64,/)[1];
-                const base64Data = avatar.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
-                const buffer = Buffer.from(base64Data, 'base64');
-
-                // Generar un nombre único para el archivo
-                const fileName = `${Date.now()}.${extension}`;
-                const uploadPath = path.join(__dirname, '../public/uploads', fileName);
-
-                // Guardar el archivo en la carpeta pública
-                fs.writeFileSync(uploadPath, buffer);
-
-                // Crear la URL pública del archivo
-                avatarPath = `/uploads/${fileName}`;
-            } else {
-                return res.status(400).send({ msg: "Formato de avatar no válido." });
-            }
-        }
-
         const updatedUser = await UserModel.findByIdAndUpdate(
             user_id,
-            { avatar, nombre, apellido, correo, telefono, direccion, rol },
+            { avatar, nombre, apellido, correo, telefono, direccion },
             { new: true, runValidators: true }
         );
 
         if (!updatedUser) {
             return res.status(404).send({ msg: "Usuario no encontrado." });
+        }
+
+        if (tipo === "Pyme" && empresa) {
+            await PymeModel.findOneAndUpdate(
+                { userId: updatedUser._id },
+                { empresa },
+                { new: true, runValidators: true }
+            );
+        } else if (tipo === "Inversionista" && nombre && apellido && monto) {
+            await InversionistaModel.findOneAndUpdate(
+                { userId: updatedUser._id },
+                { nombre, apellido, monto },
+                { new: true, runValidators: true }
+            );
+
         }
 
         res.status(200).send(updatedUser);
@@ -77,10 +66,9 @@ exports.getUser = async (req, res) => {
             console.log("usuario no encontrado");
             return res.status(404).send({ msg: "Usuario no encontrado." });
         }
-
-        const { nombre, apellido, correo, telefono, direccion, rol, avatar } = user;
-        console.log("nombre", nombre);
-        res.status(200).send({ nombre, apellido, correo, telefono, direccion, rol, avatar });
+        const { correo, telefono, direccion, tipo, avatar } = user;
+        console.log("user", correo);
+        res.status(200).send({ correo, telefono, direccion, tipo, avatar });
     } catch (err) {
         console.error(err);
         res.status(500).send({ msg: "Error al obtener el perfil del usuario.", error: err.message });

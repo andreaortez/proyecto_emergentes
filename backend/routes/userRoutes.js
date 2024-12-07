@@ -7,7 +7,7 @@ const {
 const router = express.Router();
 
 //router.post('/Proyecto', createProject);
-router.post('/MiPerfil', getUser);
+router.post('/User', getUser);
 router.put('/User', updateUser);
 router.delete('/User', deleteUser);
 
