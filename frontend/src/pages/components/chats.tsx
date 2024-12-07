@@ -4,7 +4,7 @@ export default function Chat() {
     return (
         <div className="card" style={{ width: "30%", height: '40.4vw' }}>
             <div className="card-header">
-                <h5>Mis conversaciones</h5>
+                <h5>Notificaciones</h5>
             </div>
             <ul className="list-group list-group-flush">
                 <li className="list-group-item list-group-item-action d-flex justify-content-between align-items-center">

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import Sidebar from './components/sidebar-pyme';
+import Sidebar from './components/sidebar-user';
 import Navbar from './components/navbar-user';
-import Dashboard from "./views/dashboardPYME";
+import Dashboard from "./views/dashboard";
 import Mensajeria from "./views/mensajeria";
 import MiPerfil from "./views/miperfil";
 import Proyectos from "./views/misproyectos";
 import SearchProyects from "./views/searchProjects";
 import CrearProyecto from "./views/crearProyecto";
-import VerUsuarios from './views/verUsuario';
 
 export default function Page() {
     const [currentView, setCurrentView] = useState("dashboard");
@@ -32,7 +31,6 @@ export default function Page() {
                         {currentView === "proyectos" && <Proyectos />}
                         {currentView === "crearProyectos" && <CrearProyecto />}
                         {currentView === "searchProyects" && <SearchProyects />}
-                        {currentView === "usuarios" && <VerUsuarios />}
                     </div>
                 </div>
             </div>

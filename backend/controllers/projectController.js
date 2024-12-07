@@ -386,5 +386,32 @@ exports.getRiskProfile = async (req, res) => {
     }
 };
 
+exports.getProjectsListPyme = async (req, res) => {
+    const { pyme_id } = req.query;
+
+    try {
+        if (!pyme_id) {
+            return res.status(400).json({ success: false, message: "Se debe proveer un ID de la pyme" });
+        }
+
+        const proyectos = await ProjectModel.find(
+            { pymeId: pyme_id },
+            { _id: 1, nombre: 1 }
+        );
+
+        if (proyectos.length === 0) {
+            return res.status(300).json({ success: false, message: "No se encontraron proyectos para esta PYME" });
+        }
+
+        res.status(200).json({
+            success: true,
+            proyectos
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error al obtener los proyectos" });
+    }
+};
+
 
 

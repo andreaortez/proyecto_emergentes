@@ -5,24 +5,21 @@ import axios from 'axios';
 
 export default function SignUp() {
     const router = useRouter();
-    const tipo = 1; //Pyme 1, Inversionista 0
+    const tipo = "Pyme";
     //User Data
+    const [empresa, setEmpresa] = useState<string>("");
     const [correo, setCorreo] = useState<string>();
     const [contraseña, setContraseña] = useState<string>();
-    const [nombre, setNombre] = useState<string>();
-    const [apellido, setApellido] = useState<string>();
     const [telefono, setTelefono] = useState<string>();
-    //Pyme Data
-    const [empresa, setEmpresa] = useState<string>("");
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        axios.post('http://localhost:3001/Registrarse', { correo, contraseña, nombre, apellido, telefono, empresa, tipo })
+        axios.post('http://localhost:3001/Registrarse', { empresa, correo, contraseña, telefono, tipo })
             .then(result => {
                 if (result.data.status === "success") {
                     console.log(result)
                     sessionStorage.setItem('user_id', result.data.user_id);
-                    sessionStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id)
+                    sessionStorage.setItem('tipo_id', result.data.pyme_id);
                     window.location.href = "/$YUPI";
                     router.push('/$YUPI');
                 }
@@ -43,7 +40,7 @@ export default function SignUp() {
             </div>
 
             {/* Form */}
-            <div className="LG_SU-background float-end" style={{ paddingTop: '50px' }}>
+            <div className="LG_SU-background float-end" style={{ paddingTop: '85px' }}>
                 {/* Flecha */}
                 <div className="back position-absolute top-0 start-50 p-2">
                     <Link href="/">
@@ -60,47 +57,35 @@ export default function SignUp() {
                 <form onSubmit={handleSubmit} className="center">
                     <div className="row">
                         <div className="col-6 mb-3">
-                            <label htmlFor="formGroupExampleInput" className="form-label">Nombre</label>
+                            <label htmlFor="formGroupExampleInput" className="form-label">Nombre de la Empresa</label>
                             <input
-                                onChange={(input) => setNombre(input.target.value)}
+                                onChange={(input) => setEmpresa(input.target.value)}
                                 type="text" className="form-control" aria-label="Nombre" required />
                         </div>
-                        <div className="col-6 mb-3">
-                            <label htmlFor="Apellido" className="form-label">Apellido</label>
-                            <input
-                                onChange={(input) => setApellido(input.target.value)}
-                                type="text" className="form-control" aria-label="Apellido" required />
-                        </div>
-                    </div>
-                    <div className="row">
                         <div className="col-6 mb-3">
                             <label htmlFor="inputEmail4" className="form-label">Correo electrónico</label>
                             <input
                                 onChange={(input) => setCorreo(input.target.value)}
                                 type="email" className="form-control" aria-label="Correo" required />
                         </div>
+                    </div>
+                    <div className="row">
+
                         <div className="col-6 mb-3">
                             <label htmlFor="nombre" className="form-label">Número de teléfono</label>
                             <input
                                 onChange={(input) => setTelefono(input.target.value)}
                                 type="text" className="form-control" aria-label="Numero" required />
                         </div>
-                    </div>
-                    <div className="row">
                         <div className="col-6 mb-3">
                             <label htmlFor="inputPassword4" className="form-label">Contraseña</label>
                             <input
                                 onChange={(input) => setContraseña(input.target.value)}
                                 type="password" className="form-control" aria-label="Contraseña" required />
                         </div>
-                        <div className="col-6 mb-3">
-                            <label htmlFor="inputState" className="form-label">Tipo de cuenta</label>
-                            <select id="inputState" className="form-select" required>
-                                <option selected disabled value="">Elija su tipo de cuenta...</option>
-                                <option>PYME</option>
-                                <option>Inversionista</option>
-                            </select>
-                        </div>
+                    </div>
+                    <div className="row">
+
                     </div>
                     <div className="text-center">
                         <button className="pageButton btn" type="submit">
