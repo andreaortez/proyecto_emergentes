@@ -18,9 +18,13 @@ export default function Navbar() {
               <a className="nav-link" href="#como-funciona">Cómo Funciona</a>
               <a className="nav-link" href="#contactanos">Contáctanos</a>
               <Link href="/IniciarSesion" className="nav-link">Iniciar Sesión</Link>
+              <a className="nav-link border-start">Registrarse como</a>
             </div>
+            <button className="btn pageButton me-2" type="button">
+              <Link href="/RegistroP" className="nav-link">PYME</Link>
+            </button>
             <button className="btn pageButton" type="button">
-              <Link href="/Registrarse" className="nav-link">Registrarse</Link>
+              <Link href="/RegistroI" className="nav-link">Inversionista</Link>
             </button>
           </div>
         </div>
