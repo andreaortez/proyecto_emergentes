@@ -8,7 +8,8 @@ const {
     getAllProjects,
     getProjectGraphs,
     getRiskProfile,
-    getProjectsListPyme
+    getProjectsListPyme,
+    getProjectsByInvestor
 } = require('../controllers/projectController');
 const router = express.Router();
 
@@ -20,6 +21,8 @@ router.get('/ProyectosPyme', getProjectsByPyme);
 router.get('/Proyectos', getAllProjects);
 router.get('/Graphs', getProjectGraphs);
 router.get('/PerfilRiesgo', getRiskProfile);
+
 router.get('/ListarProyectos', getProjectsListPyme);
+router.get('/ProyectosInversionista', getProjectsByInvestor)
 
 module.exports = router;
