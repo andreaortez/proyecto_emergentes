@@ -1,8 +1,11 @@
 const UserModel = require('../models/User');
 const PymeModel = require('../models/Pyme');
 const InversionistaModel = require('../models/Inversionista');
-const admin = require('../config/firebase');
+//const admin = require('../config/firebase');
+const { auth } = require("../config/firebase"); // Importar instancia de Firebase Auth
+const { createUserWithEmailAndPassword, signInWithEmailAndPassword } = require("firebase/auth");
 const nodemailer = require('nodemailer');
+const firebase = require("../config/firebase");
 
 // Configurar el transporte para Outlook o Gmail
 const transporter = nodemailer.createTransport({
@@ -39,7 +42,7 @@ exports.login = async (req, res) => {
 
         // Intentar iniciar sesión en Firebase
         try {
-            const userRecord = await admin.auth().getUserByEmail(email);
+            const firebaseUser = await signInWithEmailAndPassword(auth, email, pass);
             // Usuario ya existe en Firebase, retornar éxito
             const pyme = await PymeModel.findOne({ userId: user._id });
             if (pyme) {
@@ -51,17 +54,18 @@ exports.login = async (req, res) => {
 
 
         } catch (error) {
-            if (error.code === 'auth/user-not-found') {
-                // Si el usuario no está en Firebase, crearlo, esto es temporal capaz se quite
-                const firebaseUser = await admin.auth().createUser({
-                    email,
-                    password: pass,
-                    displayName: `${user.nombre} ${user.apellido}`,
-                });
+            // if (error.code === 'auth/user-not-found') {
+            //     // Si el usuario no está en Firebase, crearlo, esto es temporal capaz se quite
+            //     const firebaseUser = await admin.auth().createUser({
+            //         email,
+            //         password: pass,
+            //         displayName: `${user.nombre} ${user.apellido}`,
+            //     });
 
-                return res.status(200).send({ result: "Sesión Iniciada", user_id: user._id, firebaseUser });
-            }
-            throw error;
+            //     return res.status(200).send({ result: "Sesión Iniciada", user_id: user._id, firebaseUser });
+            // }
+            console.error("Error al iniciar sesión en Firebase:", error);
+            return res.status(401).send("Error al iniciar sesión en Firebase");
         }
     } catch (err) {
         console.error(err);
@@ -70,30 +74,33 @@ exports.login = async (req, res) => {
 };
 
 exports.register = async (req, res) => {
-    const { correo, contraseña, nombre, apellido, telefono, empresa, tipo } = req.body;
+    const { correo, contraseña, telefono, empresa, nombre, apellido, monto, tipo } = req.body;
     const avatar = "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png";
 
-    if (!correo || !contraseña || !nombre || !apellido || !telefono) {
+    if (!correo || !contraseña || !telefono) {
         return res.status(400).send("Complete todos los campos requeridos.");
+    } else if (!tipo) {
+        return res.status(205).send("Falto proveer el tipo");
     }
 
     try {
         // Crear en Firebase
-        const firebaseUser = await admin.auth().createUser({
-            email: correo,
-            password: contraseña,
+        const firebaseResponse = await createUserWithEmailAndPassword(auth, correo, contraseña);
+        const firebaseUser = {
+            uid: firebaseResponse.user.uid,
+            email: firebaseResponse.user.email,
             displayName: `${nombre} ${apellido}`,
-        });
+        };
 
         // Crear en MongoDB
         let newUser;
-        if (tipo === 1 && empresa) {
-            newUser = await UserModel.create({ avatar, correo, contraseña, nombre, apellido, telefono });
+        if (tipo === "Pyme" && empresa) {
+            newUser = await UserModel.create({ avatar, correo, contraseña, telefono });
             const pyme = await PymeModel.create({ empresa, userId: newUser._id });
             return res.status(201).json({ pyme, firebaseUser });
-        } else if (tipo !== 1) {
-            newUser = await UserModel.create({ correo, contraseña, nombre, apellido, telefono });
-            const inversionista = await InversionistaModel.create({ userId: newUser._id });
+        } else if (tipo == "Inversionista" && nombre && apellido && monto) {
+            newUser = await UserModel.create({ avatar, correo, contraseña, telefono });
+            const inversionista = await InversionistaModel.create({ nombre, apellido, monto_bolsa: monto, userId: newUser._id });
             return res.status(201).json({ inversionista, firebaseUser });
         } else {
             return res.status(400).send("Complete todos los campos requeridos.");

@@ -7,9 +7,12 @@ const fs = require('fs');
 const path = require('path');
 
 exports.updateUser = async (req, res) => {
-    const { user_id, avatar, nombre, apellido, correo, telefono, direccion, rol } = req.body;
+    const { user_id, avatar, correo, telefono, direccion, tipo
+        , empresa
+        , nombre, apellido, monto
+    } = req.body;
 
-    if (!user_id) {
+    if (!user_id || !tipo) {
         return res.status(400).send({ msg: "Se requiere el ID del usuario." });
     }
     console.log("Avatar de Front: ", avatar)
@@ -17,12 +20,27 @@ exports.updateUser = async (req, res) => {
     try {
         const updatedUser = await UserModel.findByIdAndUpdate(
             user_id,
-            { avatar, nombre, apellido, correo, telefono, direccion, rol },
+            { avatar, nombre, apellido, correo, telefono, direccion },
             { new: true, runValidators: true }
         );
 
         if (!updatedUser) {
             return res.status(404).send({ msg: "Usuario no encontrado." });
+        }
+
+        if (tipo === "Pyme" && empresa) {
+            await PymeModel.findOneAndUpdate(
+                { userId: updatedUser._id },
+                { empresa },
+                { new: true, runValidators: true }
+            );
+        } else if (tipo === "Inversionista" && nombre && apellido && monto) {
+            await InversionistaModel.findOneAndUpdate(
+                { userId: updatedUser._id },
+                { nombre, apellido, monto },
+                { new: true, runValidators: true }
+            );
+
         }
 
         res.status(200).send(updatedUser);
@@ -48,10 +66,9 @@ exports.getUser = async (req, res) => {
             console.log("usuario no encontrado");
             return res.status(404).send({ msg: "Usuario no encontrado." });
         }
-
-        const { nombre, apellido, correo, telefono, direccion, rol, avatar } = user;
-        console.log("nombre", nombre);
-        res.status(200).send({ nombre, apellido, correo, telefono, direccion, rol, avatar });
+        const { correo, telefono, direccion, tipo, avatar } = user;
+        console.log("user", correo);
+        res.status(200).send({ correo, telefono, direccion, tipo, avatar });
     } catch (err) {
         console.error(err);
         res.status(500).send({ msg: "Error al obtener el perfil del usuario.", error: err.message });

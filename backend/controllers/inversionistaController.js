@@ -3,7 +3,7 @@ const PymeModel = require('../models/Pyme');
 const InversionistaModel = require('../models/Inversionista');
 const InvestorProjectModel = require('../models/InvestorProject');
 const ProjectModel = require('../models/Project');
-const axios = require('axios');
+//const axios = require('axios');
 
 const createMessage = async ({ emisor, receptor, mensaje, proposalId }) => {
     if (!emisor || !receptor || !mensaje) {
@@ -22,6 +22,31 @@ const createMessage = async ({ emisor, receptor, mensaje, proposalId }) => {
         throw error;
     }
 };
+
+exports.getInversionista = async (req, res) => {
+    //const { investor_id } = req.body;
+    const { investor_id } = req.query;
+    //console.log("ID recibido en el backend:", user_id);
+
+    if (!investor_id) {
+        return res.status(400).send({ msg: "Falta proveer ID del inversionista" });
+    }
+    //const userIDObject = new mongoose.Types.ObjectId(user_id);
+
+    try {
+        const investor = await InversionistaModel.findOne({ _id: investor_id });
+        //const user = usuario;
+
+        if (!investor) {
+            console.log("inversionista no encontrado");
+            return res.status(404).send({ msg: "Inversionista no encontrado." });
+        }
+        res.status(200).send({ investor });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ msg: "Error al obtener el perfil del inversionista.", error: err.message });
+    }
+}
 
 exports.makeProposal = async (req, res) => {
     const { project_id, investor_id, roi, monto } = req.body;
