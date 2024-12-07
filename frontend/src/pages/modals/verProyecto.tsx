@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import InverstorsList from '../components/investorsList';
 import Iconos from '../elements/iconos';
+import axios from 'axios';
 
 interface Proyecto {
     nombre: string;
@@ -10,13 +11,31 @@ interface Proyecto {
     descripcion: string;
     recaudado: string;
     estado: number;
-    inversionistas: string[];
+    inversionistas: Inversionista[];
     onClose: () => void;
     footer?: React.ReactNode;
 }
 
+interface Inversionista {
+    id: string;
+    userId: string;
+}
+
+interface User {
+    id: string;
+    userId: string;
+    nombre: string;
+    apellido: string;
+    avatar: string;
+    rol: string;
+    correo: string;
+    telefono: string;
+    direccion: string;
+}
+
 export default function verProyecto({ nombre, imagen, sector, meta, descripcion, recaudado, estado, inversionistas, onClose, footer }: Proyecto) {
     const [estadoString, setEstadoString] = useState<string>('');
+    const [users, setUsers] = useState<User[]>([]);
 
     useEffect(() => {
         switch (estado) {
@@ -34,6 +53,31 @@ export default function verProyecto({ nombre, imagen, sector, meta, descripcion,
                 break;
         }
     }, [estado]);
+
+    useEffect(() => {
+        const fetchInversionistas = async () => {
+            try {
+                if (inversionistas.length === 0) {
+                    setUsers([]);
+                    return;
+                } else {
+                    const userPromises = inversionistas.map(async (inversionista) => {
+                        const response = await axios.post('http://localhost:3001/MiPerfil', {
+                            user_id: inversionista.userId,
+                        });
+                        return response.data;
+                    });
+
+                    const userData = await Promise.all(userPromises);
+                    setUsers(userData);
+                }
+            } catch (error) {
+                console.error("Error al obtener los inversionistas:", error);
+            }
+        };
+
+        fetchInversionistas();
+    }, [inversionistas]);
 
     return (
         <div className="modal show d-block" tabIndex={-1}>
@@ -84,10 +128,15 @@ export default function verProyecto({ nombre, imagen, sector, meta, descripcion,
                         {/* Lista de inversionistas */}
                         <div className="container mt-4 col-md-5 justify-content-between">
                             <h2>Inversionistas</h2>
-                            <p className="textColor"># inversionistas</p>
+                            <p className="textColor">{inversionistas.length} inversionistas</p>
                             <div className="list-group" data-bs-spy="scroll">{/* falta hacerlo scroll */}
-                                <InverstorsList />
-
+                                {users.length === 0 ? (
+                                    <p>No existen inversionistas para este proyecto.</p>
+                                ) : (
+                                    users.map((user, index) => (
+                                        <InverstorsList key={index} user={user} />
+                                    ))
+                                )}
                             </div>
                         </div>
 

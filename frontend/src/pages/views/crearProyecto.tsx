@@ -16,15 +16,6 @@ export default function CrearProyectos() {
     const [title, setTitle] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
-
-    const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files ? e.target.files[0] : null;
-        if (file) {
-            const imageURL = URL.createObjectURL(file);
-            setImagen(imageURL);
-        }
-    };
-
     const handleCreateProject = async () => {
         if (pyme_id) {
             try {
@@ -64,13 +55,11 @@ export default function CrearProyectos() {
                     <h5 className="card-title mb-4">Crear Proyecto</h5>
                     <form className="row g-3 needs-validation" noValidate>
                         <div className='hstack p-4'>
-                            <div className='d-flex flex-column align-items-center'>
+                            {/* imagen */}
+                            <div className='d-flex flex-column align-items-center justify-content-center text-center'>
                                 <h6 className="card-title mb-4">Imagen del Proyecto</h6>
                                 <div className="mb-3 me-4">
-                                    <label htmlFor="avatar" className="form-label">Subir foto</label>
-                                    <input className="form-control form-control mb-4" id="avatar" type="file" onChange={handleImage} />
-
-                                    <label htmlFor="avatar2" className="form-label">O copiar link</label>
+                                    <label htmlFor="avatar2" className="form-label">Copiar link de la imagen</label>
                                     <input type="text" id="avatar2" className="form-control mb-4" onChange={(e) => setImagen(e.target.value)} />
                                 </div>
                             </div>
@@ -97,7 +86,7 @@ export default function CrearProyectos() {
                                     <div className="mb-3">
                                         <label htmlFor="sector" className="form-label mb-3">Sector</label>
                                         <select className="form-select" id="sector" onChange={(e) => setSector(e.target.value)} required >
-                                            <option selected disabled value="">Elija Sector...</option>
+                                            <option value="" disabled>Elija Sector...</option>
                                             <option>Economía</option>
                                             <option>Salud</option>
                                             <option>Educación</option>

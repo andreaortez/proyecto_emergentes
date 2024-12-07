@@ -12,7 +12,12 @@ interface Proyecto {
     descripcion: string;
     recaudado: string;
     estado: number;
-    inversionistas: string[];
+    inversionistas: Inversionista[];
+}
+
+interface Inversionista {
+    id: string;
+    userId: string;
 }
 
 export default function MisProyectos() {
