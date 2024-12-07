@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface Parametros {
     setCurrentView: (view: string) => void;
 }
 
 export default function Sidebar({ setCurrentView }: Parametros) {
+    const tipo_user = sessionStorage.getItem('tipo');
+    const [Pyme, setPyme] = useState<boolean>(false);
+    const [Inversionista, setInversionista] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (tipo_user === "Pyme") {
+            console.log("pyme")
+            setPyme(true);
+            setInversionista(false);
+        } else {
+            console.log("inversionista")
+            setPyme(false);
+            setInversionista(true);
+        }
+    }, [tipo_user]);
+
     return (
         <div className="d-flex windowPadding ">
             <div
@@ -93,6 +109,19 @@ export default function Sidebar({ setCurrentView }: Parametros) {
                         />
                         Ver usuario
                     </a>
+                    {Inversionista && <a className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
+                        onClick={() => setCurrentView("dashboard")}
+                    >
+                        <img
+                            src="/imagenes/aplicaciones.png"
+                            alt="Dashboard"
+                            className="nav-icon"
+                            width="20"
+                            height="20"
+                            id="dashboard"
+                        />
+                        Seguimiento de Proyectos
+                    </a>}
                 </nav>
             </div>
         </div>

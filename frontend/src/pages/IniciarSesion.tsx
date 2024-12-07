@@ -20,18 +20,21 @@ export default function LogIn() {
             .then(result => {
                 if (result.data.result === "Sesión Iniciada") {
                     sessionStorage.setItem('user_id', result.data.user_id);
-                    sessionStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id);
-                    setPage(true);
+
+                    if (result.data.pyme_id) {
+                        sessionStorage.setItem('tipo_id', result.data.pyme_id);
+                        sessionStorage.setItem('tipo', "Pyme");
+                    } else {
+                        sessionStorage.setItem('tipo_id', result.data.inversionista_id);
+                        sessionStorage.setItem('tipo', "Inversionista");
+                    }
+
+                    router.push('/$YUPI');
                 } else {
                     setPage(false);
 
-                    if (result.data === "contraseña incorrecta") {
-                        setMessage("Contraseña incorrecta.");
-                    } else {
-                        setMessage("El usuario no existe");
-                    }
-
                     setTitle("¡Error!");
+                    setMessage("Correo y/o contraseña incorrecta.");
                     setShowModal(true);
                 }
             })
@@ -40,12 +43,6 @@ export default function LogIn() {
                 setMessage("No se pudo conectar con el servidor. Intenta nuevamente más tarde.");
                 setShowModal(true);
             });
-    };
-
-    const handleNavigation = () => {
-        if (page) {
-            router.push('/PYMES');
-        }
     };
 
     return (
@@ -95,7 +92,7 @@ export default function LogIn() {
                         </div>
                     </div>
                     <div className="text-center">
-                        <button className="pageButton btn" type="submit" onClick={() => handleNavigation()}>
+                        <button className="pageButton btn" type="submit">
                             Iniciar Sesión
                         </button>
                     </div>
@@ -125,7 +122,6 @@ export default function LogIn() {
                         className="btn btn-secondary pageButton"
                         onClick={() => {
                             setShowModal(false);
-                            handleNavigation();
                         }}
                     >
                         Cerrar

@@ -1,7 +1,6 @@
-import React from 'react';
-import Sidebar from './components/sidebar-pyme'
-import Navbar from './components/navbar-user'
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Sidebar from './components/sidebar-pyme';
+import Navbar from './components/navbar-user';
 import Dashboard from "./views/dashboardPYME";
 import Mensajeria from "./views/mensajeria";
 import MiPerfil from "./views/miperfil";
@@ -10,9 +9,9 @@ import SearchProyects from "./views/searchProjects";
 import CrearProyecto from "./views/crearProyecto";
 import VerUsuarios from './views/verUsuario';
 
-export default function BackgroundText() {
+export default function Page() {
     const [currentView, setCurrentView] = useState("dashboard");
-    const [userId, setUserId] = useState(sessionStorage.getItem('user_id'));
+    const userId = sessionStorage.getItem('user_id');
 
     if (!userId) {
         return <p>Se está cargando el contenido</p>;
