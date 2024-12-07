@@ -69,7 +69,7 @@ exports.updateProject = async (req, res) => {
             } else {
                 const updatedProject = await ProjectModel.findByIdAndUpdate(
                     project_id,
-                    { nombre, imagen, sector, meta, descripcion, estado, recaudado },
+                    { nombre, imagen, sector, meta, descripcion },
                     { new: true, runValidators: true } // Return the updated document and use validators in schema
                 );
 

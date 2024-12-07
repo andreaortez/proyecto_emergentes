@@ -1,6 +1,5 @@
 import Link from "next/link";
-import React from 'react';
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
@@ -14,21 +13,18 @@ export default function SignUp() {
     const [apellido, setApellido] = useState<string>();
     const [telefono, setTelefono] = useState<string>();
     //Pyme Data
-    const [empresa, setEmpresa] = useState<string>("Escala");
+    const [empresa, setEmpresa] = useState<string>("");
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         axios.post('http://localhost:3001/Registrarse', { correo, contraseña, nombre, apellido, telefono, empresa, tipo })
             .then(result => {
-                if (result.data === "Pyme") {
+                if (result.data.status === "success") {
                     console.log(result)
                     sessionStorage.setItem('user_id', result.data.user_id);
                     sessionStorage.setItem('tipo_id', result.data.pyme_id || result.data.inversionista_id)
-                    window.location.href = "/PYMES";
-                    router.push('/PYMES');
-                } else {
-                    {/* Por ahora abre iniciar sesion pero seria /Inversionista*/ }
-                    router.push('/IniciarSesion');
+                    window.location.href = "/$YUPI";
+                    router.push('/$YUPI');
                 }
             })
             .catch((error) => {

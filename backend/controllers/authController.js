@@ -8,19 +8,19 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: 'Gmail', // Cambia a 'Outlook' si usas Outlook
     auth: {
-      user: 'tatigarcia1611@gmail.com', // Tu correo
-      pass: process.env.Pass, // Tu contraseña o token de aplicación
+        user: 'tatigarcia1611@gmail.com', // Tu correo
+        pass: process.env.Pass, // Tu contraseña o token de aplicación
     },
-  });
-  
-  // Verificar conexión con el servidor de correo
-  transporter.verify((error, success) => {
+});
+
+// Verificar conexión con el servidor de correo
+transporter.verify((error, success) => {
     if (error) {
-      console.log('Error al conectar con el servicio de correo:', error);
+        console.log('Error al conectar con el servicio de correo:', error);
     } else {
-      console.log('El servidor de correo está listo para enviar mensajes');
+        console.log('El servidor de correo está listo para enviar mensajes');
     }
-  });
+});
 
 exports.login = async (req, res) => {
     const { email, pass } = req.body;
@@ -71,7 +71,7 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
     const { correo, contraseña, nombre, apellido, telefono, empresa, tipo } = req.body;
-    const avatar = "https://cdn-icons-png.flaticon.com/512/4122/4122823.png";
+    const avatar = "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png";
 
     if (!correo || !contraseña || !nombre || !apellido || !telefono) {
         return res.status(400).send("Complete todos los campos requeridos.");

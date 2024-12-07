@@ -11,6 +11,7 @@ interface buttons {
 export default function userProfile({ flag }: buttons) {
     const router = useRouter();
     const user_id = sessionStorage.getItem("user_id");
+
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
