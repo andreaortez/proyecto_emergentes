@@ -1,9 +1,10 @@
 const express = require('express');
-const { addInvestor, addFavorite } = require('../controllers/inversionistaController');
+const { declineProposal, addFavorite, makeProposal, acceptProposal } = require('../controllers/inversionistaController');
 const router = express.Router();
 
-router.post('/agregarInversionita', addInvestor);
+router.post('/aceptarPropuesta', acceptProposal);
+router.post('/rechazarPropuesta', declineProposal);
 router.post('/agregarFavoritos', addFavorite);
-//router.post('/Registrarse', register);
+router.post('/Propuesta', makeProposal);
 
 module.exports = router;

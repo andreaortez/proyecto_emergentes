@@ -38,13 +38,6 @@ app.listen(port, () => {
 
 
 //Missing Endpoints
-// app.post("/Enviar", (req, res) => {
-//     //con datos de contacto envia correo
-// })
-// app.put("/Avatar", async (req, res) => {
-//     //Modifica la direccion de imagen del avatar
-//     //no se si habria un folder o algo para cuando se acceda a una imagen local
-// })
 // app.post("/Mensajeria", async (req, res) => {
 //     //No se como seria Mensajeria exactamente todavia pero aja
 // })
