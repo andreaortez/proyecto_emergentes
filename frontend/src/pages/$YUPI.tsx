@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from './components/sidebar-user';
 import Navbar from './components/navbar-user';
-import Dashboard from "./views/dashboardPYME";
+import Dashboard from "./views/dashboard";
 import Mensajeria from "./views/mensajeria";
 import MiPerfil from "./views/miperfil";
 import Proyectos from "./views/misproyectos";
