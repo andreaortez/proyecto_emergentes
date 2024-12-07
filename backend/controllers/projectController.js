@@ -2,7 +2,7 @@ const ProjectModel = require('../models/Project');
 const Project = require('../models/Project');
 const PymeModel = require('../models/Pyme');
 const InvestorProject = require('../models/InvestorProject');
-const Inversionista = require('../models/Inversionista')
+const InversionistaModel = require('../models/Inversionista')
 const mongoose = require('mongoose');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const InvestorProjectModel = require('../models/InvestorProject');
@@ -388,6 +388,7 @@ exports.getRiskProfile = async (req, res) => {
 
 exports.getProjectsListPyme = async (req, res) => {
     const { pyme_id } = req.query;
+    //const { pyme_id } = req.body;
 
     try {
         if (!pyme_id) {
@@ -402,6 +403,39 @@ exports.getProjectsListPyme = async (req, res) => {
         if (proyectos.length === 0) {
             return res.status(300).json({ success: false, message: "No se encontraron proyectos para esta PYME" });
         }
+
+        res.status(200).json({
+            success: true,
+            proyectos
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error al obtener los proyectos" });
+    }
+};
+exports.getProjectsByInvestor = async (req, res) => {
+    const { investor_id } = req.query;
+    //const { investor_id } = req.body;
+
+    try {
+        if (!investor_id) {
+            return res.status(400).json({ success: false, message: "Se debe proveer un ID del inversionista" });
+        }
+
+        const inversionista = await InversionistaModel.findById(investor_id)
+            .populate({
+                path: 'invest_projects',
+                populate: {
+                    path: 'projectId',
+                    select: 'nombre _id',
+                    model: 'proyectos'
+                }
+            });
+
+        const proyectos = inversionista.invest_projects.map(investProject => ({
+            id: investProject.projectId._id,
+            nombre: investProject.projectId.nombre
+        }));
 
         res.status(200).json({
             success: true,
