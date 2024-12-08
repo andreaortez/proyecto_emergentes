@@ -21,57 +21,68 @@ const RiskProfile: React.FC<RiskProfileProps> = ({ profile }) => {
     if (!profile) {
         return <p>No se pudo cargar el perfil de riesgo.</p>;
     }
-    const riskColors: { [key in RiskProfileData['nivelDeRiesgo']]: string } = {
-        bajo: "green",
-        medio: "orange",
-        alto: "red",
-    };
+
     const data = {
-        labels: ['Bajo', 'Medio', 'Alto'], // Etiquetas de los niveles
+        labels: ['Bajo', 'Medio', 'Alto'],
         datasets: [
             {
                 label: 'Nivel de Riesgo',
-                data: [profile.nivelDeRiesgo === 'bajo' ? 0 : profile.nivelDeRiesgo === 'medio' ? 1 : 2],
-                borderColor: riskColors[profile.nivelDeRiesgo], // Color de la línea
-                backgroundColor: riskColors[profile.nivelDeRiesgo],
-                tension: 0.1, // Para hacer que la línea sea suave
-                fill: false, // No llenar el área debajo de la línea
-                pointRadius: 5, // Tamaño de los puntos
-                pointBackgroundColor: riskColors[profile.nivelDeRiesgo],
+                data: [
+                    profile.nivelDeRiesgo === 'bajo' ? 1 : 0,
+                    profile.nivelDeRiesgo === 'medio' ? 1 : 0,
+                    profile.nivelDeRiesgo === 'alto' ? 1 : 0,
+                ],
+                borderColor: "red", // Establecer el color de la línea a rojo
+                backgroundColor: "rgba(255, 0, 0, 0.1)", // Fondo transparente rojo
+                tension: 0.4,
+                pointRadius: 2,
+                pointBackgroundColor: "red", // Color de los puntos
+                borderWidth: 3, // Grosor de la línea
             },
         ],
     };
 
     const options = {
         responsive: true,
+        plugins: {
+            legend: {
+                display: false, // Ocultar la leyenda
+            },
+        },
         scales: {
             x: {
-                beginAtZero: true,
+                display: true, // Mantener los ejes si es necesario
             },
             y: {
-                beginAtZero: true,
-                max: 2,
+                display: true,
+                min: 0,
+                max: 2, // Escalar para mejor visibilidad
+            },
+        },
+        elements: {
+            line: {
+                tension: 0.4,
+            },
+            point: {
+                radius: 8, // Puntos más visibles
             },
         },
     };
-
-
-
-    //const { nivelDeRiesgo, estadoDeFinanciamiento, estadoDeInversionistas, puntajeDeRiesgo } = profile;
 
     return (
         <div style={{ border: "1px solid #ddd", padding: "20px", borderRadius: "10px" }}>
             <h3>Perfil de Riesgo</h3>
             <div style={{ display: "flex", alignItems: "center" }}>
                 {/* Aquí colocamos el gráfico de líneas */}
-                <div style={{ width: "40%", marginRight: "20px" }}>
+                <div style={{ width: "60%", height: "200px", marginRight: "20px" }}>
                     <Line data={data} options={options} />
                 </div>
+
                 {/* Información del perfil */}
                 <div>
                     <p>
                         Nivel de Riesgo:{" "}
-                        <span style={{ color: riskColors[profile.nivelDeRiesgo] }}>
+                        <span style={{ color: "red" }}>
                             {profile.nivelDeRiesgo.toUpperCase()}
                         </span>
                     </p>
