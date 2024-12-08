@@ -11,11 +11,9 @@ export default function Sidebar({ setCurrentView }: Parametros) {
 
     useEffect(() => {
         if (tipo_user === "Pyme") {
-            console.log("pyme")
             setPyme(true);
             setInversionista(false);
         } else {
-            console.log("inversionista")
             setPyme(false);
             setInversionista(true);
         }

@@ -10,19 +10,30 @@ interface Proyecto {
 }
 export default function dashboard() {
     const userID = sessionStorage.getItem("user_id");
-    const pyme_id = sessionStorage.getItem("tipo_id");
+    const tipo = sessionStorage.getItem("tipo");
     const [proyectos, setProyectos] = useState<Proyecto[]>([]);
     const [proyectoSelected, setProyecto] = useState<string>("");
 
+    const [pyme_id, setPymeId] = useState<string | null>(null);
+    const [inversionista_id, setInversionistaId] = useState<string | null>(null);
+
     useEffect(() => {
-        const fetchProyectos = async () => {
-            console.log(pyme_id)
+        if (tipo === "Inversionista") {
+            setInversionistaId(sessionStorage.getItem("tipo_id"));
+        } else {//pyme
+            setPymeId(sessionStorage.getItem("tipo_id"));
+        }
+    }, [tipo]);
+
+    useEffect(() => {
+        const listProyectos = async () => {
+            console.log("pyme " + pyme_id)
             try {
                 const response = await axios.get('http://localhost:3001/ListarProyectos', {
                     params: { pyme_id }
                 });
 
-                console.log(response.data)
+                console.log("repuesta " + response.data.proyectos)
                 if (response.data.proyectos) {
                     setProyectos(response.data.proyectos.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
                         id: proyecto._id,
@@ -35,7 +46,7 @@ export default function dashboard() {
         };
 
         if (pyme_id) {
-            fetchProyectos();
+            listProyectos();
         } else {
             console.error("No se encontró el ID de la pyme en sessionStorage");
         }
@@ -51,33 +62,6 @@ export default function dashboard() {
             console.error('Error al llamar a la API:', error);
         }
     }
-
-
-    const cargarDatos = async () => {
-        try {
-            let url = "http://localhost:3001/MiPerfil";
-
-            //console.log("user_id in PymeDash:", userID);
-            const result = await axios.post(url, { user_id: userID });
-
-            if (result.status === 200) {
-                sessionStorage.setItem('nombre', result.data.nombre);
-                sessionStorage.setItem('apellido', result.data.apellido);
-                sessionStorage.setItem('rol', result.data.rol);
-                sessionStorage.setItem('avatar', result.data.avatar);
-            }
-        } catch (error) {
-            console.error("Error al cargar los datos del usuario:", error);
-        }
-    };
-
-    useEffect(() => {
-        if (userID) {
-            cargarDatos();
-        } else {
-            console.error("No se encontró user_id en el sessionStorage");
-        }
-    }, [userID]);//se ejecuta solo si el id cambia
 
     const handleProyectoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setProyecto(e.target.value);

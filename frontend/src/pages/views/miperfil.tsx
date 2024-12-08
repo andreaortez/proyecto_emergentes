@@ -17,7 +17,7 @@ export default function MiPerfil() {
     useEffect(() => {
         if (user_id) {
             axios
-                .post('http://localhost:3001/MiPerfil', { user_id })
+                .post('http://localhost:3001/User', { user_id })
                 .then(result => {
                     const { correo, telefono, direccion } = result.data;
                     setUser({
