@@ -31,7 +31,7 @@ interface Inversionista {
 
 export default function Proyectos({ proyectos, titulo, editar }: Lista) {
     return (
-        <div className="card p-3">
+        <div className="card p-3" style={{ height: '45.5vw', overflowY: 'auto' }}>
             <div className="card-body">
                 {titulo && <h5 className="card-title mb-4">{titulo}</h5>}
                 {proyectos.map((proyecto) => (

@@ -50,8 +50,8 @@ export default function CrearProyectos() {
 
     return (
         <div className="components">
-            <div className="card" style={{ width: "77.8%" }}>
-                <div className="card-body">
+            <div className="card" style={{ width: "77.8%", height: '45.5vw' }}>
+                <div className="card-body d-flex flex-column justify-content-center">
                     <h5 className="card-title mb-4">Crear Proyecto</h5>
                     <form className="row g-3 needs-validation" noValidate>
                         <div className='hstack p-4'>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './components/sidebar-user';
 import Navbar from './components/navbar-user';
 import Dashboard from "./views/dashboard";
-import Mensajeria from "./views/mensajeria";
+import Propuestas from "./views/propuestas";
 import MiPerfil from "./views/miperfil";
 import Proyectos from "./views/misproyectos";
 import SearchProyects from "./views/searchProjects";
@@ -96,7 +96,7 @@ export default function Page() {
                 <div className="windowPadding">
                     {currentView === "dashboard" && <Dashboard />}
                     <div className="p-4">
-                        {currentView === "propuestas" && <Mensajeria />}
+                        {currentView === "propuestas" && <Propuestas />}
                         {currentView === "perfil" && <MiPerfil />}
                         {currentView === "proyectos" && <Proyectos />}
                         {currentView === "crearProyectos" && <CrearProyecto />}

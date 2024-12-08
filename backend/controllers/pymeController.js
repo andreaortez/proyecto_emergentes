@@ -1,9 +1,9 @@
-const UserModel = require('../models/User');
 const PymeModel = require('../models/Pyme');
-const MessageModel = require('../models/Message');
 const InversionistaModel = require('../models/Inversionista');
 const InvestorProjectModel = require('../models/InvestorProject');
 const ProjectModel = require('../models/Project');
+const MessageModel = require('../models/Message');
+const mongoose = require('mongoose');
 //const axios = require('axios');
 
 exports.getPyme = async (req, res) => {
@@ -32,6 +32,24 @@ exports.getPyme = async (req, res) => {
     }
 }
 
+const createMessage = async ({ emisor, receptor, mensaje, proposalId }) => {
+    if (!emisor || !receptor || !mensaje) {
+        throw new Error('Datos incompletos para crear el mensaje.');
+    }
+    try {
+        return await MessageModel.create({
+            proposalId,
+            mensaje,
+            fecha: new Date(),
+            emisor,
+            receptor,
+        });
+    } catch (error) {
+        console.error('Error al crear mensaje:', error);
+        throw error;
+    }
+};
+
 exports.acceptProposal = async (req, res) => {
     const { proposal_id } = req.body;
     try {
@@ -55,7 +73,7 @@ exports.acceptProposal = async (req, res) => {
         //Creacion mensaje
         const emisor = pymeuser.userId;
         const receptor = user_investor.userId;
-        const mensaje = `La pyme ${pymeuser.empresa} acepto tu propuesta.`;
+        const mensaje = `La pyme ${pymeuser.empresa} aceptó tu propuesta.`;
         await createMessage({ emisor, receptor, mensaje, proposalId: proposal_id });
 
         await user_investor.save({ session });
@@ -88,10 +106,9 @@ exports.declineProposal = async (req, res) => {
         //Creacion mensaje
         const emisor = pymeuser.userId;
         const receptor = user_investor.userId;
-        const mensaje = `La pyme ${pymeuser.empresa} rechazo tu propuesta.`;
+        const mensaje = `La pyme ${pymeuser.empresa} rechazó tu propuesta.`;
         await createMessage({ emisor, receptor, mensaje, proposalId: proposal_id });
         await InvestorProjectModel.findByIdAndDelete(proposal_id);
-
 
         return res.status(200).json({
             message: "Propuesta rechazada",
