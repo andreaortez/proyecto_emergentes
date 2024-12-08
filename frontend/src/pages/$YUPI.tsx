@@ -61,7 +61,7 @@ export default function Page() {
             const response = await axios.get('http://localhost:3001/Pyme', {
                 params: { pyme_id }
             });
-            sessionStorage.setItem("nombre", response.data.pyme.empresa);
+            sessionStorage.setItem("empresa", response.data.pyme.empresa);
         } catch (error) {
             console.error("Error al buscar la Pyme:", error);
         }
