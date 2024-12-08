@@ -3,7 +3,7 @@ const { getPyme, getMensajesList, acceptProposal, declineProposal } = require('.
 const router = express.Router();
 
 router.get('/Pyme', getPyme);
-router.get('/MensajesP', getMensajesList);
+router.get('/Mensajes', getMensajesList);
 
 router.post('/aceptarPropuesta', acceptProposal);
 router.post('/rechazarPropuesta', declineProposal);

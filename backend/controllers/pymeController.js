@@ -1,5 +1,6 @@
 const UserModel = require('../models/User');
 const PymeModel = require('../models/Pyme');
+const MessageModel = require('../models/Message');
 const InversionistaModel = require('../models/Inversionista');
 const InvestorProjectModel = require('../models/InvestorProject');
 const ProjectModel = require('../models/Project');
@@ -103,26 +104,31 @@ exports.declineProposal = async (req, res) => {
 }
 
 exports.getMensajesList = async (req, res) => {
-    const { pyme_id } = req.query;
-    //const { pyme_id } = req.query;
-
-    if (!pyme_id) {
-        return res.status(400).send({ msg: "Falta proveer ID de Pyme" });
+    const { user_id } = req.body;
+    //const {  user_id } = req.query;
+    if (!user_id) {
+        return res.status(400).send({ msg: "Falta proveer ID de usuario" });
     }
-
     try {
-        const projects = await ProjectModel.find({ pymeId: pyme_id });
-        if (projects.length === 0) {
-            return res.status(404).send({ msg: "No se encontraron proyectos para esta pyme" });
+        const mensajes = await MessageModel.find({ receptor: user_id })
+            .populate('emisor')
+            .sort({ fecha: -1, emisor: 1 });
+        let mensajeModificado = [];
+
+        for (let mensaje of mensajes) {
+            const inversionista = await InversionistaModel.findOne({ userId: mensaje.emisor._id });
+            if (inversionista) {
+                mensajeModificado = {
+                    ...mensaje.toObject(),
+                    emisor: {
+                        ...mensaje.emisor.toObject(),
+                        nombre: inversionista.nombre,
+                        apellido: inversionista.apellido
+                    }
+                };
+            }
         }
-        const proposalIds = [];
-        for (const project of projects) {
-            const proposals = await InvestorProjectModel.find({ projectId: project._id });
-            proposals.forEach(proposal => {
-                proposalIds.push(proposal._id);
-            });
-        }
-        res.status(200).send({ proposalIDs: proposalIds });
+        res.status(200).send({ mensajes: mensajeModificado });
     } catch (err) {
         console.error(err);
         res.status(500).send({ msg: "Error al obtener propuestas de la pyme.", error: err.message });
