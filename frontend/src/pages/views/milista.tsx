@@ -43,7 +43,7 @@ export default function MiLista() {
                 });
 
                 console.log(response.data);
-                setProyectos(response.data.projects.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
+                setProyectos(response.data.projects.length > 0 ? response.data.projects.map((proyecto: any) => ({
                     ...proyecto,
                     id: proyecto._id
                 })) : []);
@@ -94,21 +94,7 @@ export default function MiLista() {
                 <div style={{ width: "77.8%" }}>
                     {proyectos.length > 0 ? (//imprime los proyectos
                         <Proyectos
-                            proyectos={proyectos.map((proyecto) => ({
-                                ...proyecto,
-                                buttons: (
-                                    <button
-                                        key={proyecto.id}
-                                        type="button"
-                                        className="btn btn-danger rounded-pill"
-                                        onClick={() => {
-                                            handleConfirmDelete(proyecto.id);
-                                        }}
-                                    >
-                                        Eliminar
-                                    </button>
-                                )
-                            }))}
+                            proyectos={proyectos}
                             titulo="Mi Lista"
                             editar={true} />
                     ) : (//si no hay proyectos

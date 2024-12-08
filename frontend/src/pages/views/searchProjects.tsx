@@ -45,16 +45,14 @@ export default function Search({ searchQuery }: Props) {
     const [title, setTitle] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
-    const handleFavorite = async (project_id: string) => {
+    const handleFavorite = (projectID: string) => async () => {
         try {
             //console.log("pyme_id desde sessionStorage:", pyme_id);
-            console.log(project_id)
-            console.log("Inversionista", investor_id)
+            console.log("project " + projectID);
 
             await axios.post('http://localhost:3001/agregarFavoritos', {
-                project_id,
+                project_id: projectID,
                 investor_id: investor_id
-
             }).then(response => {
                 // Éxito
                 console.log(response.status);
@@ -106,22 +104,33 @@ export default function Search({ searchQuery }: Props) {
                         ...response.data.response.arte,
                     ];
 
+                    //mapea la lista de los ids de los proyecto
+                    const proyectosId = response.data.proyectos_id.map((item: { _id: string }) => item._id);
+
+                    const proyectosConIds = allProyectos.map((proyecto, index) => ({
+                        ...proyecto,
+                        id: proyectosId[index] // Asigna el ID correspondiente del array de IDs
+                    }));
+
                     // Si hay un sector seleccionado, filtra localmente
                     if (sector && sector !== "todos") {
                         setProyectos(
-                            allProyectos.filter((proyecto) =>
+                            proyectosConIds.filter((proyecto) =>
                                 proyecto.sector.toLowerCase() === sector.toLowerCase()
                             )
                         );
                     } else {
-                        setProyectos(allProyectos);
+                        setProyectos(proyectosConIds);
                     }
+
+
                 } else {
                     const response = await axios.get('http://localhost:3001/Search', {
                         params: { text: searchQuery },
                     });
 
                     setProyectos(response.data.proyectos || []);
+
                 }
             } catch (error) {
                 console.error("Error al cargar los proyectos:", error);
@@ -142,10 +151,7 @@ export default function Search({ searchQuery }: Props) {
                         key={proyecto.id}
                         type="button"
                         className="btn btn-secondary rounded-pill"
-                        onClick={() => {
-                            console.log("IdProject", proyecto.id);
-                            handleFavorite(proyecto.id)
-                        }}
+                        onClick={handleFavorite(proyecto.id)}
                     >
                         Agregar a Mi Lista
                     </button>

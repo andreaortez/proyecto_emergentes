@@ -64,6 +64,10 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
 
     useEffect(() => {
         console.log("Inversionistas recibidos:", inversionistas);
+        inversionistas.forEach((inversionista) => {
+            console.log("Inversionista:", inversionista);
+            console.log(`ID: ${inversionista.id}, Nombre: ${inversionista.nombre}, Apellido: ${inversionista.apellido}, Avatar: ${inversionista.avatar}`);
+        });
     }, [inversionistas]);
 
     return (
