@@ -14,15 +14,15 @@ interface lista {
 
 export default function InverstorsList({ user }: lista) {
     return (
-        <div className="hstack w-100 justify-content-between">
+        <div className="hstack w-100 d-flex align-items-center">
             <img src={user.avatar}
                 className="rounded-circle me-2"
                 alt="avatar"
                 width="50"
                 height="50"
             />
-            <div className="ms-2 me-auto mt-3">
-                <div className="fw-bold">{user.nombre} {user.apellido}</div>
+            <div className="ms-2 me-auto">
+                <span className="fw-bold">{user.nombre} {user.apellido}</span>
             </div>
         </div>
     );

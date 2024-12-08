@@ -24,40 +24,6 @@ export default function Chat() {
                     </div>
                     <small className="text-muted">Ayer</small>
                 </li>
-                <li className="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center">
-                        <img
-                            src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-                            alt="User Avatar"
-                            className="rounded-circle"
-                            width="40"
-                            height="40"
-                            style={{ marginRight: '10px' }}
-                        />
-                        <div>
-                            <strong>Usuario 2</strong>
-                            <p className="mb-0 text-muted">Gracias por tu ayuda.</p>
-                        </div>
-                    </div>
-                    <small className="text-muted">Ayer</small>
-                </li>
-                <li className="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                    <div className="d-flex align-items-center">
-                        <img
-                            src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"
-                            alt="User Avatar"
-                            className="rounded-circle"
-                            width="40"
-                            height="40"
-                            style={{ marginRight: '10px' }}
-                        />
-                        <div>
-                            <strong>Usuario 3</strong>
-                            <p className="mb-0 text-muted">Gracias por tu ayuda.</p>
-                        </div>
-                    </div>
-                    <small className="text-muted">Ayer</small>
-                </li>
             </ul>
         </div>
     );

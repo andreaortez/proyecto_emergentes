@@ -53,7 +53,7 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
                 const response = await axios.get(`http://localhost:3001/PerfilRiesgo`, {
                     params: { project_id }
                 });
-                console.log("Perfil de Riesgo:",response)
+                console.log("Perfil de Riesgo:", response)
                 const data: RiskProfileData = response.data.riskProfile;
                 setRiskProfile(data);
             } catch (error) {
