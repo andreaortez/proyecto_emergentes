@@ -62,7 +62,7 @@ export default function ProyectoCard({ id, nombre, imagen, sector, meta, descrip
             </div >
 
             {/* Ver Proyecto*/}
-            {showModal && <VerProyecto nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} recaudado={recaudado} estado={estado} empresa={empresa} inversionistas={inversionistas} onClose={() => setShowModal(false)} />}
+            {showModal && <VerProyecto project_id={id} nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} recaudado={recaudado} estado={estado} empresa={empresa} inversionistas={inversionistas} onClose={() => setShowModal(false)} />}
 
             {/* Editar Proyecto*/}
             {showEditModal && <EditarProyecto project_id={id} nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} onClose={() => setShowEditModal(false)} />}

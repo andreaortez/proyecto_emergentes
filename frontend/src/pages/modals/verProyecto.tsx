@@ -4,6 +4,7 @@ import Iconos from '../elements/iconos';
 import Propuesta from './propuesta';
 
 interface Proyecto {
+    project_id: string;
     nombre: string;
     imagen: string;
     sector: string;
@@ -24,9 +25,10 @@ interface Inversionista {
     avatar: string,
 }
 
-export default function verProyecto({ nombre, imagen, sector, meta, descripcion, recaudado, estado, empresa, inversionistas, onClose }: Proyecto) {
+export default function verProyecto({ project_id, nombre, imagen, sector, meta, descripcion, recaudado, estado, empresa, inversionistas, onClose }: Proyecto) {
     const [estadoString, setEstadoString] = useState<string>('');
     const [showPropuesta, setPropuesta] = useState<boolean>(false);
+    const investor_id = sessionStorage.getItem("tipo_id") || "";
 
     const tipo = sessionStorage.getItem("tipo");
     const [Pyme, setPyme] = useState<boolean>(false);
@@ -149,7 +151,7 @@ export default function verProyecto({ nombre, imagen, sector, meta, descripcion,
             </div >
 
             {/* Realizar Propuesta*/}
-            {showPropuesta && <Propuesta onClose={() => setPropuesta(false)} />}
+            {showPropuesta && <Propuesta project_id={project_id} investor_id={investor_id} onClose={() => { setPropuesta(false) }} />}
         </>
     );
 };

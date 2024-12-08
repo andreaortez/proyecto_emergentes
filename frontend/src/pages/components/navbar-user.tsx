@@ -29,7 +29,6 @@ export default function Navbar({ setCurrentView, setSearchResults }: Parametros)
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("search navbar" + searchText);
         setSearchResults(searchText);
         setCurrentView("searchProyects");
     };

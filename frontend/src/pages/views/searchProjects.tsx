@@ -75,7 +75,6 @@ export default function Search({ searchQuery }: Props) {
                         setProyectos(allProyectos);
                     }
                 } else {
-                    console.log("search " + searchQuery);
                     const response = await axios.get('http://localhost:3001/Search', {
                         params: { text: searchQuery },
                     });
