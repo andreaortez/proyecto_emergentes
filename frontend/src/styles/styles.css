@@ -361,3 +361,8 @@
     font-weight: lighter;
     font-size: larger;
 }
+
+.dropdown-width {
+    width: 300px;
+    /* Define el ancho deseado */
+}
