@@ -189,6 +189,22 @@ exports.addFavorite = async (req, res) => {
 
 }
 
+exports.getFavorite = async (req, res) => {
+    const { investor_id } = req.body;
+    //const {  investor_id } = req.query;
+    const investor = await InversionistaModel.findById(investor_id).populate({
+        path: 'save_projects',
+        model: 'proyectos', 
+    });
+    return res.status(200).send(
+        {
+            success: true,
+            projects: investor.save_projects
+        }
+    );
+
+}
+
 
  // axios.post('http://localhost:3001/mensajeRechazada',
 //     { proposal_id });
