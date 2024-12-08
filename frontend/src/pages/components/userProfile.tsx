@@ -67,8 +67,10 @@ export default function userProfile({ flag }: buttons) {
             <div className="card text-center" style={{ width: "18rem" }}>
                 <div className="card-body"
                     style={{ height: "100%" }}>
+
                     {Inversionista && <h5 className="card-title">{nombre} {apellido}</h5>}
                     {Pyme && <h5 className="card-title">{empresa}</h5>}
+
                     <h6 className="card-subtitle mb-2 text-body-secondary fw-light">{tipo}</h6>
                     <img
                         src={avatar || "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png"}

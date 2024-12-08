@@ -14,7 +14,9 @@ export default function dashboard() {
     const [proyectoSelected, setProyecto] = useState<string>("");
 
     const [pyme_id, setPymeId] = useState<string | null>(null);
-    const [inversionista_id, setInversionistaId] = useState<string | null>(null);
+    const [investor_id, setInversionistaId] = useState<string | null>(null);
+
+    const user_id = sessionStorage.getItem("user_id");
 
     useEffect(() => {
         if (tipo === "Inversionista") {
@@ -28,16 +30,30 @@ export default function dashboard() {
     useEffect(() => {
         const listProyectos = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/ListarProyectos', {
-                    params: { pyme_id }
-                });
+                if (tipo === "Pyme") {
+                    const response = await axios.get('http://localhost:3001/ListarProyectos', {
+                        params: { pyme_id }
+                    });
 
-                if (response.data.proyectos) {
-                    setProyectos(response.data.proyectos.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
-                        id: proyecto._id,
-                        nombre: proyecto.nombre
-                    })) : []);
+                    if (response.data.proyectos) {
+                        setProyectos(response.data.proyectos.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
+                            id: proyecto._id,
+                            nombre: proyecto.nombre
+                        })) : []);
+                    }
+                } else {
+                    const response = await axios.get('http://localhost:3001/ProyectosInversionista', {
+                        params: { investor_id }
+                    });
+
+                    if (response.data.proyectos) {
+                        setProyectos(response.data.proyectos.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
+                            id: proyecto._id,
+                            nombre: proyecto.nombre
+                        })) : []);
+                    }
                 }
+
             } catch (error) {
                 console.error("Error al cargar los proyectos:", error);
             }
@@ -48,33 +64,7 @@ export default function dashboard() {
         } else {
             console.error("No se encontró el ID de la pyme en sessionStorage");
         }
-    }, [pyme_id]);
-
-    //listar proyectos para inversionistas
-    useEffect(() => {
-        const listProyectos = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/ListarProyectos', {
-                    params: { inversionista_id }
-                });
-
-                if (response.data.proyectos) {
-                    setProyectos(response.data.proyectos.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
-                        id: proyecto._id,
-                        nombre: proyecto.nombre
-                    })) : []);
-                }
-            } catch (error) {
-                console.error("Error al cargar los proyectos:", error);
-            }
-        };
-
-        if (inversionista_id) {
-            listProyectos();
-        } else {
-            console.error("No se encontró el ID de la pyme en sessionStorage");
-        }
-    }, [inversionista_id]);
+    }, [user_id]);
 
     async function fetchProjectData(projectId: string) {
         try {

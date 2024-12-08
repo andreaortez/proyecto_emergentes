@@ -12,6 +12,7 @@ interface Proyecto {
     descripcion: string;
     recaudado: string;
     estado: number;
+    empresa: string;
     inversionistas: Inversionista[];
 }
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 export default function Nombre() {
     const avatar = sessionStorage.getItem("avatar");
-    const apellido = sessionStorage.getItem("tipo_id");
+    const apellido = sessionStorage.getItem("apellido");
     const tipo = sessionStorage.getItem("tipo");
 
     const [Pyme, setPyme] = useState<boolean>(false);

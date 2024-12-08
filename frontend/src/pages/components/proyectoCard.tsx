@@ -11,6 +11,7 @@ interface Proyecto {
     descripcion: string;
     recaudado: string;
     estado: number;
+    empresa: string;
     inversionistas: Inversionista[];
     buttons?: React.ReactNode;
     editar: boolean;
@@ -24,7 +25,7 @@ interface Inversionista {
     avatar: string,
 }
 
-export default function ProyectoCard({ id, nombre, imagen, sector, meta, descripcion, recaudado, estado, inversionistas, buttons, editar }: Proyecto) {
+export default function ProyectoCard({ id, nombre, imagen, sector, meta, descripcion, recaudado, estado, empresa, inversionistas, buttons, editar }: Proyecto) {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
 
@@ -61,7 +62,7 @@ export default function ProyectoCard({ id, nombre, imagen, sector, meta, descrip
             </div >
 
             {/* Ver Proyecto*/}
-            {showModal && <VerProyecto nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} recaudado={recaudado} estado={estado} inversionistas={inversionistas} onClose={() => setShowModal(false)} />}
+            {showModal && <VerProyecto nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} recaudado={recaudado} estado={estado} empresa={empresa} inversionistas={inversionistas} onClose={() => setShowModal(false)} />}
 
             {/* Editar Proyecto*/}
             {showEditModal && <EditarProyecto project_id={id} nombre={nombre} imagen={imagen} sector={sector} meta={meta} descripcion={descripcion} onClose={() => setShowEditModal(false)} />}

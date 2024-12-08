@@ -56,7 +56,7 @@ export default function UserInformation({ correo, telefono, direccion, monto }: 
 
     useEffect(() => {
         setFormData({ nombre, correo, apellido, telefono, direccion, avatar, monto, empresa });
-    }, [nombre, correo, apellido, telefono, direccion, avatar, empresa]);
+    }, [nombre, correo, apellido, telefono, direccion, avatar, empresa, monto]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
@@ -86,6 +86,8 @@ export default function UserInformation({ correo, telefono, direccion, monto }: 
                         setMessage("Su usuario se ha editado correctamente.");
                         setShowMessage(true);
                         //window.location.reload();
+
+                        console.log("Datos actualizados recibidos:", result.data);
                     })
             } catch (error) {
                 setShowModal(false);
@@ -202,12 +204,15 @@ export default function UserInformation({ correo, telefono, direccion, monto }: 
                                         <div className='row border-start'>
                                             {Inversionista && (
                                                 <>
-                                                    <div className='col ms-4 mt-4'>
+                                                    <div className='col ms-4'>
                                                         <label htmlFor="nombre" className="form-label">Nombre</label>
                                                         <input type="text" id="nombre" className="form-control mb-4" value={formData.nombre} onChange={handleInputChange} />
 
                                                         <label htmlFor="correo" className="form-label">Correo Electrónico</label>
                                                         <input type="email" id="correo" className="form-control mb-4" value={formData.correo} onChange={handleInputChange} />
+
+                                                        <label htmlFor="monto" className="form-label">Monto</label>
+                                                        <input type="text" id="monto" className="form-control" value={formData.monto} onChange={handleInputChange} />
                                                     </div>
                                                     <div className='col'>
                                                         <label htmlFor="apellido" className="form-label">Apellido</label>
