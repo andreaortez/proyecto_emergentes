@@ -41,6 +41,11 @@ exports.getProject = async (req, res) => {
                         path: 'investorId',
                         model: 'inversionistas'
                     }
+                })
+                .populate({
+                    path: 'pymeId',
+                    model: 'pymes',
+                    select: 'empresa'
                 });
 
             if (!proyecto) {
