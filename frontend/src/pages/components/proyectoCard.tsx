@@ -19,6 +19,9 @@ interface Proyecto {
 interface Inversionista {
     id: string;
     userId: string;
+    nombre: string,
+    apellido: string,
+    avatar: string,
 }
 
 export default function ProyectoCard({ id, nombre, imagen, sector, meta, descripcion, recaudado, estado, inversionistas, buttons, editar }: Proyecto) {

@@ -23,6 +23,9 @@ interface Lista {
 interface Inversionista {
     id: string;
     userId: string;
+    nombre: string,
+    apellido: string,
+    avatar: string,
 }
 
 export default function Proyectos({ proyectos, titulo, editar }: Lista) {

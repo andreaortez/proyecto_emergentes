@@ -14,7 +14,7 @@ export default function Page() {
     const userId = sessionStorage.getItem('user_id');
     const tipo = sessionStorage.getItem("tipo");
     const [pyme_id, setPymeId] = useState<string | null>(null);
-    const [inversionista_id, setInversionistaId] = useState<string | null>(null);
+    const [investor_id, setInvestorId] = useState<string | null>(null);
 
     if (!userId) {
         return <p>Se está cargando el contenido</p>;
@@ -30,8 +30,7 @@ export default function Page() {
 
                 if (result.status === 200) {
                     if (tipo === "Inversionista") {
-                        sessionStorage.setItem('nombre', result.data.nombre);
-                        sessionStorage.setItem('apellido', result.data.apellido);
+                        setInvestorId(sessionStorage.getItem("tipo_id"));
                     } else {//pyme
                         setPymeId(sessionStorage.getItem("tipo_id"));
                     }
@@ -61,6 +60,24 @@ export default function Page() {
                 params: { pyme_id }
             });
             sessionStorage.setItem("nombre", response.data.pyme.empresa);
+        } catch (error) {
+            console.error("Error al buscar la Pyme:", error);
+        }
+    }
+
+    useEffect(() => {
+        if (investor_id) {
+            getInvestorInfo();
+        }
+    }, [investor_id]);
+
+    async function getInvestorInfo() {
+        try {
+            const response = await axios.get('http://localhost:3001/Inversionista', {
+                params: { investor_id }
+            });
+            sessionStorage.setItem("nombre", response.data.investor.nombre);
+            sessionStorage.setItem("apellido", response.data.investor.apellido);
         } catch (error) {
             console.error("Error al buscar la Pyme:", error);
         }

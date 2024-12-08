@@ -9,7 +9,6 @@ interface Proyecto {
     nombre: string;
 }
 export default function dashboard() {
-    const userID = sessionStorage.getItem("user_id");
     const tipo = sessionStorage.getItem("tipo");
     const [proyectos, setProyectos] = useState<Proyecto[]>([]);
     const [proyectoSelected, setProyecto] = useState<string>("");
@@ -25,15 +24,14 @@ export default function dashboard() {
         }
     }, [tipo]);
 
+    //listar poryectos para pymes
     useEffect(() => {
         const listProyectos = async () => {
-            console.log("pyme " + pyme_id)
             try {
                 const response = await axios.get('http://localhost:3001/ListarProyectos', {
                     params: { pyme_id }
                 });
 
-                console.log("repuesta " + response.data.proyectos)
                 if (response.data.proyectos) {
                     setProyectos(response.data.proyectos.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
                         id: proyecto._id,
@@ -51,6 +49,32 @@ export default function dashboard() {
             console.error("No se encontró el ID de la pyme en sessionStorage");
         }
     }, [pyme_id]);
+
+    //listar proyectos para inversionistas
+    useEffect(() => {
+        const listProyectos = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/ListarProyectos', {
+                    params: { inversionista_id }
+                });
+
+                if (response.data.proyectos) {
+                    setProyectos(response.data.proyectos.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
+                        id: proyecto._id,
+                        nombre: proyecto.nombre
+                    })) : []);
+                }
+            } catch (error) {
+                console.error("Error al cargar los proyectos:", error);
+            }
+        };
+
+        if (inversionista_id) {
+            listProyectos();
+        } else {
+            console.error("No se encontró el ID de la pyme en sessionStorage");
+        }
+    }, [inversionista_id]);
 
     async function fetchProjectData(projectId: string) {
         try {

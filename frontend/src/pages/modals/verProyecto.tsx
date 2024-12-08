@@ -19,23 +19,13 @@ interface Proyecto {
 interface Inversionista {
     id: string;
     userId: string;
-}
-
-interface User {
-    id: string;
-    userId: string;
-    nombre: string;
-    apellido: string;
-    avatar: string;
-    rol: string;
-    correo: string;
-    telefono: string;
-    direccion: string;
+    nombre: string,
+    apellido: string,
+    avatar: string,
 }
 
 export default function verProyecto({ nombre, imagen, sector, meta, descripcion, recaudado, estado, inversionistas, onClose, footer }: Proyecto) {
     const [estadoString, setEstadoString] = useState<string>('');
-    const [users, setUsers] = useState<User[]>([]);
 
     useEffect(() => {
         switch (estado) {
@@ -55,28 +45,7 @@ export default function verProyecto({ nombre, imagen, sector, meta, descripcion,
     }, [estado]);
 
     useEffect(() => {
-        const fetchInversionistas = async () => {
-            try {
-                if (inversionistas.length === 0) {
-                    setUsers([]);
-                    return;
-                } else {
-                    const userPromises = inversionistas.map(async (inversionista) => {
-                        const response = await axios.post('http://localhost:3001/MiPerfil', {
-                            user_id: inversionista.userId,
-                        });
-                        return response.data;
-                    });
-
-                    const userData = await Promise.all(userPromises);
-                    setUsers(userData);
-                }
-            } catch (error) {
-                console.error("Error al obtener los inversionistas:", error);
-            }
-        };
-
-        fetchInversionistas();
+        console.log("Inversionistas recibidos:", inversionistas);
     }, [inversionistas]);
 
     return (
@@ -130,11 +99,20 @@ export default function verProyecto({ nombre, imagen, sector, meta, descripcion,
                             <h2>Inversionistas</h2>
                             <p className="textColor">{inversionistas.length} inversionistas</p>
                             <div className="list-group" data-bs-spy="scroll">{/* falta hacerlo scroll */}
-                                {users.length === 0 ? (
+                                {inversionistas.length === 0 ? (
                                     <p>No existen inversionistas para este proyecto.</p>
                                 ) : (
-                                    users.map((user, index) => (
-                                        <InverstorsList key={index} user={user} />
+                                    inversionistas.map((inversionista) => (
+                                        <InverstorsList
+                                            key={inversionista.id}
+                                            user={{
+                                                nombre: inversionista.nombre,
+                                                apellido: inversionista.apellido,
+                                                id: inversionista.id,
+                                                userId: inversionista.userId,
+                                                avatar: inversionista.avatar
+                                            }}
+                                        />
                                     ))
                                 )}
                             </div>

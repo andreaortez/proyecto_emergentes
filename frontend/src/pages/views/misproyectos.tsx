@@ -18,6 +18,9 @@ interface Proyecto {
 interface Inversionista {
     id: string;
     userId: string;
+    nombre: string;
+    apellido: string;
+    avatar: string;
 }
 
 export default function MisProyectos() {
@@ -31,7 +34,7 @@ export default function MisProyectos() {
     const [message, setMessage] = useState<string>('');
 
     useEffect(() => {
-        const fetchProyectos = async () => {
+        const listarProyectos = async () => {
             try {
                 //console.log("pyme_id desde sessionStorage:", pyme_id);
                 const response = await axios.get('http://localhost:3001/ProyectosPyme', {
@@ -49,7 +52,7 @@ export default function MisProyectos() {
         };
 
         if (pyme_id) {
-            fetchProyectos();
+            listarProyectos();
         } else {
             console.error("No se encontró el ID de la pyme en sessionStorage");
         }
