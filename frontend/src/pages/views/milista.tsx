@@ -96,7 +96,7 @@ export default function MiLista() {
                         <Proyectos
                             proyectos={proyectos}
                             titulo="Mi Lista"
-                            editar={true} />
+                            editar={false} />
                     ) : (//si no hay proyectos
                         <div className="card p-3">
                             <div className="card-body">

@@ -6,6 +6,25 @@ interface Parametros {
     setSearchResults: (results: string) => void;
 }
 
+interface Notificaciones {
+    id: string;
+    proposalId: string;
+    mensaje: string;
+    fecha: string;
+    emisores: Emisor[];
+    receptorid: string;
+}
+
+interface Emisor {
+    id: string;
+    avatar: string;
+    contraseña: string;
+    correo: string;
+    telefono: string;
+    direccion: string;
+    tipo: string;
+}
+
 export default function Navbar({ setCurrentView, setSearchResults }: Parametros) {
     const avatar = sessionStorage.getItem("avatar") || "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png";
     const nombre = sessionStorage.getItem("nombre") || "Nombre";
@@ -16,6 +35,9 @@ export default function Navbar({ setCurrentView, setSearchResults }: Parametros)
     const [Pyme, setPyme] = useState<boolean>(false);
     const [Inversionista, setInversionista] = useState<boolean>(false);
     const [searchText, setSearchText] = useState<string>("");
+
+    const user_id = sessionStorage.getItem("user_id");
+    const [notificaciones, setNotificaciones] = useState<Notificaciones[]>([]);
 
     useEffect(() => {
         if (tipo === "Inversionista") {
@@ -31,6 +53,26 @@ export default function Navbar({ setCurrentView, setSearchResults }: Parametros)
         e.preventDefault();
         setSearchResults(searchText);
         setCurrentView("searchProyects");
+    };
+
+    const listarNotificaciones = async () => {
+        try {
+            console.log("userid : ", user_id);
+            const response = await axios.get('http://localhost:3001/Notificaciones', {
+                params: { user_id }
+            });
+
+            console.log(response.data);
+            setNotificaciones(response.data.length > 0 ? response.data.map((notificacion: any) => ({
+                id: notificacion._id,
+                proposalId: notificacion.proposalId,
+                fecha: notificacion.fecha,
+                emisores: notificacion.emisores,
+                receptorid: notificacion.receptorid,
+            })) : []);
+        } catch (error) {
+            console.error("Error al cargar las notificaciones:", error);
+        }
     };
 
     return (
@@ -59,6 +101,7 @@ export default function Navbar({ setCurrentView, setSearchResults }: Parametros)
                                 id="dropdownNotification"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
+                                onClick={listarNotificaciones}
                             >
                                 <img
                                     src="/imagenes/notificacion.png"
@@ -69,14 +112,24 @@ export default function Navbar({ setCurrentView, setSearchResults }: Parametros)
                                     id="notificaciones"
                                 />
                                 <span className="position-absolute top-0 start-70 translate-middle badge rounded-pill bg-danger">
-                                    3 {/* Cambia esto por el número dinámico de notificaciones */}
+                                    {notificaciones.length}
                                 </span>
                             </button>
-                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownNotification">
+                            <ul className="dropdown-menu dropdown-menu-end dropdown-width" aria-labelledby="dropdownNotification">
                                 <li><h4 className="text-center">Notificaciones</h4></li>
-                                <li><a className="dropdown-item" href="#">Notificación 1</a></li>
-                                <li><a className="dropdown-item" href="#">Notificación 2</a></li>
-                                <li><a className="dropdown-item" href="#">Notificación 3</a></li>
+                                {notificaciones.length > 0 ? (
+                                    notificaciones.map((notificacion) => (
+                                        <li key={notificacion.id}>
+                                            <a className="dropdown-item" href="#">
+                                                {notificacion.mensaje}: {notificacion.fecha}
+                                            </a>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li>
+                                        <span className="dropdown-item text-muted">Sin notificaciones</span>
+                                    </li>
+                                )}
                             </ul>
                         </div>
                     }

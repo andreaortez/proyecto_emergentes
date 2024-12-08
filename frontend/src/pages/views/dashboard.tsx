@@ -24,9 +24,9 @@ export default function dashboard() {
         } else {//pyme
             setPymeId(sessionStorage.getItem("tipo_id"));
         }
-    }, [tipo]);
+    }, [tipo, pyme_id, investor_id]);
 
-    //listar poryectos para pymes
+    //listar proyectos para pymes
     useEffect(() => {
         const listProyectos = async () => {
             try {
@@ -62,11 +62,10 @@ export default function dashboard() {
         if (pyme_id) {
             listProyectos();
         } else {
-            console.log("id " + pyme_id);
             console.error("No existe un pyme_id ");
 
         }
-    }, [user_id]);
+    }, [tipo, pyme_id, investor_id]);
 
     async function fetchProjectData(projectId: string) {
         try {
