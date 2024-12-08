@@ -3,6 +3,7 @@ import Tab from '../components/filtros'
 import Proyectos from '../components/listarProyectos'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Modal from '../modals/modal'
 
 interface Proyecto {
     id: string;
@@ -31,8 +32,49 @@ export default function Search() {
     const [sector, setSector] = useState<string | null>(null);
 
     const tipo = sessionStorage.getItem("tipo");
+    const [pyme_id, setPymeId] = useState<string | null>(null);
+    const [investor_id, setInvestorId] = useState<string | null>(null);
     const [Pyme, setPyme] = useState<boolean>(false);
     const [Inversionista, setInversionista] = useState<boolean>(false);
+
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
+
+    const handleFavorite = async (project_id: string) => {
+        try {
+            //console.log("pyme_id desde sessionStorage:", pyme_id);
+            console.log(project_id)
+            console.log("Inversionista", investor_id)
+
+            await axios.post('http://localhost:3001/agregarFavoritos', {
+                project_id,
+                investor_id: investor_id
+
+            }).then(response => {
+                // Éxito
+                console.log(response.status);
+                setTitle('Proyecto Agregado');
+                setMessage('Proyecto agregado a Mi Lista.');
+                setShowModal(true);
+            });
+
+        } catch (error) {
+            setTitle('Error al agregar proyecto');
+            setMessage('Ocurrió un problema al agregar proyecto. Inténtalo nuevamente.');
+            setShowModal(true);
+        }
+    }
+
+    useEffect(() => {
+        if (tipo === "Inversionista") {
+            setInvestorId(sessionStorage.getItem("tipo_id"));
+        } else {//pyme
+            setPymeId(sessionStorage.getItem("tipo_id"));
+        }
+    }, [tipo]);
+
+
 
     useEffect(() => {
         if (tipo === "Inversionista") {
@@ -78,6 +120,7 @@ export default function Search() {
 
         listarProyectos();
     }, [sector]);
+    console.log("Proyectos:", proyectos)
 
     return (
         <div className="vstack gap-3">
@@ -91,13 +134,16 @@ export default function Search() {
                         type="button"
                         className="btn btn-secondary rounded-pill"
                         onClick={() => {
-
+                            console.log("IdProject", proyecto.id);
+                            handleFavorite(proyecto.id)
                         }}
                     >
                         Agregar a Mi Lista
                     </button>
                 )
             }))} editar={false} />}
+            {/* Modal */}
+            {showModal && <Modal title={title} message={message} onClose={() => setShowModal(false)} />}
         </div>
     );
 };
