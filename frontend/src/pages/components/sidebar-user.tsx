@@ -119,7 +119,7 @@ export default function Sidebar({ setCurrentView }: Parametros) {
                             <nav className="nav nav-pills flex-column ">
                                 <a
                                     className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
-                                    onClick={() => setCurrentView("miLista")}
+                                    onClick={() => setCurrentView("proyectos")}
                                 >
                                     <img
                                         src="/imagenes/crear.png"

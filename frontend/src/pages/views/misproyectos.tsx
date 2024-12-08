@@ -37,7 +37,7 @@ export default function MisProyectos() {
     useEffect(() => {
         const listarProyectos = async () => {
             try {
-                //console.log("pyme_id desde sessionStorage:", pyme_id);
+                console.log("pyme_id desde sessionStorage:", pyme_id);
                 const response = await axios.get('http://localhost:3001/ProyectosPyme', {
                     params: { pyme_id }
                 });

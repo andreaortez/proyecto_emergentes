@@ -128,7 +128,7 @@ exports.deleteProject = async (req, res) => {
 
 exports.getProjectsByPyme = async (req, res) => {
     //const { pyme_id } = req.query;
-    const { pyme_id } = req.body;
+    const { pyme_id } = req.query;
     try {
         if (pyme_id) {
             const proyectos_id = await ProjectModel.find({ pymeId: pyme_id }, { _id: 1 });

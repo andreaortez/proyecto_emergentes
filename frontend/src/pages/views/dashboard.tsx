@@ -62,7 +62,9 @@ export default function dashboard() {
         if (pyme_id) {
             listProyectos();
         } else {
-            console.error("No se encontró el ID de la pyme en sessionStorage");
+            console.log("id " + pyme_id);
+            console.error("No existe un pyme_id ");
+
         }
     }, [user_id]);
 
