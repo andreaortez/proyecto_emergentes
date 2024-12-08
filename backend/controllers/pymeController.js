@@ -113,24 +113,26 @@ exports.getMensajesList = async (req, res) => {
         const mensajes = await MessageModel.find({ receptor: user_id })
             .populate('emisor')
             .sort({ fecha: -1, emisor: 1 });
-        let mensajeModificado = [];
+
+        let mensajesModificados = [];
 
         for (let mensaje of mensajes) {
             const inversionista = await InversionistaModel.findOne({ userId: mensaje.emisor._id });
             if (inversionista) {
-                mensajeModificado = {
+                mensajesModificados.push({
                     ...mensaje.toObject(),
                     emisor: {
                         ...mensaje.emisor.toObject(),
                         nombre: inversionista.nombre,
                         apellido: inversionista.apellido
                     }
-                };
+                });
             }
         }
-        res.status(200).send({ mensajes: mensajeModificado });
+
+        res.status(200).send({ mensajes: mensajesModificados });
     } catch (err) {
         console.error(err);
         res.status(500).send({ msg: "Error al obtener propuestas de la pyme.", error: err.message });
     }
-}
+};
