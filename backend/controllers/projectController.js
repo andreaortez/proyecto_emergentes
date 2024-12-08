@@ -125,9 +125,10 @@ exports.deleteProject = async (req, res) => {
         res.status(500).send("Error al eliminar el proyecto.");
     }
 };
+
 exports.getProjectsByPyme = async (req, res) => {
-    const { pyme_id } = req.query;
-    //const { pyme_id } = req.body;
+    //const { pyme_id } = req.query;
+    const { pyme_id } = req.body;
     try {
         if (pyme_id) {
             const proyectos_id = await ProjectModel.find({ pymeId: pyme_id }, { _id: 1 });
@@ -135,14 +136,29 @@ exports.getProjectsByPyme = async (req, res) => {
                 path: 'inversionistas',
                 populate: {
                     path: 'investorId',
-                    model: 'inversionistas'
+                    model: 'inversionistas',
+                    populate: {
+                        path: 'userId',
+                        model: 'users',
+                        select: 'avatar _id'
+                    }
                 }
             });
             const pyme_proyectos = proyectos.map(proyecto => {
                 const proyectoPlano = proyecto.toObject();
                 return {
                     ...proyectoPlano,
-                    inversionistas: proyecto.inversionistas.map(inv => inv.investorId)
+                    inversionistas: proyecto.inversionistas.map(inv => {
+                        const inversionistaData = inv.investorId;
+                        const userData = inversionistaData.userId;
+                        return {
+                            pymeId: inv._id,  // ID del inversionista
+                            avatar: userData.avatar,  // Avatar del usuario
+                            userId: userData._id,  // ID del usuario
+                            apellido: inversionistaData.apellido,
+                            nombre: inversionistaData.nombre,
+                        };
+                    })
                 };
             });
 
@@ -181,13 +197,40 @@ exports.getAllProjects = async (req, res) => {
                 }
             },
             {
+                $lookup: {
+                    from: "users",
+                    localField: "detallesInversionistas.userId",
+                    foreignField: "_id",
+                    as: "usuarios"
+                }
+            },
+            {
                 $addFields: {
-                    inversionistas: "$detallesInversionistas"
+                    inversionistas: {
+                        $map: {
+                            input: "$detallesInversionistas",
+                            as: "inversionista",
+                            in: {
+                                inversionistaId: "$$inversionista._id",
+                                avatar: {
+                                    $arrayElemAt: [
+                                        "$usuarios.avatar",
+                                        { $indexOfArray: ["$detallesInversionistas", "$$inversionista"] }
+                                    ]
+                                },
+                                userId: "$$inversionista.userId",
+                                apellido: "$$inversionista.apellido",
+                                nombre: "$$inversionista.nombre"
+                            }
+                        }
+                    }
                 }
             },
             {
                 $project: {
-                    "detallesInversionistas": 0
+                    detallesInversionistas: 0,
+                    inversionistasData: 0,
+                    usuarios: 0
                 }
             },
             {
@@ -235,6 +278,7 @@ exports.getAllProjects = async (req, res) => {
         res.status(500).send("Error al obtener los proyectos.");
     }
 };
+
 exports.getProjectGraphs = async (req, res) => {
     try {
         //const { project_id } = req.body;
@@ -307,6 +351,37 @@ exports.getProjectGraphs = async (req, res) => {
         console.error('Error al obtener gráficos del proyecto:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
+};
+exports.getSectoresGraphs = async (req, res) => {
+
+    const sectoresTop = await InvestorProject.aggregate([
+        // Unir con la colección de proyectos para obtener el campo sector
+        {
+            $lookup: {
+                from: 'proyectos',
+                localField: 'projectId',
+                foreignField: '_id',
+                as: 'projectData',
+            },
+        },
+        // Descomponer el arreglo projectData
+        { $unwind: '$projectData' },
+        // Agrupar por sector y calcular el monto total
+        {
+            $group: {
+                _id: '$projectData.sector',
+                total: { $sum: '$amount' },
+            },
+        },
+        { $sort: { total: -1 } },//orden descendente
+        { $limit: 4 },
+    ]);
+    res.json({
+        sectoresTop: sectoresTop.map((sector) => ({
+            sector: sector._id,
+            total: sector.total,
+        })),
+    });
 };
 exports.getRiskProfile = async (req, res) => {
 
@@ -447,5 +522,27 @@ exports.getProjectsByInvestor = async (req, res) => {
     }
 };
 
+exports.search = async (req, res) => {
+    try {
+        //Para probar en Postman-Body
+        //const { text } = req.body;
+        //Para uso frontend
+        const { text } = req.query;
+
+        if (!text) {
+            return res.status(400).send({ error: "Se requiere una string del texto de busqueda" });
+        }
+        const response = await ProjectModel.find({ nombre: { $regex: text, $options: "i" } })
+        //const response = await coleccion.find({}).toArray();
+
+        res.status(200).send({ proyectos: response });
+
+    } catch (error) {
+        res.status(401).send({
+            err: error
+        });
+
+    }
+};
 
 

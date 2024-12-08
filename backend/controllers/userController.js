@@ -20,7 +20,7 @@ exports.updateUser = async (req, res) => {
     try {
         const updatedUser = await UserModel.findByIdAndUpdate(
             user_id,
-            { avatar, nombre, apellido, correo, telefono, direccion },
+            { avatar,correo, telefono, direccion },
             { new: true, runValidators: true }
         );
 
