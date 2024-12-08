@@ -4,12 +4,12 @@ import axios from 'axios';
 import Modal from '../modals/modal'
 
 export default function contactanos() {
-
     const [formData, setFormData] = useState({
         nombre: "",
         correo: "",
         mensaje: ""
     });
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData({
@@ -30,12 +30,13 @@ export default function contactanos() {
                 correo: formData.correo,
                 mensaje: formData.mensaje,
             });
+
             setTitle('Mensaje');
-            setMessage('El mensaje fue enviado al correo correctamente.');
+            setMessage("El mensaje fue enviado al correo correctamente.");
             setShowModal(true);
         } catch (error) {
             setTitle('Error al enviar correo');
-            setMessage('Ocurrió un problema al enviar el correo. Inténtalo nuevamente.');
+            setMessage("Ocurrió un problema al enviar el correo. Inténtalo nuevamente.");
             setShowModal(true);
         }
     }

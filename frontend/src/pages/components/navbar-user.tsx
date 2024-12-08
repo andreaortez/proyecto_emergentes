@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 interface Parametros {
     setCurrentView: (view: string) => void;
+    setSearchResults: (results: string) => void;
 }
 
-export default function Navbar({ setCurrentView }: Parametros) {
+export default function Navbar({ setCurrentView, setSearchResults }: Parametros) {
     const avatar = sessionStorage.getItem("avatar") || "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png";
     const nombre = sessionStorage.getItem("nombre") || "Nombre";
     const empresa = sessionStorage.getItem("nombre") || "Empresa";
@@ -13,6 +15,7 @@ export default function Navbar({ setCurrentView }: Parametros) {
     const tipo = sessionStorage.getItem("tipo");
     const [Pyme, setPyme] = useState<boolean>(false);
     const [Inversionista, setInversionista] = useState<boolean>(false);
+    const [searchText, setSearchText] = useState<string>("");
 
     useEffect(() => {
         if (tipo === "Inversionista") {
@@ -24,6 +27,12 @@ export default function Navbar({ setCurrentView }: Parametros) {
         }
     }, [tipo]);
 
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        setSearchResults(searchText);
+        setCurrentView("searchProyects");
+    };
+
     return (
         <nav className="navbar bg-body-tertiary fixed-top">
             <div className="container-fluid">
@@ -33,11 +42,10 @@ export default function Navbar({ setCurrentView }: Parametros) {
                     <span className="navbar-brand mb-0 h1 ms-2">$YUPI</span>
                 </a>
                 {/* Search */}
-                <form className="d-flex" role="search" onSubmit={(e) => {
-                    e.preventDefault();
-                    setCurrentView("searchProyects");
-                }}>
-                    <input className="form-control me-2" type="search" placeholder="Buscar" aria-label="Search" />
+                <form className="d-flex" role="search" onSubmit={handleSearch}>
+                    <input className="form-control me-2" type="search" placeholder="Buscar" aria-label="Search"
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)} />
                     <button className="btn btn2" type="submit">
                         Buscar
                     </button>

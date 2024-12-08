@@ -26,7 +26,7 @@ const createMessage = async ({ emisor, receptor, mensaje, proposalId }) => {
 };
 
 exports.getInversionista = async (req, res) => {
-    const { investor_id } = req.body;
+    const { investor_id } = req.query;
     //const { investor_id } = req.query;
     //console.log("ID recibido en el backend:", user_id);
 
@@ -190,7 +190,7 @@ exports.addFavorite = async (req, res) => {
 }
 
 exports.getFavorite = async (req, res) => {
-    const { investor_id } = req.body;
+    const { investor_id } = req.query;
     //const {  investor_id } = req.query;
     const investor = await InversionistaModel.findById(investor_id).populate({
         path: 'save_projects',

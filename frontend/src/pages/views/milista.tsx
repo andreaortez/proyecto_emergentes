@@ -24,8 +24,9 @@ interface Inversionista {
     avatar: string;
 }
 
-export default function MisProyectos() {
+export default function MiLista() {
     const [proyectos, setProyectos] = useState<Proyecto[]>([]);
+    const investor_id = sessionStorage.getItem("tipo_id");
     const [project_id, setProject_id] = useState<string | null>(null);
 
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -33,56 +34,30 @@ export default function MisProyectos() {
     const [title, setTitle] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
-    const tipo = sessionStorage.getItem("tipo");
-    const [pyme_id, setPymeId] = useState<string | null>(null);
-    const [investor_id, setInvestorId] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (tipo === "Inversionista") {
-            setInvestorId(sessionStorage.getItem("tipo_id"));
-        } else {//pyme
-            setPymeId(sessionStorage.getItem("tipo_id"));
-        }
-    }, [tipo]);
-
-
     useEffect(() => {
         const listarProyectos = async () => {
             try {
-                if (tipo === "Pyme") {
-                    console.log("pyme_id desde sessionStorage:", pyme_id);
-                    const response = await axios.get('http://localhost:3001/ProyectosPyme', {
-                        params: { pyme_id }
-                    });
+                console.log("investor_id: ", investor_id);
+                const response = await axios.get('http://localhost:3001/getFavoritos', {
+                    params: { investor_id }
+                });
 
-                    console.log(response.data.pyme_proyectos);
-                    setProyectos(response.data.pyme_proyectos.length > 0 ? response.data.pyme_proyectos.map((proyecto: any) => ({
-                        ...proyecto,
-                        id: proyecto._id
-                    })) : []);
-                } else {
-                    console.log("inversionista desde sessionStorage:", investor_id);
-                    const response = await axios.get('http://localhost:3001/ProyectosInversionista', {
-                        params: { investor_id }
-                    });
-
-                    console.log(response.data.proyectos);
-                    setProyectos(response.data.proyectos.length > 0 ? response.data.pyme_proyectos.map((proyecto: any) => ({
-                        ...proyecto,
-                        id: proyecto._id
-                    })) : []);
-                }
+                console.log(response.data);
+                setProyectos(response.data.projects.length > 0 ? response.data.projects.map((proyecto: any) => ({
+                    ...proyecto,
+                    id: proyecto._id
+                })) : []);
             } catch (error) {
-                console.log("Error al cargar los proyectos:", error);
+                console.error("Error al cargar los proyectos:", error);
             }
         };
 
-        if (tipo) {
+        if (investor_id) {
             listarProyectos();
         } else {
             console.error("No se encontró el ID de la pyme en sessionStorage");
         }
-    }, [tipo, pyme_id, investor_id]);
+    }, [investor_id]);
 
     const handleConfirmDelete = (projectId: string) => {
         console.log("Project ID antes de setear: ", projectId);
@@ -93,7 +68,7 @@ export default function MisProyectos() {
     const handledeleteProject = async () => {
         if (project_id) {
             try {
-                await axios.delete("http://localhost:3001/Proyecto/", {
+                await axios.delete("http://localhost:3001/Proyecto", {
                     params: { project_id }
                 });
                 setShowConfirmModal(false);
@@ -119,27 +94,13 @@ export default function MisProyectos() {
                 <div style={{ width: "77.8%" }}>
                     {proyectos.length > 0 ? (//imprime los proyectos
                         <Proyectos
-                            proyectos={proyectos.map((proyecto) => ({
-                                ...proyecto,
-                                buttons: (
-                                    <button
-                                        key={proyecto.id}
-                                        type="button"
-                                        className="btn btn-danger rounded-pill"
-                                        onClick={() => {
-                                            handleConfirmDelete(proyecto.id);
-                                        }}
-                                    >
-                                        Eliminar
-                                    </button>
-                                )
-                            }))}
-                            titulo="Mis Proyectos"
+                            proyectos={proyectos}
+                            titulo="Mi Lista"
                             editar={true} />
                     ) : (//si no hay proyectos
                         <div className="card p-3">
                             <div className="card-body">
-                                <h5 className="card-title mb-4">Mis Proyectos</h5>
+                                <h5 className="card-title mb-4">Mi Lista</h5>
                                 <p>No tienes proyectos para mostrar.</p>
                             </div>
                         </div>
