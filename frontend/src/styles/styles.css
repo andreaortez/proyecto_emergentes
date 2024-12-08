@@ -262,6 +262,18 @@
     content: url(/imagenes/crear2.png)
 }
 
+.nav-elements:hover #seguimiento {
+    content: url(/imagenes/usuarios-alt2.png)
+}
+
+.nav-elements:hover #miLista {
+    content: url(/imagenes/milista2.png)
+}
+
+.nav-elements:hover #notificaciones {
+    content: url(/imagenes/notificacion2.png)
+}
+
 .grafica {
     position: absolute;
     top: 300px;

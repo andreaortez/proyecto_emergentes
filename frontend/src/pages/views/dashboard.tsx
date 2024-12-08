@@ -106,32 +106,10 @@ export default function dashboard() {
 
                 <div>
                     <div className='estadisticas'>
-                        <img
-                            src="./imagenes/1.png"
-                            alt="User Avatar"
-                            width="40%"
-                            height="40%"
-                        />
-                        <img
-                            src="./imagenes/2.png"
-                            alt="User Avatar"
-                            width="40%"
-                            height="40%"
-                        />
+
                     </div>
                     <div className='estadisticas2'>
-                        <img
-                            src="./imagenes/3.png"
-                            alt="User Avatar"
-                            width="40%"
-                            height="40%"
-                        />
-                        <img
-                            src="./imagenes/4.png"
-                            alt="User Avatar"
-                            width="40%"
-                            height="40%"
-                        />
+
                     </div>
                 </div>
             </div>

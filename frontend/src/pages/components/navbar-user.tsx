@@ -9,8 +9,8 @@ interface Parametros {
 export default function Navbar({ setCurrentView, setSearchResults }: Parametros) {
     const avatar = sessionStorage.getItem("avatar") || "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png";
     const nombre = sessionStorage.getItem("nombre") || "Nombre";
-    const empresa = sessionStorage.getItem("nombre") || "Empresa";
     const apellido = sessionStorage.getItem("apellido") || "Apellido";
+    const empresa = sessionStorage.getItem("empresa") || "Empresa";
 
     const tipo = sessionStorage.getItem("tipo");
     const [Pyme, setPyme] = useState<boolean>(false);
@@ -52,6 +52,34 @@ export default function Navbar({ setCurrentView, setSearchResults }: Parametros)
                 </form>
                 {/* User Profile */}
                 <div className="hstack gap-2">
+                    {Inversionista &&
+                        <div className="dropdown">
+                            <button
+                                className="btn btn-link position-relative"
+                                id="dropdownNotification"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                <img
+                                    src="/imagenes/notificacion.png"
+                                    alt="Notificaciones"
+                                    className="nav-icon"
+                                    width="30"
+                                    height="30"
+                                    id="notificaciones"
+                                />
+                                <span className="position-absolute top-0 start-70 translate-middle badge rounded-pill bg-danger">
+                                    3 {/* Cambia esto por el número dinámico de notificaciones */}
+                                </span>
+                            </button>
+                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownNotification">
+                                <li><h4 className="text-center">Notificaciones</h4></li>
+                                <li><a className="dropdown-item" href="#">Notificación 1</a></li>
+                                <li><a className="dropdown-item" href="#">Notificación 2</a></li>
+                                <li><a className="dropdown-item" href="#">Notificación 3</a></li>
+                            </ul>
+                        </div>
+                    }
                     <img
                         src={avatar || ""}
                         alt="User Avatar"

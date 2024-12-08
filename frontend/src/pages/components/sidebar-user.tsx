@@ -117,12 +117,11 @@ export default function Sidebar({ setCurrentView }: Parametros) {
                                 Seguimiento de Proyectos
                             </a>
                             <nav className="nav nav-pills flex-column ">
-                                <a
-                                    className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
+                                <a className="nav-link ms-3 my-1 nav-elements text-body-secondary d-flex align-items-center gap-2"
                                     onClick={() => setCurrentView("miLista")}
                                 >
                                     <img
-                                        src="/imagenes/crear.png"
+                                        src="/imagenes/milista.png"
                                         alt="Mi Lista"
                                         className="nav-icon"
                                         width="20"
@@ -130,22 +129,6 @@ export default function Sidebar({ setCurrentView }: Parametros) {
                                         id="miLista"
                                     />
                                     Mi Lista
-                                </a>
-                            </nav>
-                            <nav className="nav nav-pills flex-column ">
-                                <a
-                                    className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
-                                    onClick={() => setCurrentView("mensajeria")}
-                                >
-                                    <img
-                                        src="/imagenes/crear.png"
-                                        alt="Notificaciones"
-                                        className="nav-icon"
-                                        width="20"
-                                        height="20"
-                                        id="notificaciones"
-                                    />
-                                    Notificaciones
                                 </a>
                             </nav>
                         </>

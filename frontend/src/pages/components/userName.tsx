@@ -10,6 +10,7 @@ export default function Nombre() {
     const [Inversionista, setInversionista] = useState<boolean>(false);
 
     const nombre = sessionStorage.getItem("nombre") || "Nombre";
+    const empresa = sessionStorage.getItem("empresa") || "Nombre";
 
     useEffect(() => {
         if (tipo === "Pyme") {
@@ -32,7 +33,7 @@ export default function Nombre() {
                     height="70"
                 />
                 <div className="user-name  hstack gap-1">
-                    {Pyme && <p className="mb-0">{nombre}</p>}
+                    {Pyme && <p className="mb-0">{empresa}</p>}
                     {Inversionista && <p className="mb-0">{nombre} {apellido}</p>}
                     <span className='text-body-secondary fw-light'> - {tipo}</span>
                 </div>
