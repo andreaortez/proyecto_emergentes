@@ -23,7 +23,7 @@ export default function userProfile({ flag }: buttons) {
 
     const avatar = sessionStorage.getItem("avatar") || "https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png";
     const nombre = sessionStorage.getItem("nombre") || "Nombre";
-    const empresa = sessionStorage.getItem("nombre") || "Empresa";
+    const empresa = sessionStorage.getItem("empresa") || "Empresa";
     const apellido = sessionStorage.getItem("apellido") || "Apellido";
 
     useEffect(() => {

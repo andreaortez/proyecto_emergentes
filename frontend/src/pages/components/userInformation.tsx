@@ -39,7 +39,7 @@ export default function UserInformation({ correo, telefono, direccion, monto }: 
             setPyme(true);
             setInversionista(false);
 
-            setEmpresa(sessionStorage.getItem("nombre") || "");
+            setEmpresa(sessionStorage.getItem("empresa") || "");
         }
     }, [tipo]);
 
@@ -78,7 +78,7 @@ export default function UserInformation({ correo, telefono, direccion, monto }: 
                             sessionStorage.setItem("apellido", result.data.apellido);
                             sessionStorage.setItem("avatar", result.data.avatar);
                         } else {//Pyme
-                            sessionStorage.setItem("nombre", result.data.empresa);
+                            sessionStorage.setItem("empresa", result.data.empresa);
                             sessionStorage.setItem("avatar", result.data.avatar);
                         }
                         setShowModal(false);

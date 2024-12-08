@@ -41,12 +41,6 @@ export default function Mensajes() {
                     </div>
                 </div>
             </div>
-            <div className="card-footer">
-                <div className="input-group">
-                    <input type="text" className="form-control" placeholder="Escribe un mensaje..." />
-                    <button className="btn btn2">Enviar</button>
-                </div>
-            </div>
         </div>
     );
 };
