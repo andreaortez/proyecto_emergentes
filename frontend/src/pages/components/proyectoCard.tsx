@@ -42,14 +42,14 @@ export default function ProyectoCard({ id, nombre, imagen, sector, meta, descrip
                             <div className='hstack'>
                                 <h5 className="card-title">{`${nombre}`}</h5>
                                 {editar && (
-                                    <a className='ms-auto' onClick={() => setShowEditModal(true)}>
+                                    <button className='ms-auto btn' onClick={() => setShowEditModal(true)}>
                                         <img src="./imagenes/editar.png"
                                             alt="editar"
                                             width="20px"
                                             height="20px"
                                             className='mb-3'
                                         />
-                                    </a>)}
+                                    </button>)}
                             </div>
                             <p className="card-text">{`${descripcion}`}</p>
                             <div className='hstack gap-3 mt-3'>

@@ -246,8 +246,8 @@
     content: url(/imagenes/aplicaciones2.png);
 }
 
-.nav-elements:hover #chat {
-    content: url(/imagenes/usuarios-alt2.png)
+.nav-elements:hover #propuestas {
+    content: url(/imagenes/propuesta2.png)
 }
 
 .nav-elements:hover #miperfil {

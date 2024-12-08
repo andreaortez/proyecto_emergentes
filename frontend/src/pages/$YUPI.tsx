@@ -96,7 +96,7 @@ export default function Page() {
                 <div className="windowPadding">
                     {currentView === "dashboard" && <Dashboard />}
                     <div className="p-4">
-                        {currentView === "mensajeria" && <Mensajeria />}
+                        {currentView === "propuestas" && <Mensajeria />}
                         {currentView === "perfil" && <MiPerfil />}
                         {currentView === "proyectos" && <Proyectos />}
                         {currentView === "crearProyectos" && <CrearProyecto />}

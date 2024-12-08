@@ -43,17 +43,17 @@ export default function Sidebar({ setCurrentView }: Parametros) {
                     </a>
                     {Pyme &&
                         <a className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"
-                            onClick={() => setCurrentView("mensajeria")}
+                            onClick={() => setCurrentView("propuestas")}
                         >
                             <img
-                                src="/imagenes/usuarios-alt.png"
+                                src="/imagenes/propuesta.png"
                                 alt="Mensajeria"
                                 className="nav-icon"
                                 width="20"
                                 height="20"
-                                id="chat"
+                                id="propuestas"
                             />
-                            Chat Inversores
+                            Propuestas
                         </a>
                     }
                     <a className="nav-link nav-elements text-body-secondary d-flex align-items-center gap-2"

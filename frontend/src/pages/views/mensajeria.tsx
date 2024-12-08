@@ -4,12 +4,12 @@ import Mensaje from '../components/mensajes'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-interface Notificaciones {
+interface Propuestas {
     id: string;
     proposalId: string;
     mensaje: string;
     fecha: string;
-    emisores: Emisor[];
+    emisores: Emisor;
     receptorid: string;
 }
 
@@ -25,85 +25,95 @@ interface Emisor {
 
 export default function Mensajes() {
     const user_id = sessionStorage.getItem("user_id");
-    const [propuestas, setPropuestas] = useState<Notificaciones[]>([]);
-    const pyme_id = sessionStorage.getItem("tipo_id");
+    const [propuestas, setPropuestas] = useState<Propuestas | null>(null);
 
     useEffect(() => {
         const listarPropuestas = async () => {
             try {
-                console.log("pyme_id : ", pyme_id);
-                const response = await axios.get('http://localhost:3001/MensajesP', {
-                    params: { pyme_id }
+                console.log("user_id : ", user_id);
+                const response = await axios.get('http://localhost:3001/Mensajes', {
+                    params: { user_id }
                 });
 
-                console.log(response.data);
-                setPropuestas(response.data.length > 0 ? response.data.map((notificacion: any) => ({
-                    id: notificacion._id,
-                    proposalId: notificacion.proposalId,
-                    fecha: notificacion.fecha,
-                    emisores: notificacion.emisores,
-                    receptorid: notificacion.receptorid,
-                })) : []);
+                console.log(response.data.mensajes);
+                if (response.data.mensajes) {
+                    setPropuestas({
+                        id: response.data.mensajes._id,
+                        proposalId: response.data.mensajes.proposalId,
+                        fecha: response.data.mensajes.fecha,
+                        emisores: response.data.mensajes.emisor,
+                        receptorid: response.data.mensajes.receptor,
+                        mensaje: response.data.mensajes.mensaje,
+                    });
+                } else {
+                    setPropuestas(null);
+                }
+
+                console.log(response.data.mensajes.emisor);
             } catch (error) {
                 console.error("Error al cargar las propuestas:", error);
             }
         };
 
-        if (pyme_id) {
+        if (user_id) {
             listarPropuestas();
         } else {
             console.error("No se encontró el ID de la pyme");
         }
-    }, [pyme_id]);
+    }, [user_id]);
 
     return (
         <div className="components gap-4 d-flex">
             {/* Propuestas */}
-            <div className="card" style={{ width: "30%", height: '40.4vw' }}>
+            <div className="card" style={{ width: "77.8%", height: '40.4vw' }}>
                 <div className="card-header">
                     <h5>Propuestas</h5>
                 </div>
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                        <div className="d-flex align-items-center">
-                            <div>
-                                {propuestas.length > 0 ? (
-                                    propuestas.map((propuesta) => (
-                                        <li key={propuesta.id} className="list-group-item list-group-item-action">
-                                            <div>
-                                                <ul className="list-unstyled">
-                                                    {propuesta.emisores.map((emisor) => (
-                                                        <li key={emisor.id} className="d-flex align-items-center mb-2">
-                                                            <img
-                                                                src={emisor.avatar || "https://randomuser.me/api/portraits/men/1.jpg"}
-                                                                alt={`${emisor.nombre} ${emisor.apellido}`}
-                                                                className="rounded-circle"
-                                                                width="40"
-                                                                height="40"
-                                                                style={{ marginRight: '10px' }}
-                                                            />
-                                                            <div>
-                                                                <strong>{emisor.nombre} {emisor.apellido}</strong>
-                                                                <br />
-                                                                <small className="text-muted">{emisor.correo}</small>
-                                                            </div>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                                <small className="text-muted">Fecha: {propuesta.fecha}</small>
-                                            </div>
-                                        </li>
-                                    ))
-                                ) : (
-                                    <span className="text-muted">Sin notificaciones</span>
-                                )}
-                            </div>
+                        <div className="d-flex align-items-center p-1 mt-2">
+                            {propuestas ? (
+                                <li key={propuestas.id} className="list-group-item list-group-item-action">
+                                    <div className="p-2">
+                                        <div className="d-flex align-items-center mb-2">
+                                            <img
+                                                src={propuestas.emisores.avatar}
+                                                alt={`${propuestas.emisores.nombre} ${propuestas.emisores.apellido}`}
+                                                className="rounded-circle"
+                                                width="40"
+                                                height="40"
+                                                style={{ marginRight: '10px' }}
+                                            />
+                                            <strong>{propuestas.emisores.nombre} {propuestas.emisores.apellido}</strong>
+                                            <button className='btn ms-auto'>
+                                                <img src="./imagenes/aceptar.png"
+                                                    alt="aceptar"
+                                                    width="25px"
+                                                    height="25px"
+                                                    className='mb-3'
+                                                />
+                                            </button>
+                                            <button className='btn '>
+                                                <img src="./imagenes/rechazar.png"
+                                                    alt="rechazar"
+                                                    width="20px"
+                                                    height="20px"
+                                                    className='mb-3'
+                                                />
+                                            </button>
+                                        </div>
+                                        <p>{propuestas.mensaje}</p>
+                                        <small className="text-muted">Fecha: {propuestas.fecha}</small>
+                                    </div>
+                                </li>
+                            ) : (
+                                <span className="text-muted">No tiene propuestas pendientes.</span>
+                            )}
                         </div>
 
                     </li>
                 </ul>
             </div>
-            <Mensaje />
         </div>
     );
 };

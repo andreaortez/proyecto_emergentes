@@ -104,7 +104,7 @@ exports.declineProposal = async (req, res) => {
 }
 
 exports.getMensajesList = async (req, res) => {
-    const { user_id } = req.body;
+    const { user_id } = req.query;
     //const {  user_id } = req.query;
     if (!user_id) {
         return res.status(400).send({ msg: "Falta proveer ID de usuario" });
