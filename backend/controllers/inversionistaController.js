@@ -167,6 +167,33 @@ exports.declineProposal = async (req, res) => {
     }
 }
 
+exports.getProposalIList = async (req, res) => {
+    const { pyme_id } = req.body;
+    //const { pyme_id } = req.query;
+
+    if (!pyme_id) {
+        return res.status(400).send({ msg: "Falta proveer ID de Pyme" });
+    }
+
+    try {
+        const projects = await ProjectModel.find({ pymeId: pyme_id });
+        if (projects.length === 0) {
+            return res.status(404).send({ msg: "No se encontraron proyectos para esta pyme" });
+        }
+        const proposalIds = [];
+        for (const project of projects) {
+            const proposals = await InvestorProjectModel.find({ projectId: project._id });
+            proposals.forEach(proposal => {
+                proposalIds.push(proposal._id);
+            });
+        }
+        res.status(200).send({ proposalIDs: proposalIds });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ msg: "Error al obtener propuestas de la pyme.", error: err.message });
+    }
+}
+
 exports.addFavorite = async (req, res) => {
     const { project_id, investor_id } = req.body;
     if (!investor_id || !project_id) {

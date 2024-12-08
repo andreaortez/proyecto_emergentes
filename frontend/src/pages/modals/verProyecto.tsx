@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import InverstorsList from '../components/investorsList';
 import Iconos from '../elements/iconos';
 import Propuesta from './propuesta';
+import RiskProfile from "../components/RiskProfile";
+import axios from 'axios';
 
 interface Proyecto {
     project_id: string;
@@ -24,6 +26,12 @@ interface Inversionista {
     apellido: string,
     avatar: string,
 }
+interface RiskProfileData {
+    nivelDeRiesgo: "bajo" | "medio" | "alto";
+    estadoDeFinanciamiento: string;
+    estadoDeInversionistas: string;
+    puntajeDeRiesgo: number;
+}
 
 export default function verProyecto({ project_id, nombre, imagen, sector, meta, descripcion, recaudado, estado, empresa, inversionistas, onClose }: Proyecto) {
     const [estadoString, setEstadoString] = useState<string>('');
@@ -33,6 +41,30 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
     const tipo = sessionStorage.getItem("tipo");
     const [Pyme, setPyme] = useState<boolean>(false);
     const [Inversionista, setInversionista] = useState<boolean>(false);
+
+    //Perfil de Riesgo
+    const [riskProfile, setRiskProfile] = useState<RiskProfileData | null>(null);
+    const [loadingRiskProfile, setLoadingRiskProfile] = useState<boolean>(true);
+
+    useEffect(() => {
+        const fetchRiskProfile = async () => {
+            try {
+                setLoadingRiskProfile(true);
+                const response = await axios.get(`http://localhost:3001/PerfilRiesgo`, {
+                    params: { project_id }
+                });
+                console.log("Perfil de Riesgo:",response)
+                const data: RiskProfileData = response.data.riskProfile;
+                setRiskProfile(data);
+            } catch (error) {
+                console.error("Error fetching risk profile:", error);
+            } finally {
+                setLoadingRiskProfile(false);
+            }
+        };
+
+        fetchRiskProfile();
+    }, [project_id]);
 
 
     useEffect(() => {
@@ -106,12 +138,14 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
                                             <Iconos imagen={"./imagenes/dinero.png"} texto={`${sector}`} />
                                         </div>
                                         <p className="card-text"><small className="text-body-secondary">{`${descripcion}`}</small></p>
-                                        <div className='d-flex justify-content-center align-items-center'>
-                                            <img src="./imagenes/perfilRiesgo.png"
-                                                alt="sector"
-                                                width="70%"
-                                                height="70%"
-                                            />
+                                        <div className='d-flex justify-content-center align-items-center mt-3'>
+                                            {loadingRiskProfile ? (
+                                                <p>Cargando perfil de riesgo...</p>
+                                            ) : riskProfile ? (
+                                                <RiskProfile profile={riskProfile} />
+                                            ) : (
+                                                <p>No se pudo cargar el perfil de riesgo.</p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
