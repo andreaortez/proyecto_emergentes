@@ -1,5 +1,5 @@
 const express = require('express');
-const { declineProposal, addFavorite, makeProposal, acceptProposal, getInversionista, getFavorite, getProposalIList } = require('../controllers/inversionistaController');
+const { declineProposal, addFavorite, makeProposal, acceptProposal, getInversionista, getFavorite, getNotificacionesList } = require('../controllers/inversionistaController');
 const router = express.Router();
 
 router.post('/aceptarPropuesta', acceptProposal);
@@ -7,9 +7,9 @@ router.post('/rechazarPropuesta', declineProposal);
 router.post('/Propuesta', makeProposal);
 
 router.post('/agregarFavoritos', addFavorite);
-router.get('/getFavoritos',getFavorite)
+router.get('/getFavoritos', getFavorite)
 
 router.get('/Inversionista', getInversionista);
-router.get('/PropuestasI', getProposalIList);
+router.get('/Notificaciones', getNotificacionesList);
 
 module.exports = router;

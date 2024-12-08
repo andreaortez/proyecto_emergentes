@@ -1,8 +1,8 @@
 const express = require('express');
-const { getPyme, getProposalPList } = require('../controllers/pymeController');
+const { getPyme, getMensajesList } = require('../controllers/pymeController');
 const router = express.Router();
 
 router.get('/Pyme', getPyme);
-router.get('/PropuestasP', getProposalPList);
+router.get('/MensajesP', getMensajesList);
 
 module.exports = router;

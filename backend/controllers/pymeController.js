@@ -31,7 +31,7 @@ exports.getPyme = async (req, res) => {
     }
 }
 
-exports.getProposalPList = async (req, res) => {
+exports.getMensajesList = async (req, res) => {
     const { pyme_id } = req.body;
     //const { pyme_id } = req.query;
 

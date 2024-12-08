@@ -149,9 +149,10 @@ exports.declineProposal = async (req, res) => {
         console.log("propuesta", proposal)
         const proyecto = await ProjectModel.findById(proposal.projectId);
         const pymeuser = await PymeModel.findById(proyecto.pymeId);
+        const user_investor = await InversionistaModel.findById(proposal.investorId);
         //Creacion mensaje
         const emisor = pymeuser.userId;
-        const receptor = proposal.investorId;
+        const receptor = user_investor.userId;
         const mensaje = `La pyme ${pymeuser.empresa} rechazo tu propuesta.`;
         await createMessage({ emisor, receptor, mensaje, proposalId: proposal_id } );
         await InvestorProjectModel.findByIdAndDelete(proposal_id);
@@ -167,30 +168,20 @@ exports.declineProposal = async (req, res) => {
     }
 }
 
-exports.getProposalIList = async (req, res) => {
-    const { pyme_id } = req.body;
-    //const { pyme_id } = req.query;
-
-    if (!pyme_id) {
-        return res.status(400).send({ msg: "Falta proveer ID de Pyme" });
+exports.getNotificacionesList = async (req, res) => {
+    //const { user_id } = req.body;
+    const { user_id } = req.query;
+    if (!user_id) {
+        return res.status(400).send({ msg: "Falta proveer ID de usuario" });
     }
-
     try {
-        const projects = await ProjectModel.find({ pymeId: pyme_id });
-        if (projects.length === 0) {
-            return res.status(404).send({ msg: "No se encontraron proyectos para esta pyme" });
-        }
-        const proposalIds = [];
-        for (const project of projects) {
-            const proposals = await InvestorProjectModel.find({ projectId: project._id });
-            proposals.forEach(proposal => {
-                proposalIds.push(proposal._id);
-            });
-        }
-        res.status(200).send({ proposalIDs: proposalIds });
+        const mensajes = await MessageModel.find({ receptor: user_id })
+            .populate('emisor') 
+            .sort({ fecha: -1, emisor: 1 });
+        res.status(200).send(mensajes);
     } catch (err) {
         console.error(err);
-        res.status(500).send({ msg: "Error al obtener propuestas de la pyme.", error: err.message });
+        res.status(500).send({ msg: "Error al obtener notificaciones", error: err.message });
     }
 }
 
