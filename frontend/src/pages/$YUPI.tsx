@@ -7,6 +7,7 @@ import MiPerfil from "./views/miperfil";
 import Proyectos from "./views/misproyectos";
 import SearchProyects from "./views/searchProjects";
 import CrearProyecto from "./views/crearProyecto";
+import MiLista from './views/milista';
 import axios from 'axios';
 
 export default function Page() {
@@ -15,6 +16,7 @@ export default function Page() {
     const tipo = sessionStorage.getItem("tipo");
     const [pyme_id, setPymeId] = useState<string | null>(null);
     const [investor_id, setInvestorId] = useState<string | null>(null);
+    const [searchResults, setSearchResults] = useState<string>("");
 
     if (!userId) {
         return <p>Se está cargando el contenido</p>;
@@ -52,7 +54,7 @@ export default function Page() {
         if (pyme_id) {
             getPymeInfo();
         }
-    }, [pyme_id]);
+    }, [pyme_id, tipo]);
 
     async function getPymeInfo() {
         try {
@@ -69,7 +71,7 @@ export default function Page() {
         if (investor_id) {
             getInvestorInfo();
         }
-    }, [investor_id]);
+    }, [investor_id, tipo]);
 
     async function getInvestorInfo() {
         try {
@@ -79,13 +81,14 @@ export default function Page() {
             sessionStorage.setItem("nombre", response.data.investor.nombre);
             sessionStorage.setItem("apellido", response.data.investor.apellido);
         } catch (error) {
-            console.error("Error al buscar la Pyme:", error);
+            console.error("Error al buscar el Inversionista:", error);
         }
     }
 
     return (
         <>
-            <Navbar setCurrentView={setCurrentView} />
+            <Navbar setCurrentView={setCurrentView}
+                setSearchResults={setSearchResults} />
 
             <div className="d-flex">
                 <Sidebar setCurrentView={setCurrentView} />
@@ -97,7 +100,8 @@ export default function Page() {
                         {currentView === "perfil" && <MiPerfil />}
                         {currentView === "proyectos" && <Proyectos />}
                         {currentView === "crearProyectos" && <CrearProyecto />}
-                        {currentView === "searchProyects" && <SearchProyects />}
+                        {currentView === "searchProyects" && <SearchProyects searchQuery={searchResults} />}
+                        {currentView === "miLista" && <MiLista />}
                     </div>
                 </div>
             </div>

@@ -26,7 +26,11 @@ interface Inversionista {
     avatar: string,
 }
 
-export default function Search() {
+interface Props {
+    searchQuery: string;
+}
+
+export default function Search({ searchQuery }: Props) {
     const [proyectos, setProyectos] = useState<Proyecto[]>([]);
     const [sector, setSector] = useState<string | null>(null);
 
@@ -47,37 +51,44 @@ export default function Search() {
     useEffect(() => {
         const listarProyectos = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/Proyectos');
+                if (searchQuery.trim() === "") {
+                    const response = await axios.get('http://localhost:3001/Proyectos');
+                    const allProyectos: Proyecto[] = [
+                        ...response.data.response.economía,
+                        ...response.data.response.salud,
+                        ...response.data.response.educación,
+                        ...response.data.response.agrícola,
+                        ...response.data.response.ganadería,
+                        ...response.data.response.finanzas,
+                        ...response.data.response.tecnología,
+                        ...response.data.response.arte,
+                    ];
 
-                console.log(response.data);
-                const allProyectos: Proyecto[] = [
-                    ...response.data.response.economía,
-                    ...response.data.response.salud,
-                    ...response.data.response.educación,
-                    ...response.data.response.agrícola,
-                    ...response.data.response.ganadería,
-                    ...response.data.response.finanzas,
-                    ...response.data.response.tecnología,
-                    ...response.data.response.arte,
-                ];
-
-                if (sector) {
-                    if (sector === "todos") {
-                        setProyectos(allProyectos);
+                    // Si hay un sector seleccionado, filtra localmente
+                    if (sector && sector !== "todos") {
+                        setProyectos(
+                            allProyectos.filter((proyecto) =>
+                                proyecto.sector.toLowerCase() === sector.toLowerCase()
+                            )
+                        );
                     } else {
-                        setProyectos(allProyectos.filter((proyecto) => proyecto.sector.toLowerCase() === sector));
+                        setProyectos(allProyectos);
                     }
                 } else {
-                    setProyectos(allProyectos);
-                }
+                    console.log("search " + searchQuery);
+                    const response = await axios.get('http://localhost:3001/Search', {
+                        params: { text: searchQuery },
+                    });
 
+                    setProyectos(response.data.proyectos || []);
+                }
             } catch (error) {
                 console.error("Error al cargar los proyectos:", error);
             }
         };
 
         listarProyectos();
-    }, [sector]);
+    }, [sector, searchQuery]);
 
     return (
         <div className="vstack gap-3">
