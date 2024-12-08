@@ -3,6 +3,8 @@ const PymeModel = require('../models/Pyme');
 const InversionistaModel = require('../models/Inversionista');
 const InvestorProjectModel = require('../models/InvestorProject');
 const ProjectModel = require('../models/Project');
+const MessageModel = require('../models/Message');
+const mongoose = require('mongoose');
 //const axios = require('axios');
 
 const createMessage = async ({ emisor, receptor, mensaje, proposalId }) => {
@@ -24,8 +26,8 @@ const createMessage = async ({ emisor, receptor, mensaje, proposalId }) => {
 };
 
 exports.getInversionista = async (req, res) => {
-    //const { investor_id } = req.body;
-    const { investor_id } = req.query;
+    const { investor_id } = req.body;
+    //const { investor_id } = req.query;
     //console.log("ID recibido en el backend:", user_id);
 
     if (!investor_id) {
@@ -72,12 +74,11 @@ exports.makeProposal = async (req, res) => {
         const proyecto = await ProjectModel.findById(project_id);
         const pymeuser = await PymeModel.findById(proyecto.pymeId);
         const receptor = pymeuser.userId;
-        const investoruser = await InversionistaModel.findById(investor_id);
-        const emisor = investoruser.userId;
+        const investor = await InversionistaModel.findById(investor_id);
+        const emisor = investor.userId;
 
         //Mensaje creacion
         const ROIString = (roi * 100);
-        const investor = await UserModel.findById(investoruser.userId);
         const mensaje = `El usuario ${investor.nombre} ${investor.apellido} te acaba te enviar una propuesta.\n
         Donde quiere invertir ${monto} lps por un ROI de ${ROIString}% en tu Proyecto ${proyecto.nombre}. \n
         Indicar si desea aceptar o rechazar la propuesta`;
@@ -106,7 +107,6 @@ exports.acceptProposal = async (req, res) => {
         const proposal = await InvestorProjectModel.findById(proposal_id);
         const proyecto = await ProjectModel.findById(proposal.projectId);
         const pymeuser = await PymeModel.findById(proyecto.pymeId);
-        const pyme = await UserModel.findById(pymeuser.userId);
         const user_investor = await InversionistaModel.findById(proposal.investorId);
 
         user_investor.monto_bolsa -= proposal.amount;
@@ -119,10 +119,10 @@ exports.acceptProposal = async (req, res) => {
         user_investor.save_projects.pull(proposal.projectId);
 
         //Creacion mensaje
-        const emisor = pyme._id;
+        const emisor = pymeuser.userId;
         const receptor = user_investor.userId;
-        const mensaje = `El usuario ${pyme.nombre} ${pyme.apellido} acepto tu propuesta.`;
-        await createMessage(emisor, receptor, mensaje);
+        const mensaje = `La pyme ${pymeuser.empresa} acepto tu propuesta.`;
+        await createMessage({ emisor, receptor, mensaje, proposalId: proposal_id } );
 
         await user_investor.save({ session });
         await proposal.save({ session });
@@ -144,16 +144,16 @@ exports.acceptProposal = async (req, res) => {
 exports.declineProposal = async (req, res) => {
     const { proposal_id } = req.body;
     try {
-        
-        const proposal = await InvestorProjectModel.findById(proposal_id );
+        console.log("propuestaId", proposal_id)
+        const proposal = await InvestorProjectModel.findById(proposal_id);
+        console.log("propuesta", proposal)
         const proyecto = await ProjectModel.findById(proposal.projectId);
         const pymeuser = await PymeModel.findById(proyecto.pymeId);
-        const pyme = await UserModel.findById(pymeuser.userId);
         //Creacion mensaje
-        const emisor = pyme._id;
+        const emisor = pymeuser.userId;
         const receptor = proposal.investorId;
-        const mensaje = `El usuario ${pyme.nombre} ${pyme.apellido} rechazo tu propuesta.`;
-        await createMessage(emisor, receptor, mensaje);
+        const mensaje = `La pyme ${pymeuser.empresa} rechazo tu propuesta.`;
+        await createMessage({ emisor, receptor, mensaje, proposalId: proposal_id } );
         await InvestorProjectModel.findByIdAndDelete(proposal_id);
 
        
@@ -168,7 +168,6 @@ exports.declineProposal = async (req, res) => {
 }
 
 exports.addFavorite = async (req, res) => {
-
     const { project_id, investor_id } = req.body;
     if (!investor_id || !project_id) {
         return res.status(205).send("Falta proveer datos para addFavorite/agregarFavorito");
@@ -187,7 +186,6 @@ exports.addFavorite = async (req, res) => {
         console.error(error);
         res.status(500).json("Error al añadir a Favoritos");
     }
-
 
 }
 
