@@ -462,8 +462,10 @@ exports.getRiskProfile = async (req, res) => {
 };
 
 exports.getProjectsListPyme = async (req, res) => {
+    console.log("hola");
     const { pyme_id } = req.query;
     //const { pyme_id } = req.body;
+    console.log("entre " + pyme_id);
 
     try {
         if (!pyme_id) {

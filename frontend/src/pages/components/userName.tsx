@@ -2,38 +2,39 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 
 export default function Nombre() {
-    const [avatar, setAvatar] = useState("https://www.shareicon.net/data/512x512/2016/09/15/829453_user_512x512.png");
-    const [nombre, setNombre] = useState("Nombre");
-    const [apellido, setApellido] = useState("Apellido");
-    const [rol, setRol] = useState("Rol");
+    const avatar = sessionStorage.getItem("avatar");
+    const apellido = sessionStorage.getItem("apellido");
+    const tipo = sessionStorage.getItem("tipo");
+
+    const [Pyme, setPyme] = useState<boolean>(false);
+    const [Inversionista, setInversionista] = useState<boolean>(false);
+
+    const nombre = sessionStorage.getItem("nombre") || "Nombre";
 
     useEffect(() => {
-        const userAvatar = sessionStorage.getItem("avatar");
-        const userNombre = sessionStorage.getItem("nombre");
-        const userApellido = sessionStorage.getItem("apellido");
-        const userRol = sessionStorage.getItem("rol");
-
-        if (userAvatar && userNombre && userApellido && userRol) {
-            setAvatar(userAvatar);
-            setNombre(userNombre);
-            setApellido(userApellido);
-            setRol(userRol);
+        if (tipo === "Pyme") {
+            setPyme(true);
+            setInversionista(false);
+        } else {
+            setPyme(false);
+            setInversionista(true);
         }
-    }, []);
+    }, [tipo]);
 
     return (
         <div className="card usuario-card">
             <div className="card-body d-flex gap-4">
                 <img
-                    src={avatar}
+                    src={avatar || ""}
                     alt="User Avatar"
                     className="rounded-circle"
                     width="70"
                     height="70"
                 />
                 <div className="user-name  hstack gap-1">
-                    <p className="mb-0">{nombre} {apellido}</p>
-                    <span className='text-body-secondary fw-light'> - {rol}</span>
+                    {Pyme && <p className="mb-0">{nombre}</p>}
+                    {Inversionista && <p className="mb-0">{nombre} {apellido}</p>}
+                    <span className='text-body-secondary fw-light'> - {tipo}</span>
                 </div>
             </div>
         </div>

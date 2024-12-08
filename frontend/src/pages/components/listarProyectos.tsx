@@ -10,6 +10,7 @@ interface Proyecto {
     descripcion: string;
     recaudado: string;
     estado: number;
+    empresa: string;
     inversionistas: Inversionista[];
     buttons?: React.ReactNode;
 }
@@ -23,6 +24,9 @@ interface Lista {
 interface Inversionista {
     id: string;
     userId: string;
+    nombre: string,
+    apellido: string,
+    avatar: string,
 }
 
 export default function Proyectos({ proyectos, titulo, editar }: Lista) {
@@ -41,6 +45,7 @@ export default function Proyectos({ proyectos, titulo, editar }: Lista) {
                         descripcion={proyecto.descripcion}
                         recaudado={proyecto.recaudado}
                         estado={proyecto.estado}
+                        empresa={proyecto.empresa}
                         inversionistas={proyecto.inversionistas}
                         buttons={proyecto.buttons}
                         editar={editar}

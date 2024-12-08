@@ -6,10 +6,6 @@ interface Inversionista {
     nombre: string;
     apellido: string;
     avatar: string;
-    rol: string;
-    correo: string;
-    telefono: string;
-    direccion: string;
 }
 
 interface lista {
@@ -27,9 +23,7 @@ export default function InverstorsList({ user }: lista) {
             />
             <div className="ms-2 me-auto mt-3">
                 <div className="fw-bold">{user.nombre} {user.apellido}</div>
-                <p className='text-body-secondary'>Dia de inversion</p>
             </div>
-            <button className="btn btn2">Ver Perfil</button>
         </div>
     );
 };

@@ -67,7 +67,7 @@ export default function EditarProyecto({ project_id, nombre, imagen, sector, met
                             <form className="row g-3 needs-validation" noValidate>
                                 <div className='hstack p-4'>
                                     {/* imagen */}
-                                    <div className='d-flex flex-column align-items-center justify-content-center text-center'>
+                                    <div className='d-flex me-4 flex-column align-items-center justify-content-center text-center'>
                                         <h6 className="card-title mb-4">Imagen del Proyecto</h6>
                                         <div className="mb-3 mt-3">
                                             <label htmlFor="imagen" className="form-label">Copiar link de la imagen</label>

@@ -13,16 +13,39 @@ interface Proyecto {
     descripcion: string;
     recaudado: string;
     estado: number;
-    inversionistas: string[];
+    empresa: string;
+    inversionistas: Inversionista[];
     buttons?: React.ReactNode;
+}
+
+interface Inversionista {
+    id: string;
+    userId: string;
+    nombre: string,
+    apellido: string,
+    avatar: string,
 }
 
 export default function Search() {
     const [proyectos, setProyectos] = useState<Proyecto[]>([]);
     const [sector, setSector] = useState<string | null>(null);
 
+    const tipo = sessionStorage.getItem("tipo");
+    const [Pyme, setPyme] = useState<boolean>(false);
+    const [Inversionista, setInversionista] = useState<boolean>(false);
+
     useEffect(() => {
-        const fetchProyectos = async () => {
+        if (tipo === "Inversionista") {
+            setPyme(false);
+            setInversionista(true);
+        } else {//pyme
+            setPyme(true);
+            setInversionista(false);
+        }
+    }, [tipo]);
+
+    useEffect(() => {
+        const listarProyectos = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/Proyectos');
 
@@ -53,13 +76,28 @@ export default function Search() {
             }
         };
 
-        fetchProyectos();
+        listarProyectos();
     }, [sector]);
 
     return (
         <div className="vstack gap-3">
             <Tab Sectores={setSector} />
-            <Proyectos proyectos={proyectos} editar={false} />
+            {Pyme && <Proyectos proyectos={proyectos} editar={false} />}
+            {Inversionista && <Proyectos proyectos={proyectos.map((proyecto) => ({
+                ...proyecto,
+                buttons: (
+                    <button
+                        key={proyecto.id}
+                        type="button"
+                        className="btn btn-secondary rounded-pill"
+                        onClick={() => {
+
+                        }}
+                    >
+                        Agregar a Mi Lista
+                    </button>
+                )
+            }))} editar={false} />}
         </div>
     );
 };

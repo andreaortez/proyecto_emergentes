@@ -8,7 +8,6 @@ export default function LogIn() {
     const [email, setEmail] = useState<string>();
     const [pass, setPass] = useState<string>();
     const router = useRouter();
-    const [page, setPage] = useState<boolean>(false);
 
     const [showModal, setShowModal] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
@@ -31,8 +30,6 @@ export default function LogIn() {
 
                     router.push('/$YUPI');
                 } else {
-                    setPage(false);
-
                     setTitle("¡Error!");
                     setMessage("Correo y/o contraseña incorrecta.");
                     setShowModal(true);
