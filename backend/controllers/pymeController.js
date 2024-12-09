@@ -90,6 +90,7 @@ exports.acceptProposal = async (req, res) => {
             nuevo_monto: user_investor.monto_bolsa,
         });
 
+
     } catch (error) {
         console.error(error);
         res.status(500).json("Error al aceptar Propuesta");

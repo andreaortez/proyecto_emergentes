@@ -31,8 +31,7 @@ exports.createProject = async (req, res) => {
     }
 };
 exports.getProject = async (req, res) => {
-    const { project_id } = req.body;
-    //const { project_id } = req.query;
+    const { project_id } = req.query;
     try {
         if (project_id) {
             const proyecto = await ProjectModel.findById(project_id)
@@ -252,7 +251,7 @@ exports.getAllProjects = async (req, res) => {
                         }
                     },
                     pyme: {
-                        $arrayElemAt: ["$detallesPyme", 0] 
+                        $arrayElemAt: ["$detallesPyme", 0]
                     }
                 }
             },
@@ -525,7 +524,7 @@ exports.getProjectsListPyme = async (req, res) => {
 exports.getProjectsByInvestor = async (req, res) => {
     const { investor_id } = req.query;
     //const { investor_id } = req.body;
-
+    console.log("Investor ID recibido en el backend:", investor_id);
     try {
         if (!investor_id) {
             return res.status(400).json({ success: false, message: "Se debe proveer un ID del inversionista" });

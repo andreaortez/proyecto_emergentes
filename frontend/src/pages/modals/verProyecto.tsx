@@ -94,14 +94,6 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
         }
     }, [estado]);
 
-    useEffect(() => {
-        console.log("Inversionistas recibidos:", inversionistas);
-        inversionistas.forEach((inversionista) => {
-            console.log("Inversionista:", inversionista);
-            console.log(`ID: ${inversionista.id}, Nombre: ${inversionista.nombre}, Apellido: ${inversionista.apellido}, Avatar: ${inversionista.avatar}`);
-        });
-    }, [inversionistas]);
-
     return (
         <>
             <div className="modal show d-block" tabIndex={-1}>
@@ -110,9 +102,9 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
                         <div className="modal-header">
                             <button type="button" className="btn-close" aria-label="Close" onClick={onClose}></button>
                         </div>
-                        <div className='hstack'>
+                        <div className='d-flex'>
                             {/* informacion */}
-                            <div className="modal-body border-end col-md-7">
+                            <div className="modal-body border-end col-md-8">
                                 <div className="row g-0">
                                     <div className="col-md-4">
                                         <img src={`${imagen}`} alt="Imagen" className="img-fluid rounded-start" />
@@ -152,10 +144,12 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
                             </div>
 
                             {/* Lista de inversionistas */}
-                            <div className="container mt-4 col-md-5 justify-content-between">
+                            <div className="container mt-4 col-md-4 position-relative top-0">
                                 <h2>Inversionistas</h2>
                                 <p className="textColor">{inversionistas.length} inversionistas</p>
-                                <div className="list-group" data-bs-spy="scroll">{/* falta hacerlo scroll */}
+                                <div className="list-group overflow-auto"
+                                    style={{ maxHeight: '400px' }}
+                                    data-bs-spy="scroll">
                                     {inversionistas.length === 0 ? (
                                         <p>No existen inversionistas para este proyecto.</p>
                                     ) : (

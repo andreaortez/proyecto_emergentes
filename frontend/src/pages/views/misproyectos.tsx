@@ -37,11 +37,15 @@ export default function MisProyectos() {
     const [pyme_id, setPymeId] = useState<string | null>(null);
     const [investor_id, setInvestorId] = useState<string | null>(null);
 
+    const [editarProyecto, setEditar] = useState<boolean>(false);
+
     useEffect(() => {
         if (tipo === "Inversionista") {
             setInvestorId(sessionStorage.getItem("tipo_id"));
+            setEditar(false);
         } else {//pyme
             setPymeId(sessionStorage.getItem("tipo_id"));
+            setEditar(true);
         }
     }, [tipo]);
 
@@ -49,35 +53,51 @@ export default function MisProyectos() {
     useEffect(() => {
         const listarProyectos = async () => {
             try {
-                if (tipo === "Pyme") {
-                    console.log("pyme_id desde sessionStorage:", pyme_id);
+                if (tipo === "Pyme" && pyme_id) {
                     const response = await axios.get('http://localhost:3001/ProyectosPyme', {
                         params: { pyme_id }
                     });
 
                     console.log(response.data.pyme_proyectos);
-                    setProyectos(response.data.pyme_proyectos.length > 0 ? response.data.pyme_proyectos.map((proyecto: any) => ({
-                        ...proyecto,
-                        id: proyecto._id
-                    })) : []);
-                } else {
-                    console.log("inversionista desde sessionStorage:", investor_id);
+                    setProyectos(response.data.pyme_proyectos.length > 0 ?
+                        response.data.pyme_proyectos.map((proyecto: any) => ({
+                            ...proyecto,
+                            id: proyecto._id,
+                            empresa: proyecto.pymeId.empresa
+                        })) : []);
+                } else if (tipo === "Inversionista" && investor_id) {
                     const response = await axios.get('http://localhost:3001/ProyectosInversionista', {
-                        params: { investor_id }
+                        params: { investor_id: investor_id }
                     });
 
-                    console.log(response.data.proyectos);
-                    setProyectos(response.data.proyectos.length > 0 ? response.data.pyme_proyectos.map((proyecto: any) => ({
-                        ...proyecto,
-                        id: proyecto._id
-                    })) : []);
+                    // Guarda todos los IDs en un array
+                    const proyectosIds = response.data.proyectos.map((proyecto: any) => proyecto.id);
+
+                    if (proyectosIds.length > 0) {
+                        const allProyectos = await Promise.all(
+                            proyectosIds.map(async (id: string) => {
+                                const res = await axios.get('http://localhost:3001/Proyecto', {
+                                    params: { project_id: id }
+                                });
+                                return {
+                                    ...res.data,
+                                    empresa: res.data.pymeId?.empresa
+                                };
+                            })
+                        );
+
+                        console.log(allProyectos);
+                        setProyectos(allProyectos);
+                    } else {
+                        setProyectos([]);
+                    }
                 }
             } catch (error) {
                 console.log("Error al cargar los proyectos:", error);
             }
         };
 
-        if (tipo) {
+        if (pyme_id || investor_id) {
             listarProyectos();
         } else {
             console.error("No se encontró el ID de la pyme en sessionStorage");
@@ -93,7 +113,7 @@ export default function MisProyectos() {
     const handledeleteProject = async () => {
         if (project_id) {
             try {
-                await axios.delete("http://localhost:3001/Proyecto/", {
+                await axios.delete("http://localhost:3001/Proyecto", {
                     params: { project_id }
                 });
                 setShowConfirmModal(false);
@@ -135,7 +155,7 @@ export default function MisProyectos() {
                                 )
                             }))}
                             titulo="Mis Proyectos"
-                            editar={true} />
+                            editar={editarProyecto} />
                     ) : (//si no hay proyectos
                         <div className="card p-3">
                             <div className="card-body">

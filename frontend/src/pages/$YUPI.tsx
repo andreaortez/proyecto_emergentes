@@ -23,6 +23,15 @@ export default function Page() {
     }
 
     useEffect(() => {
+        document.title = "$YUPI";
+        //ícono
+        const link = document.querySelector("link[rel~='icon']") as HTMLLinkElement || document.createElement("link");
+        link.rel = "icon";
+        link.href = "/imagenes/logo.png";
+        document.head.appendChild(link);
+    }, []);
+
+    useEffect(() => {
         const cargarDatos = async () => {
             try {
                 let url = "http://localhost:3001/User";

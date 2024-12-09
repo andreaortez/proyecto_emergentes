@@ -31,7 +31,7 @@ const icons: Record<Sector, JSX.Element> = {
 const CategoryCard: React.FC<CategoryCardProps> = ({ sector, value }) => {
     return (
         <div style={{
-            background: '#f9f9f9'
+            background: '#f9f9f9',
         }}>
             {/* Sector */}
             <div>
