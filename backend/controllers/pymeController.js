@@ -161,3 +161,24 @@ exports.getMensajesList = async (req, res) => {
         res.status(500).send({ msg: "Error al obtener propuestas de la pyme.", error: err.message });
     }
 };
+
+exports.validarPropuesta = async (req, res) => {
+    const { mensaje_id } = req.query;
+    if (!mensaje_id) {
+        return res.status(205).send("No mensaje_id");
+    }
+    try {
+        const mensaje = await MessageModel.findById(mensaje_id);
+        const propuesta = await InvestorProjectModel.findOne({ _id: mensaje.proposalId });
+        console.log("propuesta", propuesta);
+        if (propuesta && propuesta.status === 'proposed') {
+            return res.status(200).send({ proposal: true });
+        } else {
+            return res.status(200).send({ proposal: false });
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json("Error al aceptar Propuesta");
+    }
+}
