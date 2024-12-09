@@ -74,7 +74,7 @@ const RiskProfile: React.FC<RiskProfileProps> = ({ profile }) => {
             <h3>Perfil de Riesgo</h3>
             <div style={{ display: "flex", alignItems: "center" }}>
                 {/* Aquí colocamos el gráfico de líneas */}
-                <div style={{ width: "60%", height: "200px", marginRight: "20px" }}>
+                <div style={{ width: "70%", height: "200px", marginRight: "20px" }}>
                     <Line data={data} options={options} />
                 </div>
 

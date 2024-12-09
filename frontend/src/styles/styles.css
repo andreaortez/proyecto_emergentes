@@ -283,7 +283,7 @@
 .estadisticas {
     position: absolute;
     top: 330px;
-    left: 900px;
+    left: 4cqmax;
 }
 
 .estadisticas img {
@@ -294,7 +294,7 @@
 .estadisticas2 {
     position: absolute;
     top: 430px;
-    left: 900px;
+    left: 400px;
 }
 
 .estadisticas2 img {
