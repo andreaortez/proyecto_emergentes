@@ -53,7 +53,7 @@ const createMessage = async ({ emisor, receptor, mensaje, proposalId }) => {
 exports.acceptProposal = async (req, res) => {
     const { proposal_id } = req.body;
     if (proposal_id) {
-        res.status(205).send("No proposal id");
+        res.status(205).send("No proposal id");
     }
     try {
         const session = await mongoose.startSession();
@@ -100,8 +100,9 @@ exports.acceptProposal = async (req, res) => {
 
 exports.declineProposal = async (req, res) => {
     const { proposal_id } = req.body;
+    console.log(proposal_id);
     if (proposal_id) {
-        res.status(205).send("No proposal id");
+        res.status(205).send("No proposal id");
     }
     try {
         console.log("propuestaId", proposal_id)
