@@ -273,35 +273,60 @@
     content: url(/imagenes/notificacion2.png)
 }
 
-.graficas {
-    position: absolute;
-    top: 300px;
-}
-
-.linegraph {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    position: absolute;
-    top: 85px;
-    width: 550px;
-    height: 290px;
-    border-radius: 5px;
-    padding: 15px;
-}
-
-.piegraph {
-    width: 160px;
-    height: 160px;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
 .statistics {
     position: absolute;
     top: 25px;
     left: 630px;
     width: 350px;
     height: 300px;
+}
+
+.graficas {
+    position: absolute;
+    top: 300px;
+}
+
+.graph-container {
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.linegraph {
+    top: 85px;
+    width: 550px;
+    height: 290px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.selectbox {
+    width: 200px !important;
+}
+
+.piegraph {
+    width: 160px;
+    height: 160px;
+}
+
+.sectores {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-top: 30px;
+    width: 100%;
+}
+
+.sectores-graphs {
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .components {

@@ -66,8 +66,6 @@ export default function dashboard() {
     const [pyme_id, setPymeId] = useState<string | null>(null);
     const [investor_id, setInversionistaId] = useState<string | null>(null);
 
-    const user_id = sessionStorage.getItem("user_id");
-
     useEffect(() => {
         if (tipo === "Inversionista") {
             setInversionistaId(sessionStorage.getItem("tipo_id"));
@@ -148,11 +146,12 @@ export default function dashboard() {
     }
 
     const handleProyectoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        //setProyecto(e.target.value);
-        const selectedId = e.target.value;
-        setProyecto(selectedId);
-        fetchProjectData(selectedId);
+        const projectId = e.target.value; // Obtener el valor del select
+        setProyecto(projectId);
+        console.log(projectId + " este es el id");
+        fetchProjectData(projectId);
     };
+
 
     // Datos para gráficos
     const lineData = graficaData
@@ -227,7 +226,7 @@ export default function dashboard() {
             </div>
 
             <div className='p-4 graficas'>
-                <select className="form-select" value={proyectoSelected} onChange={handleProyectoChange} required >
+                <select className="form-select selectbox" value={proyectoSelected} onChange={handleProyectoChange} required >
                     <option value="" disabled>Elija un Proyecto...</option>
                     {proyectos.map((proyecto) => (
                         <option key={proyecto.id} value={proyecto.id}>
@@ -236,7 +235,7 @@ export default function dashboard() {
                     ))}
                 </select>
 
-                <div className="linegraph" style={{ backgroundColor: 'white' }}>
+                <div className="linegraph graph-container" style={{ backgroundColor: 'white' }}>
                     {lineData && (
                         <Line
                             data={lineData}
@@ -250,7 +249,7 @@ export default function dashboard() {
                 <div className='statistics'>
                     <div className="row">
                         <div className="col-md-6">
-                            <div className="piegraph mb-4">
+                            <div className="piegraph graph-container mb-4">
                                 {/* Gráfico Diario */}
                                 {doughnutData && doughnutData.daily && (
                                     <Doughnut
@@ -261,7 +260,7 @@ export default function dashboard() {
                                     />
                                 )}
                             </div>
-                            <div className="piegraph">
+                            <div className="piegraph graph-container">
                                 {/* Gráfico Semanal */}
                                 {doughnutData && doughnutData.weekly && (
                                     <Doughnut
@@ -274,7 +273,7 @@ export default function dashboard() {
                             </div>
                         </div>
                         <div className="col-md-6">
-                            <div className="piegraph mb-4">
+                            <div className="piegraph graph-container mb-4">
                                 {/* Gráfico Mensual */}
                                 {doughnutData && doughnutData.monthly && (
                                     <Doughnut
@@ -285,7 +284,7 @@ export default function dashboard() {
                                     />
                                 )}
                             </div>
-                            <div className="piegraph">
+                            <div className="piegraph graph-container">
                                 {/* Gráfico Recaudado vs Brecha */}
                                 {doughnutData && doughnutData.recaudo && (
                                     <Doughnut
@@ -299,11 +298,14 @@ export default function dashboard() {
                         </div>
                     </div>
                 </div>
-            </div>
-            {/*Graficos Sectores*/}
-            <div>
+
+                {/*Graficos Sectores*/}
                 {graficaSector?.sectoresTop.map((item, index) => (
-                    <CategoryCard key={index} sector={item.sector} value={item.total} />
+                    <div className="sectores me-4">
+                        <div key={index} className="sectores-graphs">
+                            <CategoryCard sector={item.sector} value={item.total} />
+                        </div>
+                    </div>
                 ))}
             </div>
         </>

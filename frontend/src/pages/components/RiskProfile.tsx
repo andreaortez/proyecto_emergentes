@@ -13,7 +13,7 @@ interface RiskProfileData {
 }
 
 interface RiskProfileProps {
-    profile: RiskProfileData | null; // Permitir que sea nulo
+    profile: RiskProfileData | null;
 }
 
 const RiskProfile: React.FC<RiskProfileProps> = ({ profile }) => {
@@ -71,7 +71,7 @@ const RiskProfile: React.FC<RiskProfileProps> = ({ profile }) => {
 
     return (
         <div style={{ border: "1px solid #ddd", padding: "20px", borderRadius: "10px" }}>
-            <h3>Perfil de Riesgo</h3>
+            <h4>Perfil de Riesgo</h4>
             <div style={{ display: "flex", alignItems: "center" }}>
                 {/* Aquí colocamos el gráfico de líneas */}
                 <div style={{ width: "70%", height: "200px", marginRight: "20px" }}>
@@ -82,12 +82,12 @@ const RiskProfile: React.FC<RiskProfileProps> = ({ profile }) => {
                 <div>
                     <p>
                         Nivel de Riesgo:{" "}
-                        <span style={{ color: "red" }}>
+                        <strong style={{ color: "red" }}>
                             {profile.nivelDeRiesgo.toUpperCase()}
-                        </span>
+                        </strong>
                     </p>
-                    <p>Estado de Financiamiento: {profile.estadoDeFinanciamiento}</p>
-                    <p>Estado de Inversionistas: {profile.estadoDeInversionistas}</p>
+                    <p>Estado de Financiamiento: <strong>{profile.estadoDeFinanciamiento}</strong></p>
+                    <p>Estado de Inversionistas:  <strong>{profile.estadoDeInversionistas}</strong></p>
                     <p>Puntaje de Riesgo: <strong>{profile.puntajeDeRiesgo}</strong></p>
                 </div>
             </div>

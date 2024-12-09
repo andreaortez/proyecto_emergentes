@@ -62,7 +62,8 @@ export default function MisProyectos() {
                     setProyectos(response.data.pyme_proyectos.length > 0 ?
                         response.data.pyme_proyectos.map((proyecto: any) => ({
                             ...proyecto,
-                            id: proyecto._id
+                            id: proyecto._id,
+                            empresa: proyecto.pymeId.empresa
                         })) : []);
                 } else if (tipo === "Inversionista" && investor_id) {
                     const response = await axios.get('http://localhost:3001/ProyectosInversionista', {
@@ -78,7 +79,10 @@ export default function MisProyectos() {
                                 const res = await axios.get('http://localhost:3001/Proyecto', {
                                     params: { project_id: id }
                                 });
-                                return res.data;
+                                return {
+                                    ...res.data,
+                                    empresa: res.data.pymeId?.empresa
+                                };
                             })
                         );
 

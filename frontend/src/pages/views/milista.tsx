@@ -45,7 +45,8 @@ export default function MiLista() {
                 console.log(response.data);
                 setProyectos(response.data.projects.length > 0 ? response.data.projects.map((proyecto: any) => ({
                     ...proyecto,
-                    id: proyecto._id
+                    id: proyecto._id,
+                    empresa: proyecto.pymeId.empresa
                 })) : []);
             } catch (error) {
                 console.error("Error al cargar los proyectos:", error);
