@@ -2,6 +2,7 @@ import React from 'react';
 import Portada from '../components/portada'
 import UserName from '../components/userName'
 import axios from 'axios';
+import CategoryCard from '../components/categoryCard'
 import { useEffect, useState } from 'react';
 import { Line, Doughnut } from 'react-chartjs-2';
 import {
@@ -23,7 +24,7 @@ ChartJS.register(
     LinearScale,
     CategoryScale
 );
-
+type Sector = 'Economía' | 'Salud' | 'Educación' | 'Agrícola' | 'Ganadería' | 'Finanzas' | 'Tecnología' | 'Arte';
 interface Proyecto {
     id: string;
     nombre: string;
@@ -45,6 +46,14 @@ interface GraficaData {
         total: number;
     }[];
 }
+interface TopSector {
+    sector: Sector;
+    total: number;
+}
+
+interface GraficaSector {
+    sectoresTop: TopSector[];
+}
 
 export default function dashboard() {
     const tipo = sessionStorage.getItem("tipo");
@@ -52,6 +61,7 @@ export default function dashboard() {
     const [proyectoSelected, setProyecto] = useState<string>("");
 
     const [graficaData, setGraficaData] = useState<GraficaData | null>(null);
+    const [graficaSector, setGraficaSector] = useState<GraficaSector | null>(null);
 
     const [pyme_id, setPymeId] = useState<string | null>(null);
     const [investor_id, setInversionistaId] = useState<string | null>(null);
@@ -65,6 +75,9 @@ export default function dashboard() {
             setPymeId(sessionStorage.getItem("tipo_id"));
         }
     }, [tipo, pyme_id, investor_id]);
+    useEffect(() => {
+        GraphSectorData();
+    }, []);
 
     //listar proyectos para pymes
     useEffect(() => {
@@ -116,6 +129,19 @@ export default function dashboard() {
                 throw new Error('Error al obtener datos del proyecto');
             }
             setGraficaData(response.data)
+        } catch (error) {
+            console.error('Error al llamar a la API:', error);
+        }
+    }
+    async function GraphSectorData() {
+        try {
+
+            const response = await axios(`http://localhost:3001/GraphsSector`);
+            console.log("GraficasSector", response.data)
+            if (response.status !== 200) {
+                throw new Error('Error al obtener datos del proyecto');
+            }
+            setGraficaSector(response.data)
         } catch (error) {
             console.error('Error al llamar a la API:', error);
         }
@@ -273,6 +299,12 @@ export default function dashboard() {
                         </div>
                     </div>
                 </div>
+            </div>
+            {/*Graficos Sectores*/}
+            <div>
+                {graficaSector?.sectoresTop.map((item, index) => (
+                    <CategoryCard key={index} sector={item.sector} value={item.total} />
+                ))}
             </div>
         </>
     );
