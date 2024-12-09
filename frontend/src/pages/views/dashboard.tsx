@@ -99,7 +99,7 @@ export default function dashboard() {
 
                     if (response.data.proyectos) {
                         setProyectos(response.data.proyectos.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
-                            id: proyecto._id,
+                            id: proyecto.id,
                             nombre: proyecto.nombre
                         })) : []);
                     }
