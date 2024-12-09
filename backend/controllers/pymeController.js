@@ -52,6 +52,9 @@ const createMessage = async ({ emisor, receptor, mensaje, proposalId }) => {
 
 exports.acceptProposal = async (req, res) => {
     const { proposal_id } = req.body;
+    if (proposal_id) {
+        res.status(205).send("No proposal id");
+    }
     try {
         const session = await mongoose.startSession();
         session.startTransaction();
@@ -87,6 +90,7 @@ exports.acceptProposal = async (req, res) => {
             nuevo_monto: user_investor.monto_bolsa,
         });
 
+
     } catch (error) {
         console.error(error);
         res.status(500).json("Error al aceptar Propuesta");
@@ -96,6 +100,9 @@ exports.acceptProposal = async (req, res) => {
 
 exports.declineProposal = async (req, res) => {
     const { proposal_id } = req.body;
+    if (proposal_id) {
+        res.status(205).send("No proposal id");
+    }
     try {
         console.log("propuestaId", proposal_id)
         const proposal = await InvestorProjectModel.findById(proposal_id);

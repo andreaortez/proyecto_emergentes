@@ -283,7 +283,7 @@
 .estadisticas {
     position: absolute;
     top: 330px;
-    left: 900px;
+    left: 4cqmax;
 }
 
 .estadisticas img {
@@ -294,7 +294,7 @@
 .estadisticas2 {
     position: absolute;
     top: 430px;
-    left: 900px;
+    left: 400px;
 }
 
 .estadisticas2 img {
@@ -364,5 +364,22 @@
 
 .dropdown-width {
     width: 300px;
-    /* Define el ancho deseado */
+    display: block;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 200px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
 }

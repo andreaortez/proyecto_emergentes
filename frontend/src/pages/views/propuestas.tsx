@@ -68,7 +68,7 @@ export default function Mensajes() {
     const aceptarPropuesta = async (proposalId: string) => {
         try {
             console.log("proposalID : ", proposalId);
-            const response = await axios.post('http://localhost:3001/aceptarPropuesta', { proposalId }
+            const response = await axios.post('http://localhost:3001/aceptarPropuesta', { proposal_id: proposalId }
             ).then(response => {
                 // Éxito
                 setTitle('¡Éxito!');
@@ -86,7 +86,7 @@ export default function Mensajes() {
     const rechazarPropuesta = async (proposalId: string) => {
         try {
             console.log("proposalID : ", proposalId);
-            const response = await axios.post('http://localhost:3001/rechazarPropuesta', { proposalId }
+            const response = await axios.post('http://localhost:3001/rechazarPropuesta', { proposal_id: proposalId }
             ).then(response => {
                 // Éxito
                 setTitle('¡Éxito!');

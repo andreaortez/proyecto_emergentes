@@ -37,11 +37,15 @@ export default function MisProyectos() {
     const [pyme_id, setPymeId] = useState<string | null>(null);
     const [investor_id, setInvestorId] = useState<string | null>(null);
 
+    const [editarProyecto, setEditar] = useState<boolean>(false);
+
     useEffect(() => {
         if (tipo === "Inversionista") {
             setInvestorId(sessionStorage.getItem("tipo_id"));
+            setEditar(false);
         } else {//pyme
             setPymeId(sessionStorage.getItem("tipo_id"));
+            setEditar(true);
         }
     }, [tipo]);
 
@@ -60,16 +64,16 @@ export default function MisProyectos() {
                         ...proyecto,
                         id: proyecto._id
                     })) : []);
-                } else {
-                    console.log("inversionista desde sessionStorage:", investor_id);
+                } else {//inversionista
+                    console.log("inversionista:", investor_id);
                     const response = await axios.get('http://localhost:3001/ProyectosInversionista', {
-                        params: { investor_id }
+                        params: { investor_id: investor_id }
                     });
 
                     console.log(response.data.proyectos);
-                    setProyectos(response.data.proyectos.length > 0 ? response.data.pyme_proyectos.map((proyecto: any) => ({
+                    setProyectos(response.data.proyectos.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
                         ...proyecto,
-                        id: proyecto._id
+                        id: proyecto.id
                     })) : []);
                 }
             } catch (error) {
@@ -77,7 +81,7 @@ export default function MisProyectos() {
             }
         };
 
-        if (tipo) {
+        if (pyme_id || investor_id) {
             listarProyectos();
         } else {
             console.error("No se encontró el ID de la pyme en sessionStorage");
@@ -93,7 +97,7 @@ export default function MisProyectos() {
     const handledeleteProject = async () => {
         if (project_id) {
             try {
-                await axios.delete("http://localhost:3001/Proyecto/", {
+                await axios.delete("http://localhost:3001/Proyecto", {
                     params: { project_id }
                 });
                 setShowConfirmModal(false);
@@ -135,7 +139,7 @@ export default function MisProyectos() {
                                 )
                             }))}
                             titulo="Mis Proyectos"
-                            editar={true} />
+                            editar={editarProyecto} />
                     ) : (//si no hay proyectos
                         <div className="card p-3">
                             <div className="card-body">

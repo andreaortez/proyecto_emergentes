@@ -67,7 +67,7 @@ export default function CrearProyectos() {
                             {/* informacion */}
                             <div className='vstack border-start'>
                                 <div className='ms-4'>
-                                    <div className="row mb-3 align-items-center">
+                                    <div className="row mb-5 align-items-center">
                                         <div className="col-md-6">
                                             <label htmlFor="titulo" className="form-label">Título</label>
                                             <input type="text" className="form-control" id="titulo" onChange={(e) => setNombre(e.target.value)} required />
@@ -78,13 +78,13 @@ export default function CrearProyectos() {
                                         </div>
                                     </div>
 
-                                    <div className="mb-3">
+                                    <div className="mb-5">
                                         <label htmlFor="descripcion" className="form-label mb-3">Descripción</label>
                                         <textarea className="form-control" id="descripcion" rows={3} onChange={(e) => setDescripcion(e.target.value)} required />
                                     </div>
 
-                                    <div className="mb-3">
-                                        <label htmlFor="sector" className="form-label mb-3">Sector</label>
+                                    <div className="mb-5">
+                                        <label htmlFor="sector" className="form-label mb-1">Sector</label>
                                         <select className="form-select" id="sector" onChange={(e) => setSector(e.target.value)} required >
                                             <option value="" disabled>Elija Sector...</option>
                                             <option>Economía</option>
@@ -100,7 +100,7 @@ export default function CrearProyectos() {
                                 </div>
                             </div>
                         </div>
-                        <div className="d-flex justify-content-end mt-3">
+                        <div className="d-flex justify-content-end mt-0">
                             <button type="button" className="btn btn2" onClick={handleCreateProject} >
                                 Crear Proyecto
                             </button>

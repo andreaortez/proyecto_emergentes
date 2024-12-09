@@ -8,21 +8,14 @@ interface Parametros {
 
 interface Notificaciones {
     id: string;
-    proposalId: string;
     mensaje: string;
     fecha: string;
-    emisores: Emisor[];
-    receptorid: string;
+    emisores: Emisor;
 }
 
 interface Emisor {
     id: string;
     avatar: string;
-    contraseña: string;
-    correo: string;
-    telefono: string;
-    direccion: string;
-    tipo: string;
 }
 
 export default function Navbar({ setCurrentView, setSearchResults }: Parametros) {
@@ -38,6 +31,7 @@ export default function Navbar({ setCurrentView, setSearchResults }: Parametros)
 
     const user_id = sessionStorage.getItem("user_id");
     const [notificaciones, setNotificaciones] = useState<Notificaciones[]>([]);
+    const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
     useEffect(() => {
         if (tipo === "Inversionista") {
@@ -65,10 +59,9 @@ export default function Navbar({ setCurrentView, setSearchResults }: Parametros)
             console.log(response.data);
             setNotificaciones(response.data.length > 0 ? response.data.map((notificacion: any) => ({
                 id: notificacion._id,
-                proposalId: notificacion.proposalId,
                 fecha: notificacion.fecha,
-                emisores: notificacion.emisores,
-                receptorid: notificacion.receptorid,
+                emisores: notificacion.emisor,
+                mensaje: notificacion.mensaje,
             })) : []);
         } catch (error) {
             console.error("Error al cargar las notificaciones:", error);
@@ -100,8 +93,11 @@ export default function Navbar({ setCurrentView, setSearchResults }: Parametros)
                                 className="btn btn-link position-relative"
                                 id="dropdownNotification"
                                 data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                                onClick={listarNotificaciones}
+                                aria-expanded={dropdownOpen}
+                                onClick={() => {
+                                    listarNotificaciones();
+                                    setDropdownOpen(prev => !prev);
+                                }}
                             >
                                 <img
                                     src="/imagenes/notificacion.png"
@@ -115,22 +111,39 @@ export default function Navbar({ setCurrentView, setSearchResults }: Parametros)
                                     {notificaciones.length}
                                 </span>
                             </button>
-                            <ul className="dropdown-menu dropdown-menu-end dropdown-width" aria-labelledby="dropdownNotification">
-                                <li><h4 className="text-center">Notificaciones</h4></li>
-                                {notificaciones.length > 0 ? (
-                                    notificaciones.map((notificacion) => (
-                                        <li key={notificacion.id}>
-                                            <a className="dropdown-item" href="#">
-                                                {notificacion.mensaje}: {notificacion.fecha}
-                                            </a>
+                            {dropdownOpen && (
+                                <ul className={`dropdown-menu dropdown-menu-end dropdown-width ${dropdownOpen ? 'show' : ''}`} aria-labelledby="dropdownNotification">
+                                    <li><h4 className="text-center mb-4 mt-2">Notificaciones</h4></li>
+                                    {notificaciones.length > 0 ? (
+                                        notificaciones.map((notificacion) => (
+                                            <li key={notificacion.id} className="dropdown-item">
+                                                <div className="d-flex align-items-center">
+                                                    {notificacion.emisores && (
+                                                        <img
+                                                            key={notificacion.emisores.id}
+                                                            src={notificacion.emisores.avatar}
+                                                            alt="avatar"
+                                                            className="rounded-circle"
+                                                            width="40"
+                                                            height="40"
+                                                            style={{ marginRight: '10px' }}
+                                                        />
+                                                    )}
+                                                    <div className="text-wrap">
+                                                        <span className="fw-bold">{notificacion.mensaje}</span>
+                                                        <br />
+                                                        <span className="text-muted">{notificacion.fecha}</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <li>
+                                            <span className="dropdown-item text-muted">Sin notificaciones</span>
                                         </li>
-                                    ))
-                                ) : (
-                                    <li>
-                                        <span className="dropdown-item text-muted">Sin notificaciones</span>
-                                    </li>
-                                )}
-                            </ul>
+                                    )}
+                                </ul>
+                            )}
                         </div>
                     }
                     <img

@@ -59,7 +59,7 @@ export default function dashboard() {
             }
         };
 
-        if (pyme_id) {
+        if (pyme_id || investor_id) {
             listProyectos();
         } else {
             console.error("No existe un pyme_id ");

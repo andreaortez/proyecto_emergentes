@@ -498,7 +498,7 @@ exports.getProjectsListPyme = async (req, res) => {
 exports.getProjectsByInvestor = async (req, res) => {
     const { investor_id } = req.query;
     //const { investor_id } = req.body;
-
+    console.log("Investor ID recibido en el backend:", investor_id);
     try {
         if (!investor_id) {
             return res.status(400).json({ success: false, message: "Se debe proveer un ID del inversionista" });
