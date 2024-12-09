@@ -46,6 +46,8 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
     const [riskProfile, setRiskProfile] = useState<RiskProfileData | null>(null);
     const [loadingRiskProfile, setLoadingRiskProfile] = useState<boolean>(true);
 
+    console.log("Ver Proyecto:", inversionistas)
+
     useEffect(() => {
         const fetchRiskProfile = async () => {
             try {
@@ -161,8 +163,10 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
                                                     apellido: inversionista.apellido,
                                                     id: inversionista.id,
                                                     userId: inversionista.userId,
-                                                    avatar: inversionista.avatar
+                                                    avatar: inversionista.userId
+                                                    
                                                 }}
+                                                
                                             />
                                         ))
                                     )}
