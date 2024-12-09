@@ -16,12 +16,12 @@ export default function SignUp() {
         e.preventDefault();
         axios.post('http://localhost:3001/Registrarse', { empresa, correo, contraseña, telefono, tipo })
             .then(result => {
-                if (result.data.status === "success") {
-                    console.log(result)
+                if (result.data.result === "success") {
                     sessionStorage.setItem('user_id', result.data.user_id);
                     sessionStorage.setItem('tipo_id', result.data.pyme_id);
-                    window.location.href = "/$YUPI";
-                    router.push('/$YUPI');
+                    e.preventDefault();
+                    window.location.href = "/IniciarSesion";
+                    router.push('/IniciarSesion');
                 }
             })
             .catch((error) => {

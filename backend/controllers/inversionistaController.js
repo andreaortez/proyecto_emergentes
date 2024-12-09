@@ -79,9 +79,11 @@ exports.makeProposal = async (req, res) => {
 
         //Mensaje creacion
         const ROIString = (roi * 100);
-        const mensaje = `El usuario ${investor.nombre} ${investor.apellido} te acaba te enviar una propuesta.\n
-        Donde quiere invertir ${monto} lps por un ROI de ${ROIString}% en tu Proyecto ${proyecto.nombre}. \n
-        Indicar si desea aceptar o rechazar la propuesta`;
+        const mensaje = `El usuario ${investor.nombre} ${investor.apellido} te ha enviado una propuesta.
+
+        Quiere invertir ${monto} LPS con un ROI de ${ROIString}% en tu proyecto ${proyecto.nombre}.
+
+        Por favor, indica si deseas aceptar o rechazar la propuesta.`;
         await createMessage({emisor, receptor, mensaje, proposalId: propuesta._id });
 
         await session.commitTransaction();
