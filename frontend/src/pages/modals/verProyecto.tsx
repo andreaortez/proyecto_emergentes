@@ -164,9 +164,9 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
                                                     id: inversionista.id,
                                                     userId: inversionista.userId,
                                                     avatar: inversionista.userId
-                                                    
+
                                                 }}
-                                                
+
                                             />
                                         ))
                                     )}
