@@ -10,6 +10,7 @@ interface Propuestas {
     fecha: string;
     emisores: Emisor;
     receptorid: string;
+    editar: boolean;
 }
 
 interface Emisor {
@@ -30,6 +31,8 @@ export default function Mensajes() {
     const [title, setTitle] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
+    const [showPropuesta, setShowPropuesta] = useState<boolean>(false);
+
     useEffect(() => {
         const listarPropuestas = async () => {
             try {
@@ -40,14 +43,24 @@ export default function Mensajes() {
 
                 console.log(response.data.mensajes);
                 if (Array.isArray(response.data.mensajes)) {
-                    setPropuestas(response.data.mensajes.map((mensaje: any) => ({
-                        id: mensaje._id,
-                        proposalId: mensaje.proposalId,
-                        fecha: mensaje.fecha,
-                        emisores: mensaje.emisor,
-                        receptorid: mensaje.receptor,
-                        mensaje: mensaje.mensaje,
-                    })));
+                    let propuestasActualizadas = await Promise.all(response.data.mensajes.map(async (mensaje: any) => {
+                        // Llamar a validarPropuesta para cada mensaje
+                        const validacion = await axios.get('http://localhost:3001/validarPropuesta', {
+                            params: { mensaje_id: mensaje._id }
+                        });
+
+                        return {
+                            id: mensaje._id,
+                            proposalId: mensaje.proposalId,
+                            fecha: mensaje.fecha,
+                            emisores: mensaje.emisor,
+                            receptorid: mensaje.receptor,
+                            mensaje: mensaje.mensaje,
+                            editar: validacion.data.proposal
+                        };
+                    }));
+
+                    setPropuestas(propuestasActualizadas);
                 } else {
                     setPropuestas([]);
                 }
@@ -126,22 +139,25 @@ export default function Mensajes() {
                                                         style={{ marginRight: '10px' }}
                                                     />
                                                     <strong>{propuesta.emisores.nombre} {propuesta.emisores.apellido}</strong>
-                                                    <button className='btn ms-auto' onClick={() => aceptarPropuesta(propuesta.proposalId)}>
-                                                        <img src="./imagenes/aceptar.png"
-                                                            alt="aceptar"
-                                                            width="25px"
-                                                            height="25px"
-                                                            className='mb-3'
-                                                        />
-                                                    </button>
-                                                    <button className='btn' onClick={() => rechazarPropuesta(propuesta.proposalId)}>
-                                                        <img src="./imagenes/rechazar.png"
-                                                            alt="rechazar"
-                                                            width="20px"
-                                                            height="20px"
-                                                            className='mb-3'
-                                                        />
-                                                    </button>
+                                                    {propuesta.editar && (<>
+                                                        <button className='btn ms-auto' onClick={() => aceptarPropuesta(propuesta.proposalId)}>
+                                                            <img src="./imagenes/aceptar.png"
+                                                                alt="aceptar"
+                                                                width="25px"
+                                                                height="25px"
+                                                                className='mb-3'
+                                                            />
+                                                        </button>
+                                                        <button className='btn' onClick={() => rechazarPropuesta(propuesta.proposalId)}>
+                                                            <img src="./imagenes/rechazar.png"
+                                                                alt="rechazar"
+                                                                width="20px"
+                                                                height="20px"
+                                                                className='mb-3'
+                                                            />
+                                                        </button>
+                                                    </>)}
+
                                                 </div>
                                                 <p>{propuesta.mensaje}</p>
                                                 <small className="text-muted">Fecha: {propuesta.fecha}</small>

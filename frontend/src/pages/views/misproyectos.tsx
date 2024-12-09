@@ -81,7 +81,7 @@ export default function MisProyectos() {
                                 });
                                 return {
                                     ...res.data,
-                                    empresa: res.data.pymeId?.empresa
+                                    empresa: res.data.pymeId.empresa,
                                 };
                             })
                         );

@@ -300,13 +300,13 @@ export default function dashboard() {
                 </div>
 
                 {/*Graficos Sectores*/}
-                {graficaSector?.sectoresTop.map((item, index) => (
+                {/*{graficaSector?.sectoresTop.map((item, index) => (
                     <div className="sectores me-4">
                         <div key={index} className="sectores-graphs">
                             <CategoryCard sector={item.sector} value={item.total} />
                         </div>
                     </div>
-                ))}
+                ))}*/}
             </div>
         </>
     );
