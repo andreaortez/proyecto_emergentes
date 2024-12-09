@@ -138,12 +138,35 @@ exports.addFavorite = async (req, res) => {
 }
 
 exports.getFavorite = async (req, res) => {
-    const { investor_id } = req.query;
+    const { investor_id } = req.body;
     //const {  investor_id } = req.query;
-    const investor = await InversionistaModel.findById(investor_id).populate({
-        path: 'save_projects',
-        model: 'proyectos', 
-    });
+    const investor = await InversionistaModel.findById(investor_id)
+        .populate({
+            path: 'save_projects',
+            model: 'proyectos', 
+            populate: [
+                {
+                    path: 'inversionistas',
+                    populate: [
+                        {
+                            path: 'investorId',
+                            model: 'inversionistas',
+                            populate: {
+                                path: 'userId',
+                                model: 'users',
+                                select: 'avatar ',
+                            },
+                        },
+                    ],
+                },
+                {
+                    path: 'pymeId',
+                    model: 'pymes',
+                    select: 'empresa'
+                }
+            ],
+        })
+        
     return res.status(200).send(
         {
             success: true,
