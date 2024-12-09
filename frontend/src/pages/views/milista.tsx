@@ -46,8 +46,17 @@ export default function MiLista() {
                 setProyectos(response.data.projects.length > 0 ? response.data.projects.map((proyecto: any) => ({
                     ...proyecto,
                     id: proyecto._id,
-                    empresa: proyecto.pymeId.empresa
+                    empresa: proyecto.pymeId.empresa,
+                    inversionistas: proyecto.inversionistas.map((inversor: any) => ({
+                        id: inversor.investorId._id,
+                        userId: inversor.investorId.userId._id,
+                        nombre: inversor.investorId.nombre,
+                        apellido: inversor.investorId.apellido,
+                        avatar: inversor.investorId.userId.avatar
+                    }))
                 })) : []);
+
+                console.log(response.data.projects.inversionistas)
             } catch (error) {
                 console.error("Error al cargar los proyectos:", error);
             }

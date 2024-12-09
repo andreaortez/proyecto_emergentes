@@ -21,7 +21,6 @@ interface Proyecto {
 
 interface Inversionista {
     id: string;
-    userId: string;
     nombre: string,
     apellido: string,
     avatar: string,
@@ -162,9 +161,7 @@ export default function verProyecto({ project_id, nombre, imagen, sector, meta, 
                                                     nombre: inversionista.nombre,
                                                     apellido: inversionista.apellido,
                                                     id: inversionista.id,
-                                                    userId: inversionista.userId,
-                                                    avatar: inversionista.userId
-
+                                                    avatar: inversionista.avatar
                                                 }}
 
                                             />

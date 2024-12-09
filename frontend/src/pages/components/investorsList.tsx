@@ -2,7 +2,6 @@ import React from 'react';
 
 interface Inversionista {
     id: string;
-    userId: string;
     nombre: string;
     apellido: string;
     avatar: string;
