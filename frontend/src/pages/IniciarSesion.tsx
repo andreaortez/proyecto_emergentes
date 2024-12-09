@@ -95,7 +95,11 @@ export default function LogIn() {
                     </div>
                     <div className="alternativa">
                         <p>¿No tienes una cuenta? </p>
-                        <Link href="/Registrarse" className="textColor"> Haz click aquí para registrarte.</Link>
+                        <Link href="/RegistroP" className="textColor"> Haz click aquí para registrarte como Pyme.</Link>
+
+                    </div>
+                    <div className="alternativa mt-0">
+                        <Link href="/RegistroI" className="textColor"> o haz click aquí para registrarte como Inversionista.</Link>
                     </div>
                 </form>
 

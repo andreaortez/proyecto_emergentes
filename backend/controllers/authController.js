@@ -97,11 +97,11 @@ exports.register = async (req, res) => {
         if (tipo === "Pyme" && empresa) {
             newUser = await UserModel.create({ avatar, correo, contraseña, telefono });
             const pyme = await PymeModel.create({ empresa, userId: newUser._id });
-            return res.status(201).json({result:"success" , pyme, firebaseUser });
-        } else if (tipo === "Inversionista" && nombre && apellido && monto) {
+            return res.status(201).json({ result: "success", pyme, firebaseUser });
+        } else if (tipo ==== "Inversionista" && nombre && apellido && monto) {
             newUser = await UserModel.create({ avatar, correo, contraseña, telefono });
             const inversionista = await InversionistaModel.create({ nombre, apellido, monto_bolsa: monto, userId: newUser._id });
-            return res.status(201).json({result:"success" , inversionista, firebaseUser });
+            return res.status(201).json({ result: "success", inversionista, firebaseUser });
         } else {
             return res.status(400).send("Complete todos los campos requeridos.");
         }
