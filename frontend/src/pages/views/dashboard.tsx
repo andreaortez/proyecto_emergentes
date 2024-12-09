@@ -137,7 +137,7 @@ export default function dashboard() {
                     label: 'Recaudación Mensual',
                     data: graficaData.recaudacionMensual.map((item: any) => item.total),
                     fill: true,
-                    borderColor: '#4CAF50',
+                    borderColor: '#06b09a',
                     backgroundColor: 'rgba(76, 175, 80, 0.2)',
                     tension: 0.3,
                 },
@@ -145,7 +145,7 @@ export default function dashboard() {
         }
         : null;
 
-        const doughnutData = graficaData
+    const doughnutData = graficaData
         ? {
             // Primer gráfico: Ganancias Diarias
             daily: {
@@ -153,7 +153,7 @@ export default function dashboard() {
                 datasets: [
                     {
                         data: [graficaData.intervalos.diario, 100 - graficaData.intervalos.diario],
-                        backgroundColor: ['#000080', '#B0B0B0'], // Azul para la ganancia, gris para "sin ganancia"
+                        backgroundColor: ['#055E63', '#06b09a']
                     },
                 ],
             },
@@ -163,7 +163,7 @@ export default function dashboard() {
                 datasets: [
                     {
                         data: [graficaData.intervalos.semanal, 100 - graficaData.intervalos.semanal],
-                        backgroundColor: ['#000080', '#B0B0B0'],
+                        backgroundColor: ['#055E63', '#06b09a']
                     },
                 ],
             },
@@ -173,7 +173,7 @@ export default function dashboard() {
                 datasets: [
                     {
                         data: [graficaData.intervalos.mensual, 100 - graficaData.intervalos.mensual],
-                        backgroundColor: ['#000080', '#B0B0B0'],
+                        backgroundColor: ['#055E63', '#06b09a']
                     },
                 ],
             },
@@ -183,13 +183,13 @@ export default function dashboard() {
                 datasets: [
                     {
                         data: [graficaData.montos.recaudado, graficaData.montos.brecha],
-                        backgroundColor: ['#000080', '#008080'], // Azul para recaudado, rojo para brecha
+                        backgroundColor: ['#055E63', '#06b09a'],
                     },
                 ],
             },
         }
         : null;
-        
+
 
     return (
         <>
@@ -200,69 +200,77 @@ export default function dashboard() {
                 </div>
             </div>
 
-            <div className='p-4 grafica'>
-                <div>
-                    <select className="form-select" value={proyectoSelected} onChange={handleProyectoChange} required >
-                        <option value="" disabled>Elija un Proyecto...</option>
-                        {proyectos.map((proyecto) => (
-                            <option key={proyecto.id} value={proyecto.id}>
-                                {proyecto.nombre}
-                            </option>
-                        ))}
-                    </select>
+            <div className='p-4 graficas'>
+                <select className="form-select" value={proyectoSelected} onChange={handleProyectoChange} required >
+                    <option value="" disabled>Elija un Proyecto...</option>
+                    {proyectos.map((proyecto) => (
+                        <option key={proyecto.id} value={proyecto.id}>
+                            {proyecto.nombre}
+                        </option>
+                    ))}
+                </select>
+
+                <div className="linegraph" style={{ backgroundColor: 'white' }}>
+                    {lineData && (
+                        <Line
+                            data={lineData}
+                            options={{
+                                responsive: true,
+                            }}
+                        />
+                    )}
                 </div>
 
-                <div>
-                    <div className="estadisticas" style={{ backgroundColor: 'white' }}>
-                        {lineData && (
-                            <Line
-                                data={lineData}
-                                options={{
-                                    responsive: true,
-                                }}
-                            />
-                        )}
-                    </div>
-                    <div className="estadisticas2" style={{ backgroundColor: 'white' }}>
-                        {/* Gráfico Diario */}
-                        {doughnutData && doughnutData.daily && (
-                            <Doughnut
-                                data={doughnutData.daily}
-                                options={{
-                                    responsive: true,
-                                }}
-                            />
-                        )}
-
-                        {/* Gráfico Semanal */}
-                        {doughnutData && doughnutData.weekly && (
-                            <Doughnut
-                                data={doughnutData.weekly}
-                                options={{
-                                    responsive: true,
-                                }}
-                            />
-                        )}
-
-                        {/* Gráfico Mensual */}
-                        {doughnutData && doughnutData.monthly && (
-                            <Doughnut
-                                data={doughnutData.monthly}
-                                options={{
-                                    responsive: true,
-                                }}
-                            />
-                        )}
-
-                        {/* Gráfico Recaudado vs Brecha */}
-                        {doughnutData && doughnutData.recaudo && (
-                            <Doughnut
-                                data={doughnutData.recaudo}
-                                options={{
-                                    responsive: true,
-                                }}
-                            />
-                        )}
+                <div className='statistics'>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="piegraph mb-4">
+                                {/* Gráfico Diario */}
+                                {doughnutData && doughnutData.daily && (
+                                    <Doughnut
+                                        data={doughnutData.daily}
+                                        options={{
+                                            responsive: true,
+                                        }}
+                                    />
+                                )}
+                            </div>
+                            <div className="piegraph">
+                                {/* Gráfico Semanal */}
+                                {doughnutData && doughnutData.weekly && (
+                                    <Doughnut
+                                        data={doughnutData.weekly}
+                                        options={{
+                                            responsive: true,
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="piegraph mb-4">
+                                {/* Gráfico Mensual */}
+                                {doughnutData && doughnutData.monthly && (
+                                    <Doughnut
+                                        data={doughnutData.monthly}
+                                        options={{
+                                            responsive: true,
+                                        }}
+                                    />
+                                )}
+                            </div>
+                            <div className="piegraph">
+                                {/* Gráfico Recaudado vs Brecha */}
+                                {doughnutData && doughnutData.recaudo && (
+                                    <Doughnut
+                                        data={doughnutData.recaudo}
+                                        options={{
+                                            responsive: true,
+                                        }}
+                                    />
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -31,7 +31,7 @@ exports.createProject = async (req, res) => {
     }
 };
 exports.getProject = async (req, res) => {
-    const { project_id } = req.body;
+    const { project_id } = req.query;
     try {
         if (project_id) {
             const proyecto = await ProjectModel.findById(project_id)

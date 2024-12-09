@@ -53,28 +53,40 @@ export default function MisProyectos() {
     useEffect(() => {
         const listarProyectos = async () => {
             try {
-                if (tipo === "Pyme") {
-                    console.log("pyme_id desde sessionStorage:", pyme_id);
+                if (tipo === "Pyme" && pyme_id) {
                     const response = await axios.get('http://localhost:3001/ProyectosPyme', {
                         params: { pyme_id }
                     });
 
                     console.log(response.data.pyme_proyectos);
-                    setProyectos(response.data.pyme_proyectos.length > 0 ? response.data.pyme_proyectos.map((proyecto: any) => ({
-                        ...proyecto,
-                        id: proyecto._id
-                    })) : []);
-                } else {//inversionista
-                    console.log("inversionista:", investor_id);
+                    setProyectos(response.data.pyme_proyectos.length > 0 ?
+                        response.data.pyme_proyectos.map((proyecto: any) => ({
+                            ...proyecto,
+                            id: proyecto._id
+                        })) : []);
+                } else if (tipo === "Inversionista" && investor_id) {
                     const response = await axios.get('http://localhost:3001/ProyectosInversionista', {
                         params: { investor_id: investor_id }
                     });
 
-                    console.log(response.data.proyectos);
-                    setProyectos(response.data.proyectos.length > 0 ? response.data.proyectos.map((proyecto: any) => ({
-                        ...proyecto,
-                        id: proyecto.id
-                    })) : []);
+                    // Guarda todos los IDs en un array
+                    const proyectosIds = response.data.proyectos.map((proyecto: any) => proyecto.id);
+
+                    if (proyectosIds.length > 0) {
+                        const allProyectos = await Promise.all(
+                            proyectosIds.map(async (id: string) => {
+                                const res = await axios.get('http://localhost:3001/Proyecto', {
+                                    params: { project_id: id }
+                                });
+                                return res.data;
+                            })
+                        );
+
+                        console.log(allProyectos);
+                        setProyectos(allProyectos);
+                    } else {
+                        setProyectos([]);
+                    }
                 }
             } catch (error) {
                 console.log("Error al cargar los proyectos:", error);
