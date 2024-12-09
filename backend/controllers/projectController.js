@@ -32,15 +32,23 @@ exports.createProject = async (req, res) => {
 };
 exports.getProject = async (req, res) => {
     const { project_id } = req.body;
+    //const { project_id } = req.query;
     try {
         if (project_id) {
             const proyecto = await ProjectModel.findById(project_id)
                 .populate({
                     path: 'inversionistas',
-                    populate: {
-                        path: 'investorId',
-                        model: 'inversionistas'
-                    }
+                    populate: [
+                        {
+                            path: 'investorId',
+                            model: 'inversionistas',
+                            populate: {
+                                path: 'userId',
+                                model: 'users',
+                                select: 'avatar ',
+                            },
+                        },
+                    ],
                 })
                 .populate({
                     path: 'pymeId',
@@ -132,23 +140,29 @@ exports.deleteProject = async (req, res) => {
 };
 
 exports.getProjectsByPyme = async (req, res) => {
-    //const { pyme_id } = req.query;
+    //const { pyme_id } = req.body;
     const { pyme_id } = req.query;
     try {
         if (pyme_id) {
             const proyectos_id = await ProjectModel.find({ pymeId: pyme_id }, { _id: 1 });
-            const proyectos = await ProjectModel.find({ pymeId: pyme_id }).populate({
-                path: 'inversionistas',
-                populate: {
-                    path: 'investorId',
-                    model: 'inversionistas',
+            const proyectos = await ProjectModel.find({ pymeId: pyme_id })
+                .populate({
+                    path: 'inversionistas',
                     populate: {
-                        path: 'userId',
-                        model: 'users',
-                        select: 'avatar _id'
+                        path: 'investorId',
+                        model: 'inversionistas',
+                        populate: {
+                            path: 'userId',
+                            model: 'users',
+                            select: 'avatar _id'
+                        }
                     }
-                }
-            });
+                })
+                .populate({
+                    path: 'pymeId',
+                    model: 'pymes',
+                    select: 'empresa'
+                });
             const pyme_proyectos = proyectos.map(proyecto => {
                 const proyectoPlano = proyecto.toObject();
                 return {
@@ -210,6 +224,14 @@ exports.getAllProjects = async (req, res) => {
                 }
             },
             {
+                $lookup: {
+                    from: "pymes",
+                    localField: "pymeId",
+                    foreignField: "_id",
+                    as: "detallesPyme"
+                }
+            },
+            {
                 $addFields: {
                     inversionistas: {
                         $map: {
@@ -228,6 +250,9 @@ exports.getAllProjects = async (req, res) => {
                                 nombre: "$$inversionista.nombre"
                             }
                         }
+                    },
+                    pyme: {
+                        $arrayElemAt: ["$detallesPyme", 0] 
                     }
                 }
             },
@@ -235,7 +260,9 @@ exports.getAllProjects = async (req, res) => {
                 $project: {
                     detallesInversionistas: 0,
                     inversionistasData: 0,
-                    usuarios: 0
+                    usuarios: 0,
+                    detallesPyme: 0,
+                    pymeId: 0
                 }
             },
             {

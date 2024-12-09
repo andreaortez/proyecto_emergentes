@@ -160,3 +160,30 @@ exports.getMensajesList = async (req, res) => {
         res.status(500).send({ msg: "Error al obtener propuestas de la pyme.", error: err.message });
     }
 };
+
+exports.validarPropuesta = async (req, res) => {
+    const { mensaje_id } = req.body;
+    if (mensaje_id) {
+        res.status(205).send("No proposal id");
+    }
+    try {
+        console.log("mensaje", mensaje_id);
+        const mensaje = await MessageModel.findById({ mensaje_id });
+        const propuesta = await InvestorProjectModel.findOne({ _id: mensaje.proposalId });
+        console.log("propuesta", propuesta);
+        if (propuesta && propuesta.status === 'proposed') {
+            res.status(200).send({ proposal: true });
+        } else {
+            res.status(200).send({ proposal: false });
+        }
+        return res.status(200).json({
+            message: "Propuesta aceptada: Inversión registrada correctamente",
+            nuevo_monto: user_investor.monto_bolsa,
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json("Error al aceptar Propuesta");
+    }
+
+};
