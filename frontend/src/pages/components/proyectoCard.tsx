@@ -19,7 +19,6 @@ interface Proyecto {
 
 interface Inversionista {
     id: string;
-    userId: string;
     nombre: string,
     apellido: string,
     avatar: string,

@@ -23,7 +23,6 @@ interface Lista {
 
 interface Inversionista {
     id: string;
-    userId: string;
     nombre: string,
     apellido: string,
     avatar: string,

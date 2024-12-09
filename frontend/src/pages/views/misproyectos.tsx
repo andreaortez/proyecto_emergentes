@@ -18,7 +18,6 @@ interface Proyecto {
 
 interface Inversionista {
     id: string;
-    userId: string;
     nombre: string;
     apellido: string;
     avatar: string;
@@ -82,6 +81,12 @@ export default function MisProyectos() {
                                 return {
                                     ...res.data,
                                     empresa: res.data.pymeId.empresa,
+                                    inversionistas: res.data.inversionistas.map((inv: any) => ({
+                                        id: inv._id,
+                                        nombre: inv.nombre,
+                                        apellido: inv.apellido,
+                                        avatar: inv.userId.avatar
+                                    }))
                                 };
                             })
                         );
